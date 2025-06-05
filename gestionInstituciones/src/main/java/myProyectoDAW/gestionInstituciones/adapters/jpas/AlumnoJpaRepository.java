@@ -1,0 +1,25 @@
+package myProyectoDAW.gestionInstituciones.adapters.jpas;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import myProyectoDAW.gestionInstituciones.adapters.dtos.AlumnoAsignaturasDTO;
+import myProyectoDAW.gestionInstituciones.adapters.entitys.AlumnoEntity;
+
+@Repository
+public interface AlumnoJpaRepository extends JpaRepository<AlumnoEntity, Integer> {
+
+        Optional<AlumnoEntity> findByDni(String dni);
+
+        /* Alumnos con mas asignaturas */
+        @Query("SELECT new myProyectoDAW.gestionInstituciones.adapters.dtos.AlumnoAsignaturasDTO(" +
+                        " alum.dni, alum.nombre, alum.apellido1, alum.apellido2, COUNT(asig.codigo)) " +
+                        "FROM AlumnoEntity alum JOIN alum.asignaturas asig GROUP BY alum.dni, alum.nombre, alum.apellido1, alum.apellido2 "
+                        +
+                        " ORDER BY COUNT(asig.codigo) DESC")
+        List<AlumnoAsignaturasDTO> countAsignaturasByAlumnoOrdered();
+}

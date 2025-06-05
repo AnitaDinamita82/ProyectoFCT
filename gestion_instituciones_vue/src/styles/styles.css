@@ -1,0 +1,497 @@
+/* -- Contenedor principal para todos --*/
+.index-gestion-container {
+
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+}
+
+/* -- -- */
+/* -- Estilos generales franja superior (usuario logeado y boton de salir) --*/
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    /* Mismo degradado que las tarjetas */
+    background-image: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-container-top-bar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.top-bar-logo {
+    width: 40px;
+    /* Ajusta el tamaño del logo dentro del círculo */
+    height: 40px;
+    object-fit: contain;
+}
+
+.top-bar-text {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-display {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: white;
+}
+
+.logout-button {
+    margin-left: auto;
+    padding: 10px 15px;
+    font-size: 1em;
+    color: black;
+    border-color: black;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: #f1bc96;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+
+    &:hover {
+        background-color: #ee7724;
+    }
+}
+
+/* -- -- */
+/* -- Estilo general para el boton de volver --*/
+.action-volver {
+    display: flex;
+    padding: 0.5%;
+}
+
+.back-button {
+    padding: 5px 10px;
+    font-size: 1em;
+    color: black;
+    border-color: black;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    background-color: #b575a2;
+
+    &:hover {
+        background-color: #a9147c;
+    }
+}
+
+/* -- --*/
+/* -- Estilo general para la CABECERA para aquellos componentes que la tengan --*/
+.header {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    padding: 1%;
+    margin-top: 2%;
+}
+
+.header h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+/* -- -- */
+
+/* --  MAIN: Estilo general para el contenedor principal (CARDS) -- */
+.main-container-gest {
+    display: flex;
+    /* Permite que las tarjetas se envuelvan a la siguiente línea si no hay espacio */
+    flex-wrap: wrap;
+    /* Centra las tarjetas si no llenan la línea */
+    justify-content: center;
+    align-items: flex-start;
+    /* Espacio entre las tarjetas */
+    gap: 20px;
+    /* Permite que ocupe el espacio disponible.*/
+    flex-grow: 1;
+    margin-top: 5%;
+}
+
+/* // Estilo de casi todos los demas contenedores */
+.action-container {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    margin: auto;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.container-color-guardar {
+    border-left: 5px solid #ee7724;
+}
+
+.container-color-listar {
+    border-left: 5px solid #b44593;
+}
+
+.container-color-editar {
+    border-left: 5px solid #dd3675;
+
+}
+
+/*-- --*/
+/* -- Estilos generales para las CARDS, para todos aquellos componentes que las usen -- */
+.action-card {
+    width: 200px;
+    /* Ancho fijo para cada tarjeta, ajusta si es necesario */
+    height: 150px;
+    /* Altura fija para que todas sean iguales */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    /* Fondo blanco de la tarjeta */
+    display: flex;
+    flex-direction: column;
+    /* Para que la sección superior y la inferior estén una encima de la otra */
+    overflow: hidden;
+    /* Asegura que el borde redondeado se aplique a las secciones internas */
+    text-decoration: none;
+    /* Quita el subrayado de los enlaces */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* // Parte superior de la tarjeta (donde va el icono y el degradado) */
+.card-top-section {
+    height: 60%;
+    /* Ocupa el 60% de la altura de la tarjeta */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Asegúrate de que los bordes superiores redondeados coincidan con la tarjeta */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* // El círculo blanco del icono */
+.icon-container {
+    width: 70px;
+    /* Tamaño del círculo */
+    height: 70px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    /* Fondo blanco del círculo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Sombra para el círculo */
+}
+
+.card-icon-color {
+    font-size: 2.5em;
+    /* Tamaño del icono */
+    color: #4a4a4a;
+    /* Color oscuro para el icono */
+}
+
+.fondo-card-1 {
+    /* ALTAS */
+    background-color: #ee7724;
+}
+
+.fondo-card-2 {
+    /* LISTADOS */
+    background-color: #b44593;
+}
+
+/* Parte inferior de la tarjeta (donde va el texto) */
+.card-bottom-section {
+    height: 40%;
+    /* Ocupa el 40% restante de la altura de la tarjeta */
+    background-color: #ffffff;
+    /* Fondo blanco para esta sección */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    /* Padding horizontal para el texto */
+    text-align: center;
+    /* Asegúrate de que los bordes inferiores redondeados coincidan */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.card-text {
+    font-size: 1em;
+    font-weight: 500;
+    color: #555;
+    margin: 0;
+}
+
+/* -- --*/
+/* -- Estilos comunes para las opciones en FORMUMARIOS --*/
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="password"],
+
+select {
+    width: calc(100% - 12px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-select {
+    width: calc(100% - 12px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-left: 2%;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    text-align: left;
+}
+
+.text-muted {
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* -- --*/
+
+/* -- Estilos comunes para el componente de BUSQUEDA --*/
+.search-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 50%;
+    margin-right: 10px;
+}
+
+.search-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+/* -- -- */
+/* -- Estilos generales para los BOTONES de acciones (Guardar, Alta, Eliminar, Buscar) -- */
+.action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 1.1em;
+    border-color: black;
+    border-radius: 15px;
+    color: black;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin: auto;
+    cursor: pointer;
+}
+
+/* // Estilo para cuando hay mas de un botón */
+.button-group {
+    display: flex;
+    gap: 10%;
+    margin-right: 40%;
+    margin-top: 2%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* // //*/
+
+.color-button-guardar {
+
+    background-color: #f1bc96;
+
+    &:hover {
+        background-color: #ee7724;
+    }
+}
+
+.color-button-eliminar,
+.color-button-cancelar {
+    background-color: #dc6d6f;
+
+    &:hover {
+        background-color: #d74cd7;
+    }
+}
+
+.color-button-buscar {
+    margin-left: 0%;
+    background-color: #6eb3b5;
+
+    &:hover {
+        background-color: #242bae;
+    }
+}
+
+.color-button-añadir {
+    margin-left: 0%;
+    background-color: #e0759e;
+
+    &:hover {
+        background-color: #da1963;
+    }
+}
+
+.color-button-matricular,
+.color-button-asignaciones {
+
+    background-color: #479989;
+
+    &:hover {
+        background-color: #476999;
+    }
+}
+
+.color-button-ver {
+
+    background-color: #c9c23d;
+
+    &:hover {
+        background-color: #c9703d;
+    }
+}
+
+.color-button-baja {
+
+    background-color: #5fbf68;
+
+    &:hover {
+        background-color: #babf5f;
+    }
+}
+
+.style-router-link {
+    text-decoration: none;
+}
+
+/* -- -- */
+/* -- Estilos generales para las ALERTAS en PopUp  -- */
+.alert {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    text-align: center;
+    /* Nos aseguramos que siempre estará delante */
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* // Estilo para la X de cierre // */
+.x-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0.5rem 0.5rem;
+    margin: -0.5rem -0.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+table {
+
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+
+}
+
+thead tr {
+
+    background-color: #009879;
+    /* Color de cabecera de tabla */
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #ddd;
+
+}
+
+th {
+    padding: 10px 12px;
+}
+
+td,
+tr {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 3px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+tbody tr:hover {
+    background-color: #e0f2f1;
+    cursor: pointer;
+}
