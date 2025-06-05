@@ -56,13 +56,20 @@ public class UsuarioController {
 
         Usuario usuario = usuarioDTO.convertirDTOAEntity();
 
+        // Comprobamos si el DNI ya esxiste
         if (usuarioService.existe(usuario.getDni())) {
             return new ResponseEntity<>("El usuario con DNI: " + usuario.getDni() + " ya existe en el sistema.",
                     HttpStatus.CONFLICT);
-        } else {
-            usuarioService.darDeAltaUnUsuario(usuario);
-            return new ResponseEntity<>(usuario, HttpStatus.CREATED);
         }
+        // Comprobamos si el Login de usuario ya existe.
+        if (usuarioService.existeLoginDeUsuario(usuario.getLogin())) {
+            return new ResponseEntity<>(
+                    "El login " + usuario.getLogin() + " ya está siendo utilizado por otra persona.",
+                    HttpStatus.CONFLICT);
+        }
+        usuarioService.darDeAltaUnUsuario(usuario);
+        return new ResponseEntity<>("Se ha dado al usuario " + usuario.getLogin() + " de alta con exito",
+                HttpStatus.OK);
     }
 
     /* DELETE */

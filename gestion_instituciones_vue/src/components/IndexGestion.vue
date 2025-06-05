@@ -17,7 +17,7 @@
     <!-- ** -->
     <header class="header">
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
-      <h1>sistema de GESTion integral en INstituciones</h1>
+      <h1>sistema de GESTión integral en INstituciones</h1>
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
     </header>
     <main class="main-container-gest">

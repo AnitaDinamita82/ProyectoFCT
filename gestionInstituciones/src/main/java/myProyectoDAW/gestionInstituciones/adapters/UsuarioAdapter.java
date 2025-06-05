@@ -22,7 +22,7 @@ public class UsuarioAdapter implements RepositoryUsuario {
 
     private Optional<UsuarioEntity> usuarioEntityOptional;
 
-    @Override
+    @Override // Operacion de Listar todos los usuarios de la BD
     public List<Usuario> listarUsuarios() {
 
         List<UsuarioEntity> usuarioEntities = usuarioJpaRepository.findAll();
@@ -32,7 +32,7 @@ public class UsuarioAdapter implements RepositoryUsuario {
                 .collect(Collectors.toList());
     }
 
-    @Override
+    @Override // Operacion para dar de alta un usuario.
     public Usuario darDeAltaUnUsuario(Usuario usuario) {
 
         UsuarioEntity usuarioEntity = convertirUsuarioAEntity(usuario);
@@ -120,8 +120,12 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return convertirEntityAUsuario(usuarioEntity);
     }
 
-    /* Metodos de conversion */
+    @Override
+    public Boolean existeLoginDeUsuario(String login) {
+        return usuarioJpaRepository.findByLogin(login).isPresent();
+    }
 
+    /* Metodos de conversion */
     private UsuarioEntity convertirUsuarioAEntity(Usuario usuario) {
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();
@@ -145,5 +149,4 @@ public class UsuarioAdapter implements RepositoryUsuario {
         usuario.setRol(usuarioEntity.getRol());
         return usuario;
     }
-
 }

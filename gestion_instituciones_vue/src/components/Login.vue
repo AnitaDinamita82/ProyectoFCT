@@ -45,12 +45,17 @@
 
       </form>
     </main>
+    <footer>
+      <img :src="imgcc" alt="Creative Commons" class="cc-image">
+      <h6>@Ana Belen Madrid Garcia</h6>
+    </footer>
   </div>
 </template>
 
 <script>
 import imglotus from '@/assets/lotus.webp';
 import axios from 'axios';
+import imgcc from '@/assets/cc.png'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -59,6 +64,7 @@ export default {
   data() {
     return {
       imglotus: imglotus,
+      imgcc: imgcc,
       apiUrl: 'http://localhost:8080', // Define la URL base de tu API
 
       username: "",
@@ -90,7 +96,7 @@ export default {
 
         if (error.response && error.response.status === 403) {
           this.error = true;
-          this.mensaje = 'Error de autenticacion. Verifique las credenciales.';
+          this.mensaje = 'Error de autenticación o la cuenta no existe. Verifique las credenciales.';
         } else if (error.request) {
           this.error = true;
           this.mensaje = 'Fallo en el inicio. No se ha podido conectar con el servidor';
@@ -125,8 +131,10 @@ export default {
 
         if (error.response && error.response.status === 409) {
           this.error = true;
-          this.mensaje = error.data;
+          this.mensaje = error.response.data;
           console.log('Error en registrar???: ', this.mensaje); // PUNTO DE CONTRO
+
+
         } else {
           if (error.request) {
             this.error = true;
@@ -216,5 +224,34 @@ h4 {
   }
 }
 
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: white;
+  padding: 5px 0;
+  width: 100%;
+  margin-top: 20px;
+  /* Adjust as needed for spacing from the login box */
+  border-radius: 5px;
+}
 
+footer h6 {
+  margin: 0 0 0 10px;
+  font-size: 0.8em;
+  color: #bbb;
+
+}
+
+.cc-image {
+  width: 50px;
+  height: auto;
+  vertical-align: middle;
+
+}
+
+.alert-danger {
+  width: 60%;
+}
 </style>

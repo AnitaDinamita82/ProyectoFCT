@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.UsuarioEntity;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.UsuarioJpaRepository;
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryAuthentication;
-import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryUsuario;
+import myProyectoDAW.gestionInstituciones.applications.services.UsuarioService;
 import myProyectoDAW.gestionInstituciones.domain.models.Usuario;
 
 @Component
@@ -20,7 +20,7 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
     private UsuarioJpaRepository usuarioJpaRepository;
 
     @Autowired
-    private RepositoryUsuario repositorioUsuario;
+    private UsuarioService usuarioService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -28,17 +28,27 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
     @Override
     public ResponseEntity<String> signup(Usuario usuario) {
 
-        Boolean existeUsuario = repositorioUsuario.existe(usuario.getDni());
+        // Comprobacion para el DNI
+        Boolean existeUsuarioPorDni = usuarioService.existe(usuario.getDni());
 
-        if (existeUsuario) { // Estamos intentando registrar un usuario que ya esta dado de alta en la BD.
+        if (existeUsuarioPorDni) { // Estamos intentando registrar un usuario que ya esta dado de alta en la BD.
             return new ResponseEntity<>(
-                    "Su usuario ya esta dado de alta. Pruebe a iniciar sesion con sus credenciales.",
+                    "Su usuario ya está dado de alta. Pruebe a iniciar sesion con sus credenciales.",
+                    HttpStatus.CONFLICT);
+        }
+
+        // Comprobacion para el login
+        Boolean existeUsuarioPorLogin = usuarioService.existeLoginDeUsuario(usuario.getLogin());
+
+        if (existeUsuarioPorLogin) {
+            return new ResponseEntity<>(
+                    "Este nombre de usuario " + usuario.getLogin() + " ya está en uso. Por favor, elija otro distinto",
                     HttpStatus.CONFLICT);
         }
 
         UsuarioEntity usuarioEntity = convertirUsuarioAEntity(usuario);
         usuarioJpaRepository.save(usuarioEntity);
-        return new ResponseEntity<>("¡Enhorabuena!! Cuenta registrada con exito. Inicie sesion con sus credenciales",
+        return new ResponseEntity<>("¡Enhorabuena!! Cuenta registrada con éxito. Inicie sesión con sus credenciales",
                 HttpStatus.OK);
     }
 
@@ -49,7 +59,7 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
                         usuario.getLogin(),
                         usuario.getPassword()));
 
-        Usuario usuarioEncontrado = repositorioUsuario.encontrarSiExisteUsuario(usuario.getLogin());
+        Usuario usuarioEncontrado = usuarioService.encontrarSiExisteUsuario(usuario.getLogin());
         return usuarioEncontrado;
 
     }
@@ -67,18 +77,4 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
         usuarioEntity.setRol(usuario.getRol());
         return usuarioEntity;
     }
-    /*
-     * private Usuario convertirEntityAUsuario(UsuarioEntity usuarioEntity) {
-     * 
-     * Usuario usuario = new Usuario();
-     * 
-     * usuario.setId(usuarioEntity.getId());
-     * usuario.setDni(usuarioEntity.getDni());
-     * usuario.setLogin(usuarioEntity.getLogin());
-     * usuario.setPassword(usuarioEntity.getPassword());
-     * usuario.setRol(usuarioEntity.getRol());
-     * return usuario;
-     * }
-     */
-
 }

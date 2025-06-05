@@ -28,7 +28,10 @@ public class UsuarioService {
         return repositoryUsuario.darDeAltaUnUsuario(usuario);
     }
 
-    /* Dado un login de usuario saber si existe en base de datos */
+    /*
+     * Dado un login de usuario saber si existe en base de datos y nos devuelve el
+     * usuario
+     */
     public Usuario encontrarSiExisteUsuario(String login) {
 
         return repositoryUsuario.encontrarSiExisteUsuario(login);
@@ -46,18 +49,23 @@ public class UsuarioService {
     }
 
     /* Obtener el numero de usuarios en BD */
-
     public long obtenerNumeroTotalDeUsuarios() {
         return repositoryUsuario.obtenerNumeroTotalDeUsuarios();
     }
 
-    /* Nos devuelve si el usuario ya existe */
+    /* Nos devuelve si el usuario ya existe dado su DNI */
     public boolean existe(String dniUsuario) {
         return repositoryUsuario.existe(dniUsuario);
     }
 
+    /* Obtener al usuario en si dado su DNI */
     public Usuario obtenerUsuarioDadoDni(String dniUsuario) {
         return repositoryUsuario.obtenerUsuarioDadoDni(dniUsuario);
+    }
+
+    /* Nos devuelve si el usuario existe o no dado su login */
+    public Boolean existeLoginDeUsuario(String login) {
+        return repositoryUsuario.existeLoginDeUsuario(login);
     }
 
 }
