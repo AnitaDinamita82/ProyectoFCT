@@ -132,8 +132,6 @@ export default {
         if (error.response && error.response.status === 409) {
           this.error = true;
           this.mensaje = error.response.data;
-          console.log('Error en registrar???: ', this.mensaje); // PUNTO DE CONTRO
-
 
         } else {
           if (error.request) {
@@ -152,7 +150,7 @@ export default {
     limpiarFormulario() {
       this.username = ""; // Limpia el campo de usuario
       this.password = ""; // Limpia el campo de contraseña
-      this.dni = "";
+      this.dni = ""; // Limpia el campo de DNI
     },
     registrarse() {
       this.esUnRegistro = !this.esUnRegistro;
@@ -173,18 +171,11 @@ export default {
   padding: 30px;
   border-radius: 10px;
   box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-    /* Sombra interior superior izquierda */
-    inset -2px -2px 5px rgba(255, 255, 255, 0.7),
-    /* Sombra interior inferior derecha (luz) */
-    3px 3px 10px rgba(0, 0, 0, 0.2),
-    /* Sombra exterior inferior derecha */
-    -3px -3px 10px rgba(255, 255, 255, 0.7);
-  /* Sombra exterior superior izquierda (luz) */
+    inset -2px -2px 5px rgba(255, 255, 255, 0.7), 3px 3px 10px rgba(0, 0, 0, 0.2), -3px -3px 10px rgba(255, 255, 255, 0.7);
   background-color: #f0f0f0;
   position: relative;
-  /* Añadimos esto para crear un contexto de apilamiento */
   z-index: 1;
-  /* Aseguramos que el login esté "detrás" de la alerta */
+
 
 }
 
@@ -233,7 +224,6 @@ footer {
   padding: 5px 0;
   width: 100%;
   margin-top: 20px;
-  /* Adjust as needed for spacing from the login box */
   border-radius: 5px;
 }
 

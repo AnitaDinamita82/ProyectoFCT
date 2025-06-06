@@ -7,12 +7,6 @@ INSERT INTO instituto.alumnos (id,dni,nombre, apellido1, apellido2) VALUES
 (104,'23014589S','Isabel', 'Moreno', 'Castro'),
 (105,'23698541W','Carmen', 'Bolaños', 'Pérez'),
 (106,'23654789W','Fernando', 'Torres', 'Gutiérrez');
-/*(107,'23598741','José', 'Jiménez', 'Mendoza'),
-(108,'23054892','Ana', 'Vásquez', 'Ríos'),
-(109,'21547896','Sofía', 'Serrano', 'Cruz'),
-(110,'12547896','Diego', 'Bermúdez', 'Salazar'),
-(111,'48796520','Patricia', 'Alarcón', 'Vidal'),
-(112,'12036577','Javier', 'Salcedo', 'Palacios');*/
 
 
 -- Insert tabla Asignaturas --
@@ -39,15 +33,6 @@ INSERT INTO instituto.asignaturas (id,codigo,nombre, descripcion) VALUES
 (120,'DAC203','Proyecto intermodular de Desarrollo en Aplicaciones Web/Multiplataforma','Desarrolla un proyecto completo de aplicación web integrando conocimientos.'),
 (122,'DAC204','Formacion en empresa','Aplica los conocimientos adquiridos en un entorno laboral real.'),
 (130,'DAC105','Itinerario personal para la Empleabilidad I','Desarrolla habilidades y estrategias para la búsqueda activa de empleo.');
-
---Insert en tabla alumnos_asignaturas
-/*INSERT INTO instituto.alumnos_asignaturas (dni_alu, codigo_asig) VALUES 
-('23048962','MAT01'),
-('23048962','FIS01'),
-('23698742','MAT01'),
-('45896320','QUI01'),
-('23048962','HIS01'),
-('23698541','MAT01');*/
 
 
 /* Insert tabla Usuarios*/

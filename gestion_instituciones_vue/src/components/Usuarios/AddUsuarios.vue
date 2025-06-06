@@ -128,7 +128,7 @@ export default {
                 if (error.response && error.response.status === 409) { // El usuario ya existe.
                     this.mensaje = error.response.data; // Se captura el error del backend
                 } else {
-                    this.mensaje = 'Fallo al dar de alta un nuevo usuario. Conexion perdida con el servidor.';
+                    this.mensaje = 'Fallo al dar de alta un nuevo usuario. Conexión perdida con el servidor.';
                 }
 
                 this.mostrarAlerta = true;

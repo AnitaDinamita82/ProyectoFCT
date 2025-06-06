@@ -25,6 +25,9 @@ public class AuthenticationController {
     @Autowired
     private JwtService jwtService; // Para generar el token JWT.
 
+    /* -- ENPOINT POST -- */
+
+    // Registro de un usuario //
     @PostMapping("/signup")
     public ResponseEntity<String> registrar(@RequestBody UsuarioDTO usuarioDTO) {
 
@@ -32,6 +35,7 @@ public class AuthenticationController {
         return authenticationService.signup(usuario);
     }
 
+    // Proceso de autenticación de un usuario //
     @PostMapping("/login")
     public ResponseEntity<?> autenticar(@RequestBody UsuarioDTO usuarioDTO) {
 
@@ -49,7 +53,7 @@ public class AuthenticationController {
 
         } catch (AuthenticationException e) {
             // Credenciales incorrectas
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Autenticacion fallida."));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("AutenticaciÓn fallida."));
         }
     }
 

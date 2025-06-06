@@ -33,7 +33,7 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
 
         if (existeUsuarioPorDni) { // Estamos intentando registrar un usuario que ya esta dado de alta en la BD.
             return new ResponseEntity<>(
-                    "Su usuario ya está dado de alta. Pruebe a iniciar sesion con sus credenciales.",
+                    "Este DNI ya está registrado en el sistema. Pruebe a iniciar sesión con sus credenciales.",
                     HttpStatus.CONFLICT);
         }
 
@@ -48,7 +48,7 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
 
         UsuarioEntity usuarioEntity = convertirUsuarioAEntity(usuario);
         usuarioJpaRepository.save(usuarioEntity);
-        return new ResponseEntity<>("¡Enhorabuena!! Cuenta registrada con éxito. Inicie sesión con sus credenciales",
+        return new ResponseEntity<>("¡Enhorabuena!! Cuenta registrada con éxito. Ya puede iniciar sesión.",
                 HttpStatus.OK);
     }
 
