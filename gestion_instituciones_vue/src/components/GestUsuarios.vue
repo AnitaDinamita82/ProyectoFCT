@@ -11,18 +11,15 @@
       </div>
       <div class="top-bar-right">
         <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-        <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+        <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+        <button class="logout-button" title="Desconectar" @click="logout"><i class="fas fa-power-off"></i></button>
       </div>
     </div>
     <!-- ** -->
-    <!-- Boton Volver -->
-    <div class="action-volver">
-      <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-    </div>
     <!-- Cabecera -->
     <header class="header">
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
-      <h1>Bienvenido a la Gestion de Usuarios</h1>
+      <h1>Bienvenido a la Gestión de Usuarios</h1>
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
     </header>
     <main class="main-container-gest">
@@ -33,7 +30,7 @@
           </div>
         </div>
         <div class="card-bottom-section">
-          <p class="card-text">Alta de un nuevo Usuario</p>
+          <p class="card-text">Alta de Usuarios</p>
         </div>
       </router-link>
       <router-link to="/ListUsuarios" class="action-card">

@@ -11,15 +11,12 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Cancelar" @click="logout"><i class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
+        <!-- ** *-->
+
         <main class="action-container container-color-listar">
             <div>
                 <img :src="imglotus" style="width: 155px;" alt="logo">
@@ -34,14 +31,24 @@
             <div v-else-if="asignaturas?.length > 0">
 
                 <!-- Logica para buscar y editar una asignatura -->
-                <form @submit.prevent="buscarAsignatura">
-                    <div class="search-section">
-                        <input class="search-input" type="text" id="codigoABuscar" v-model="codigoABuscar"
-                            placeholder="Código" required>
-                        <button type="submit" class="action-button color-button-buscar"><i
-                                class="fas fa-search"></i></button>
-                    </div>
-                </form>
+
+                <div class="control-section">
+
+                    <form @submit.prevent="buscarAsignatura">
+                        <div class="search-section">
+                            <input class="search-input" type="text" id="codigoABuscar" v-model="codigoABuscar"
+                                placeholder="Código" required>
+                            <button type="submit" class="action-button"><i class="fas fa-search"></i></button>
+                            <router-link to="AddAsignaturas" class="style-router-link"><button class="action-button"><i
+                                        class="fas fa-plus-circle"></i><span>Añadir nueva
+                                        Asignatura</span></button>
+                            </router-link>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- *** -->
+
                 <table>
                     <thead>
                         <tr>
@@ -56,22 +63,24 @@
                             <td>{{ asignatura.codigo }}</td>
                             <td>{{ asignatura.nombre }}</td>
                             <td>{{ asignatura.descripcion }}</td>
-                            <td>
-                                <button type="submit" class="action-button color-button-eliminar"
-                                    @click="confirmarBaja(asignatura.codigo)"><i class="fas fa-trash"></i></button>
-
+                            <td class="action-cell">
+                                <button type="submit" title="Eliminar" class="action-button"
+                                    @click="confirmarBaja(asignatura.codigo)"><i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <!-- Logica para poder ir al componente que gestiona el añadir asignatura -->
                 <div>
-                    <router-link to="AddAsignaturas" class="style-router-link"><button
-                            class="action-button color-button-añadir">AÑADIR NUEVA ASIGNATURA</button></router-link>
+                    <router-link to="AddAsignaturas" class="style-router-link"><button class="action-button"><i
+                                class="fas fa-plus-circle"></i><span>Añadir nueva
+                                Asignatura</span></button></router-link>
                 </div>
             </div>
             <p v-else>No se puede cargar la lista de asignaturas disponibles.</p>
         </main>
+        <BotonSubir />
     </div>
 </template>
 
@@ -80,11 +89,15 @@
 import imglotus from '@/assets/lotus.webp';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-
+import BotonSubir from '@/components/Acciones/BotonSubir.vue';
 
 
 export default {
     name: 'ListAsignaturas',
+    components: {
+        BotonSubir
+    },
+
     data() {
         return {
             imglotus: imglotus,
@@ -259,13 +272,30 @@ export default {
 
 <style lang="css" scoped>
 .action-container {
-    margin-top: 0;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+
 }
 
-.search-section {
-    width: 20%;
+button span {
+    color: #ee7724
+}
+
+.style-router-link {
+    margin-left: auto;
+}
+
+.style-router-link button {
+    margin-left: auto;
+}
+
+input[type="text"] {
+
+    width: 30%;
+}
+
+table {
+    width: 1000px;
 }
 
 .alert {

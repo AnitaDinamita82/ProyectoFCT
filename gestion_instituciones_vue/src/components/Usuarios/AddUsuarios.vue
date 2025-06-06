@@ -11,13 +11,10 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
-        </div>
-        <!-- *** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
         </div>
         <!-- *** -->
 
@@ -49,7 +46,9 @@
                         <option value="USER">USER</option>
                     </select>
                 </div>
-                <button type="submit" class="action-button color-button-guardar">GUARDAR</button>
+                <button type="submit" class="action-button"><i class="fas fa-plus-circle"></i><span>Añadir nuevo
+                        Usuario</span>
+                </button>
             </form>
         </main>
     </div>
@@ -117,10 +116,10 @@ export default {
                     }
                 });
 
-                this.mensaje = `Se ha dado al usuario  ${response.data.login} de alta con exito`;
                 this.error = false;
                 this.mostrarAlerta = true;
 
+                this.mensaje = response.data;
 
             } catch (error) {
                 this.error = true;
@@ -148,16 +147,20 @@ export default {
 </script>
 
 <style lang="css" scoped>
-/* Se modifica el margen de esta cabecera porque hay que tener en cuenta el contenedor del boton volver.*/
-.header {
-    margin-top: 2%;
+.action-button {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button span {
+    color: #ee7724
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {
-    width: 40%;
+    width: 60%;
 }
 </style>

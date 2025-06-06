@@ -53,4 +53,4 @@ INSERT INTO instituto.asignaturas (id,codigo,nombre, descripcion) VALUES
 /* Insert tabla Usuarios*/
 
 INSERT INTO instituto.Usuarios (id,dni,login,password,rol) VALUES 
-(0,'23037927','anabelen.madrid','11111','ADMIN');
+(0,'23037927T','anabelen.madrid','11111','ADMIN');

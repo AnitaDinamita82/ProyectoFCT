@@ -26,4 +26,6 @@ public interface RepositoryUsuario {
 
      public Usuario obtenerUsuarioDadoDni(String dniUsuario);
 
+     public Boolean existeLoginDeUsuario(String login);
+
 }

@@ -11,15 +11,13 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
         <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
+
         <main class="action-container container-color-listar">
             <div>
                 <img :src="imglotus" style="width: 185px;" alt="logo">
@@ -55,15 +53,21 @@
             </div>
             <p v-else-if="!mostrarAlerta">Cargando detalles del módulo o el módulo no existe...</p>
         </main>
+        <BotonSubir />
     </div>
 </template>
 <script>
 import imglotus from '@/assets/lotus.webp';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
+import BotonSubir from '@/components/Acciones/BotonSubir.vue';
 
 export default {
     name: 'VerModuloCompleto',
+    components: {
+        BotonSubir
+    },
+
     data() {
         return {
             imglotus: imglotus,
@@ -202,7 +206,7 @@ export default {
 </script>
 <style scoped>
 .action-container {
-    margin-top: 0;
+    margin-top: 2%;
 }
 
 .alert {

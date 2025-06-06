@@ -10,11 +10,10 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Deconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
-        </div>
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
         </div>
 
         <header class="header">
@@ -26,7 +25,7 @@
             <router-link to="/AddModulos" class="action-card">
                 <div class="card-top-section fondo-card-1">
                     <div class="icon-container">
-                        <i class="fas fa-plus-square card-icon-color"></i>
+                        <i class="fas fa-file-circle-plus card-icon-color"></i>
                     </div>
                 </div>
                 <div class="card-bottom-section">
@@ -37,7 +36,7 @@
             <router-link to="/ListModulos" class="action-card">
                 <div class="card-top-section fondo-card-2">
                     <div class="icon-container">
-                        <i class="fas fa-list-alt card-icon-color"></i>
+                        <i class="fas fas fa-list card-icon-color"></i>
                     </div>
                 </div>
                 <div class="card-bottom-section">

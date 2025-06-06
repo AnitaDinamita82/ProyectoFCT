@@ -11,15 +11,12 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
         <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
 
         <main class="action-container container-color-listar">
 
@@ -36,14 +33,21 @@
             <div v-else-if="alumnos?.length > 0">
 
                 <!-- Logica para buscar y editar un alumno -->
-                <form @submit.prevent="buscarAlumno">
-                    <div class="search-section">
-                        <input class="search-input" type="text" id="dniABuscar" v-model="dniABuscar" placeholder="DNI"
-                            required>
-                        <button type="submit" class="action-button color-button-buscar"><i
-                                class="fas fa-search"></i></button>
-                    </div>
-                </form>
+
+                <div class="control-section">
+
+                    <form @submit.prevent="buscarAlumno">
+                        <div class="search-section">
+                            <input class="search-input" type="text" id="dniABuscar" v-model="dniABuscar"
+                                placeholder="DNI" required>
+                            <button type="submit" class="action-button"><i class="fas fa-search"></i></button>
+                            <router-link to="AddAlumnos" class="style-router-link"><button class="action-button"><i
+                                        class="fas fa-plus-circle"></i><span>Añadir nuevo
+                                        Aumno</span></button></router-link>
+                        </div>
+                    </form>
+                </div>
+
                 <!-- *** -->
 
                 <table>
@@ -58,14 +62,13 @@
                         <tr v-for="alumno in alumnos" :key="alumno.id">
                             <td>{{ alumno.dni }}</td>
                             <td>{{ alumno.nombre }} {{ alumno.apellido1 }} {{ alumno.apellido2 }} </td>
-                            <td>
-                                <button type="submit" class="action-button color-button-matricular"
-                                    @click="matricular(alumno.dni)"><i
-                                        class="fas fa-sharp-duotone fa-regular fa-file-pen"></i></button>
-                                <button type="submit" class="action-button color-button-ver"
+                            <td class="action-cell">
+                                <button type="submit" title="Matricular" class="action-button"
+                                    @click="matricular(alumno.dni)"><i class="fas fa-regular fa-file-pen"></i></button>
+                                <button type="submit" title="Ver Matricula" class="action-button"
                                     @click="verMatriculaCompleta(alumno)"><i class="fas fa-light
                                         fa-eye"></i></button>
-                                <button type="submit" class="action-button color-button-eliminar"
+                                <button type="submit" title="Eliminar" class="action-button"
                                     @click="confirmarBaja(alumno.dni)"><i class="fas fa-trash"></i></button>
 
                             </td>
@@ -75,12 +78,13 @@
                 </table>
                 <!-- Logica para poder ir al componente que gestiona el añadir alumno -->
                 <div>
-                    <router-link to="AddAlumnos" class="style-router-link"><button
-                            class="action-button color-button-añadir">AÑADIR NUEVO ALUMNO</button></router-link>
+                    <router-link to="AddAlumnos" class="style-router-link"><button class="action-button"><i
+                                class="fas fa-plus-circle"></i><span>Añadir nuevo Aumno</span></button></router-link>
                 </div>
             </div>
             <p v-else>No se puede cargar la lista o no disponemos de alumnos matriculados.</p>
         </main>
+        <BotonSubir />
     </div>
 </template>
 
@@ -89,11 +93,14 @@
 import imglotus from '@/assets/lotus.webp';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-
+import BotonSubir from '@/components/Acciones/BotonSubir.vue';
 
 
 export default {
     name: 'ListAlumnos',
+    components: {
+        BotonSubir
+    },
     data() {
         return {
             imglotus: imglotus,
@@ -313,32 +320,29 @@ export default {
 
 <style lang="css" scoped>
 .action-container {
-    margin-top: 0;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
-th:nth-child(3),
-td:nth-child(3) {
-    width: 150px;
-    /* Un ancho suficiente para 3 iconos de 32px + gaps. Ajusta si es necesario. */
-    min-width: 120px;
-    /* Para asegurar que no se haga demasiado pequeña en pantallas pequeñas */
-    text-align: center;
-    /* Centra el contenido en la cabecera */
+button span {
+    color: #ee7724
+}
 
-    /* Aquí es donde convertimos el TD en un contenedor flexbox */
-    display: flex;
-    justify-content: center;
-    /* Centra horizontalmente los botones dentro de la celda */
-    align-items: center;
-    /* Alinea verticalmente los botones */
-    gap: 8px;
-    /* Espacio entre cada botón (8px es un buen punto de partida) */
-    flex-wrap: nowrap;
-    /* Evita que los botones salten de línea si el espacio es justo */
+.style-router-link {
+    margin-left: auto;
+}
+
+.style-router-link button {
+    margin-left: auto;
+}
+
+input[type="text"] {
+
+    width: 30%;
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {

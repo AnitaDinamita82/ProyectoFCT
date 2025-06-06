@@ -10,15 +10,13 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
         <!-- *** -->
+
         <main class="action-container container-color-listar">
             <div>
                 <img :src="imglotus" style="width: 185px;" alt="logo">
@@ -33,14 +31,21 @@
             <div v-else-if="modulos?.length > 0">
 
                 <!-- Logica para buscar y editar un modulo -->
-                <form @submit.prevent="buscarModulo">
-                    <div class="search-section">
-                        <input class="search-input" type="text" id="codigoABuscar" v-model="codigoABuscar"
-                            placeholder="Código Módulo" required>
-                        <button type="submit" class="action-button color-button-buscar"><i
-                                class="fas fa-search"></i></button>
-                    </div>
-                </form>
+
+                <div class="control-section">
+                    <form @submit.prevent="buscarModulo">
+                        <div class="search-section">
+                            <input class="search-input" type="text" id="codigoABuscar" v-model="codigoABuscar"
+                                placeholder="Código Módulo" required>
+                            <button type="submit" class="action-button"><i class="fas fa-search"></i></button>
+                            <router-link to="/AddModulos" class="style-router-link"><button class="action-button"><i
+                                        class="fas fa-plus-circle"></i><span>Añadir nuevo
+                                        Módulo</span></button></router-link>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- *** -->
 
                 <table>
                     <thead>
@@ -58,14 +63,14 @@
                             <td>{{ modulo.nombreModulo }}</td>
                             <td>{{ modulo.curso }}</td>
                             <td>{{ modulo.grupo }}</td>
-                            <td>
-                                <button type="submit" class="action-button color-button-asignaciones"
+                            <td class="action-cell">
+                                <button type="submit" title="Asignar Asignaturas" class="action-button"
                                     @click="gestionarAsignaciones(modulo.codigoModulo)"><i
                                         class="fas fa-network-wired"></i></button>
-                                <button type="submit" class="action-button color-button-ver"
+                                <button type="submit" title="Ver Detalles Módulo" class="action-button"
                                     @click="verModuloCompleto(modulo)"><i class="fas fa-light
                                         fa-eye"></i></button>
-                                <button type="submit" class="action-button color-button-eliminar"
+                                <button type="submit" title="Eliminar" class="action-button"
                                     @click="confirmarBaja(modulo.codigoModulo)"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -73,8 +78,9 @@
                 </table>
                 <div>
                     <!-- Logica para poder ir al componente que gestiona el añadir modulo -->
-                    <router-link to="/AddModulos" class="style-router-link"><button
-                            class="action-button color-button-añadir">AÑADIR NUEVO MÓDULO</button></router-link>
+                    <router-link to="/AddModulos" class="style-router-link"><button class="action-button"><i
+                                class="fas fa-plus-circle"></i><span>Añadir nuevo
+                                Módulo</span></button></router-link>
                 </div>
             </div>
             <p v-else>No se puede cargar la lista o no disponemos de módulos registrados.</p>
@@ -109,8 +115,7 @@ export default {
 
             codigoABuscar: '',
             moduloEncontrado: null // Modulo activo para quien se van a mostrar los datos para editar*/
-            // mostrarModalAsignaciones: false,
-            // mostrarModalEdicion: false,
+
         }
     },
     setup() {
@@ -296,29 +301,25 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.action-container {
-    margin-top: 0;
+button span {
+    color: #ee7724
 }
 
-th:nth-child(5),
-td:nth-child(5) {
-    width: 150px;
-    /* Un ancho suficiente para 3 iconos de 32px + gaps. Ajusta si es necesario. */
-    min-width: 120px;
-    /* Para asegurar que no se haga demasiado pequeña en pantallas pequeñas */
-    text-align: center;
-    /* Centra el contenido en la cabecera */
+.style-router-link {
+    margin-left: auto;
+}
 
-    /* Aquí es donde convertimos el TD en un contenedor flexbox */
-    display: flex;
-    justify-content: center;
-    /* Centra horizontalmente los botones dentro de la celda */
-    align-items: center;
-    /* Alinea verticalmente los botones */
-    gap: 8px;
-    /* Espacio entre cada botón (8px es un buen punto de partida) */
-    flex-wrap: nowrap;
-    /* Evita que los botones salten de línea si el espacio es justo */
+.style-router-link button {
+    margin-left: auto;
+}
+
+input[type="text"] {
+
+    width: 30%;
+}
+
+table {
+    width: 1000px;
 }
 
 .alert {

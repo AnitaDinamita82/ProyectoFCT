@@ -12,15 +12,13 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Vovler" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
         <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
+
         <main class="action-container container-color-listar">
             <div>
                 <img :src="imglotus" style="width: 185px;" alt="logo">
@@ -35,14 +33,22 @@
             <div v-else-if="usuarios?.length > 0">
 
                 <!-- Logica para buscar y editar un usuario -->
-                <form @submit.prevent="buscarUsuario">
-                    <div class="search-section">
-                        <input class="search-input" type="text" id="dniABuscar" v-model="dniABuscar" placeholder="DNI"
-                            required>
-                        <button type="submit" class="action-button color-button-buscar"><i
-                                class="fas fa-search"></i></button>
-                    </div>
-                </form>
+                <div class="control-section">
+                    <form @submit.prevent="buscarUsuario">
+                        <div class="search-section">
+                            <input class="search-input" type="text" id="dniABuscar" v-model="dniABuscar"
+                                placeholder="DNI" required>
+                            <button type="submit" title="Buscar" class="action-button"><i class="fas fa-search"></i>
+                            </button>
+                            <router-link to="AddUsuarios" class="style-router-link">
+                                <button class="action-button"><i class="fas fa-plus-circle"></i><span>Añadir nuevo
+                                        Usuario</span>
+                                </button>
+                            </router-link>
+                        </div>
+                    </form>
+                </div>
+
                 <!-- *** -->
                 <table>
                     <thead>
@@ -58,18 +64,22 @@
                             <td>{{ usuario.dni }}</td>
                             <td>{{ usuario.login }}</td>
                             <td>{{ usuario.rol }}</td>
-                            <td><button type="submit" class="action-button color-button-eliminar"
+                            <td class="action-cell ">
+                                <button type="submit" title="Eliminar" class="action-button"
                                     :disabled="usuario.login === sessionUser"
                                     :class="{ 'disabled-button': usuario.login === sessionUser }"
-                                    @click="confirmarBaja(usuario.dni)"><i class="fas fa-trash"></i></button></td>
+                                    @click="confirmarBaja(usuario.dni)"><i class="fas fa-trash"></i>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
                 <!-- Logica para poder ir al componente que gestiona el añadir usuarios -->
-                <div>
-                    <router-link to="AddUsuarios" class="style-router-link"><button
-                            class="action-button color-button-añadir">AÑADIR NUEVO USUARIO</button></router-link>
-                </div>
+
+                <router-link to="AddUsuarios" class="style-router-link">
+                    <button class="action-button"><i class="fas fa-plus-circle"></i><span>Añadir nuevo
+                            Usuario</span></button></router-link>
+
             </div>
             <p v-else>No hay usuarios registrados en la base de datos.</p>
         </main>
@@ -250,33 +260,30 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.header {
-    margin-top: 2%;
-}
-
 .disabled-button {
-    background-color: #cccccc !important;
-    /* Muestra el icono de prohibido */
     cursor: not-allowed !important;
-    opacity: 0.7;
+    opacity: 0.5;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    /* Para apilar los form-groups verticalmente */
-    gap: 15px;
-    /* Espacio entre cada grupo de formulario */
-    width: 100%;
-    /* CLAVE: Limita el ancho total del formulario, haciendo que los inputs se adapten */
-    max-width: 450px;
-    /* Ajusta este valor para controlar el ancho general del formulario */
-    margin: auto;
-    /* Centra el formulario dentro de .action-container */
+button span {
+    color: #ee7724
+}
+
+.style-router-link {
+    margin-left: auto;
+}
+
+.style-router-link button {
+    margin-left: auto;
+}
+
+input[type="text"] {
+
+    width: 30%;
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {

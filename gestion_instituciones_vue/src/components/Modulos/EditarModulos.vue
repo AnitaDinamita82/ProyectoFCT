@@ -11,15 +11,13 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
         <!-- *** -->
+
         <main class="action-container container-color-editar">
             <div>
                 <img :src="imglotus" style="width: 185px;" alt="logo">
@@ -55,8 +53,10 @@
                     </select>
                 </div>
                 <div class="button-group">
-                    <button type="submit" class="action-button color-button-guardar">GUARDAR</button>
-                    <button type="button" class="action-button color-button-cancelar" @click="back">CANCELAR</button>
+                    <button type="submit" title="Guardar" class="action-button"><i
+                            class="fas fa-thin fa-floppy-disk"></i></button>
+                    <button type="button" title="Cancelar" class="action-button" @click="back"><i
+                            class="fas fa-regular fa-xmark"></i></button>
                 </div>
             </form>
 
@@ -176,7 +176,7 @@ export default {
 </script>
 <style scoped lang="css">
 .action-container {
-    margin-top: 0;
+    gap: 15%;
 }
 
 .form-group {
@@ -185,10 +185,10 @@ export default {
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {
-    width: 40%;
+    width: 60%;
 }
 </style>
