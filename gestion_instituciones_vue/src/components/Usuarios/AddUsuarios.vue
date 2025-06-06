@@ -147,9 +147,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
-select {
-    margin: 0;
-    width: 400px;
+.action-button {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 button span {

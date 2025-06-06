@@ -11,15 +11,13 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
         <!-- *** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
+
         <main class="action-container container-color-guardar">
             <div>
                 <img :src="imglotus" style="width: 185px;" alt="logo">
@@ -50,7 +48,9 @@
                         <option value="Online">ONLINE</option>
                     </select>
                 </div>
-                <button type="submit" class="action-button color-button-guardar">REGISTRAR</button>
+                <button type="submit" class="action-button"><i class="fas fa-plus-circle"></i><span>Añadir nuevo
+                        Módulo</span>
+                </button>
             </form>
         </main>
     </div>
@@ -162,15 +162,20 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.header {
-    margin-top: 2%;
+.action-button {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button span {
+    color: #ee7724
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {
-    width: 40%;
+    width: 60%;
 }
 </style>

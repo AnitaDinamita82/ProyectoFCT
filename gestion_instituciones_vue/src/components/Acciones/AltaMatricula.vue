@@ -10,15 +10,11 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
 
         <header class="header">
             <img :src="imglotus" style="width: 100px;" alt="logo-header" />
@@ -37,45 +33,55 @@
             <!-- Seccion para matricular a un alumno -->
             <div v-if="alumno">
                 <div v-if="modulosConAsignaturasDisponibles.length > 0">
-                    <h3>Módulos con asignaturas disponibles para matricular</h3>
-
-                    <div v-for="modulo in modulosConAsignaturasDisponibles" :key="modulo.codigoModulo" class="modulo-card">
+                    <h3>Módulos con asignaturas disponibles</h3>
+                    <div class="action-style">
+                        <button type="submit" class="action-button" @click="verMatriculaCompleta()"><i class="fas fa-light
+                        fa-eye"></i><span>Matricula Completa</span>
+                        </button>
+                    </div>
+                    <div v-for="modulo in modulosConAsignaturasDisponibles" :key="modulo.codigoModulo"
+                        class="modulo-card">
                         <h4>Módulo: {{ modulo.nombreModulo }} ({{ modulo.codigoModulo }})</h4>
                         <p>Curso: {{ modulo.curso }} | Grupo: {{ modulo.grupo }}</p>
                         <div v-if="modulo.asignaturas && modulo.asignaturas.length > 0">
-                            <h5>Asignaturas:</h5>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>CÓDIGO</th>
-                                            <th>NOMBRE ASIGNATURA</th>
-                                            <th>DESCRIPCIÓN</th>
-                                            <th>ACCIÓN</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="asignatura in modulo.asignaturas" :key="asignatura.id">
-                                            <td>{{ asignatura.codigo }}</td>
-                                            <td>{{ asignatura.nombre }}</td>
-                                            <td>{{ asignatura.descripcion }}</td>
-                                            <td>
-                                                <button class="action-button color-button-matricular"
-                                                    @click="confirmarEnMatricula(asignatura.codigo)"><i
-                                                        class="fas fa-plus-circle"></i> MATRICULAR</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                            </table>                           
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>CÓDIGO</th>
+                                        <th>NOMBRE ASIGNATURA</th>
+                                        <th>DESCRIPCIÓN</th>
+                                        <th>ACCIÓN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="asignatura in modulo.asignaturas" :key="asignatura.id">
+                                        <td>{{ asignatura.codigo }}</td>
+                                        <td>{{ asignatura.nombre }}</td>
+                                        <td>{{ asignatura.descripcion }}</td>
+                                        <td class="action-cell">
+                                            <button class="action-button"
+                                                @click="confirmarEnMatricula(asignatura.codigo)"><i
+                                                    class="fas fa-plus-circle"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <p v-else>No hay asignaturas disponibles en este módulo para este alumno.</p>
-                    </div>       
-                        <button type="submit" class="action-button color-button-ver" @click="verMatriculaCompleta()">Ver
-                            Matricula Completa</button>            
+                    </div>
+                    <div class="action-style">
+                        <button type="submit" class="action-button" @click="verMatriculaCompleta()"><i class="fas fa-light
+                        fa-eye"></i><span>Matricula Completa</span>
+                        </button>
+                    </div>
                 </div>
-                <p v-else>Aún no tenemos abierta la oferta para el nuevo curso o el alumno está matriculado de todas las asignaturas disponibles</p>
+                <p v-else>Aún no tenemos abierta la oferta para el nuevo curso o el alumno está matriculado de todas las
+                    asignaturas disponibles</p>
             </div>
             <p v-else>Cargando información o sin datos que mostrar.</p>
         </main>
+        <BotonSubir />
     </div>
 </template>
 
@@ -83,11 +89,15 @@
 import imglotus from '@/assets/lotus.webp';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
-
+import BotonSubir from '@/components/Acciones/BotonSubir.vue';
 
 export default {
 
     name: 'AltaMatricula',
+    components: {
+        BotonSubir
+    },
+
     data() {
         return {
             imglotus: imglotus,
@@ -195,8 +205,8 @@ export default {
                 // 3. Obtener todos los modulos
                 const responseModulos = await axios.get(`${this.apiUrl}/${this.version}/modulos/listar`, {
                     headers: {
-                        'Authorization': `Bearer ${token}` 
-                        
+                        'Authorization': `Bearer ${token}`
+
                     },
                 });
 
@@ -208,12 +218,12 @@ export default {
                     try {
                         const responseAsignaturasDeModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturas/${modulo.codigoModulo}`, {
                             headers: {
-                                'Authorization': `Bearer ${token}` 
-                                
+                                'Authorization': `Bearer ${token}`
+
                             },
                         });
 
-                     // Filtrar asignaturas del módulo: solo las que NO están matriculadas por el alumno Y existen en la lista general de asignaturas    
+                        // Filtrar asignaturas del módulo: solo las que NO están matriculadas por el alumno Y existen en la lista general de asignaturas    
 
                         const asignaturasDisponiblesEnModulo = responseAsignaturasDeModulo.data.filter(asignatura => !codigosAsignaturasMatriculadas.has(asignatura.codigo) && codigosTodasAsignaturas.has(asignatura.codigo));
 
@@ -225,12 +235,12 @@ export default {
                         }
                     } catch (error) {
                         console.warn(`No se pudieron cargar las asignaturas para el módulo ${modulo.codigoModulo}:`);
-                    } 
+                    }
                 }
-        
+
                 console.log('Módulos con asignaturas disponibles para matricular:', this.modulosConAsignaturasDisponibles); // PUNTO DE CONTROL
                 console.log("FINALIZADA carga. Módulos con asignaturas disponibles:", this.modulosConAsignaturasDisponibles); // Debug
-                 
+
             } catch (error) {
                 this.error = true;
                 this.mostrarAlerta = true;
@@ -243,7 +253,7 @@ export default {
                 console.error('Error general al cargar datos de matrícula:', error);
             }
 
-            
+
         },
 
         confirmarEnMatricula(codigoAsignatura) {
@@ -324,12 +334,20 @@ export default {
 
 <style lang="css" scoped>
 .header {
-    margin-top: 0%;
+    margin-top: 2%;
+}
+
+.action-button span {
+    color: #25662b;
+}
+
+.action-style button {
+    margin-left: auto;
 }
 
 .action-container {
-    margin-top: 0;
-    margin-left: 3%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 .container-color-matricular {
@@ -337,10 +355,10 @@ export default {
 }
 
 .modulo-card {
-    border: 1px solid #c9c23d; /* O un color que te guste, similar a tu container-color-matricular */
+    border: 1px solid #c9c23d;
     border-radius: 8px;
     padding: 20px;
-    margin-bottom: 25px; /* Espacio entre módulos */
+    margin-bottom: 25px;
     background-color: #fefefe;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -369,31 +387,13 @@ export default {
 
 .modulo-card th,
 .modulo-card td {
-    border: 1px solid #ddd;
+
     padding: 10px;
-    text-align: left;
-}
-
-.modulo-card th {
-    background-color: #f2f2f2;
-}
-
-.action-button.color-button-matricular {
-    background-color: #c9c23d; /* Asegúrate de que el color sea consistente */
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-
-.action-button.color-button-matricular:hover {
-    background-color: #b0a931; /* Un tono más oscuro al pasar el ratón */
+    text-align: center;
 }
 
 .alert {
-    width: 50%;
+    width: 60%;
 }
 
 .alert-danger {

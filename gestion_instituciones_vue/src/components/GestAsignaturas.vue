@@ -10,24 +10,25 @@
       </div>
       <div class="top-bar-right">
         <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-        <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+        <button class="back-button" title="Vovler" @click="back"><i class="fas fa-arrow-left"></i></button>
+        <button class="logout-button" title="Cancelar" @click="logout"><i class="fas fa-power-off"></i></button>
       </div>
     </div>
     <!-- ** -->
 
     <!-- Boton Volver -->
     <div class="action-volver">
-      <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
+
     </div>
     <!-- Cabecera -->
     <header class="header">
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
-      <h1>Bienvenido a la Gestion de Asignaturas</h1>
+      <h1>Bienvenido a la Gestión de Asignaturas</h1>
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
     </header>
 
     <main class="main-container-gest">
-    
+
       <router-link to="/AddAsignaturas" class="action-card">
         <div class="card-top-section fondo-card-1">
           <div class="icon-container">

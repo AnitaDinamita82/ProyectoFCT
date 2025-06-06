@@ -1,26 +1,27 @@
 <template>
     <div class="index-gestion-container">
 
-       <!-- Franja superior (usuario logeado y boton de salir)-->
-            <div class="top-bar">
-                <div class="top-bar-left">
-                    <div class="icon-container-top-bar">
-                        <img :src="imglotus" alt="logo-top-bar" class="top-bar-logo" />
-                    </div>
-                    <p class="top-bar-text">Gest-In</p>
+        <!-- Franja superior (usuario logeado y boton de salir)-->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="icon-container-top-bar">
+                    <img :src="imglotus" alt="logo-top-bar" class="top-bar-logo" />
                 </div>
-                <div class="top-bar-right">
-                    <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                    <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
-                </div>
+                <p class="top-bar-text">Gest-In</p>
             </div>
-            <!-- *** -->
-            <!-- Bloque boton volver  -->
-            <div class="action-volver">
-                <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
+            <div class="top-bar-right">
+                <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Cancelar" @click="logout"><i class="fas fa-power-off"></i></button>
             </div>
+        </div>
         <!-- *** -->
-       
+        <!-- Bloque boton volver  -->
+        <div class="action-volver">
+
+        </div>
+        <!-- *** -->
+
         <main class="action-container container-color-guardar">
 
             <div>
@@ -44,7 +45,9 @@
                     <input type="text" id="descripcion" v-model="nuevaAsignatura.descripcion" placeholder="Descripción"
                         required>
                 </div>
-                 <button type="submit" class="action-button color-button-guardar">GUARDAR</button>
+                <button type="submit" class="action-button"><i class="fas fa-plus-circle"></i><span>Añadir nueva
+                        asignatura</span>
+                </button>
             </form>
         </main>
     </div>
@@ -112,7 +115,7 @@ export default {
                     }
                 });
 
-                this.mensaje =  `Se ha dado la asignatura ${response.data.nombre} con codigo ${response.data.codigo} de alta con exito `
+                this.mensaje = `Se ha dado la asignatura ${response.data.nombre} con codigo ${response.data.codigo} de alta con exito `
                 this.error = false;
                 this.mostrarAlerta = true;
 
@@ -127,10 +130,10 @@ export default {
                     this.mensaje = 'Error en la operación de alta, posible problema de conexiósn con el servidor';
                     this.mostrarAlerta = true;
                 }
-               
+
             }
             this.limpiarFormulario();
-           
+
         },
         cerrarAlerta() {
             this.mostrarAlerta = false;
@@ -144,8 +147,20 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.action-button {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button span {
+    color: #ee7724
+}
 
 .alert {
-    width: 30%;
+    width: 60%;
+}
+
+.alert-danger {
+    width: 60%;
 }
 </style>

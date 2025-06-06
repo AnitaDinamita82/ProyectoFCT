@@ -251,6 +251,11 @@ footer h6 {
 
 }
 
+input[type="text"],
+input[type="password"] {
+  width: 250px;
+}
+
 .alert-danger {
   width: 60%;
 }

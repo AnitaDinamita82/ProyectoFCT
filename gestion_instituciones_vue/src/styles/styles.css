@@ -278,12 +278,12 @@ select {
 }
 
 .form-select {
-    width: calc(100% - 12px);
+    width: 400px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-    margin-left: 2%;
+
 }
 
 label {
@@ -358,11 +358,20 @@ label {
 
 .fa-trash,
 .fa-xmark {
-    color: red;
+    color: rgb(227, 64, 64);
 }
 
 .fa-floppy-disk {
     color: #ee7724;
+}
+
+.fa-file-pen,
+.fa-network-wired {
+    color: #3e44ad;
+}
+
+.fa-eye {
+    color: #cec625
 }
 
 /* // Estilo para cuando hay mas de un botón */
@@ -506,6 +515,8 @@ thead tr {
     display: flex;
     justify-items: center;
     justify-content: center;
+    border: none;
+    gap: 10px;
 
 }
 

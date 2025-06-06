@@ -10,19 +10,16 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Vovler" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
-        </div>
-        <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
         </div>
         <!-- *** -->
 
         <header class="header">
             <img :src="imglotus" style="width: 100px;" alt="logo-header" />
-            <h1>Gestión de matricula para {{ alumno.nombre }} {{ alumno.apellido1 }}
+            <h1>Matricula de {{ alumno.nombre }} {{ alumno.apellido1 }}
                 {{ alumno.apellido2 }}</h1>
             <img :src="imglotus" style="width: 100px;" alt="logo-header" />
         </header>
@@ -35,44 +32,51 @@
             <div v-if="alumno">
                 <div v-if="modulosConAsignaturasMatriculadas.length > 0">
                     <h3>Módulos con asignaturas matriculadas</h3>
+                    <div class="action-style">
+                        <button type="submit" class="action-button" @click="confirmarBajaCompleta()">
+                            <i class="fas fa-trash"></i><span>Baja Completa </span>
+                        </button>
+                    </div>
+                    <div v-for="modulo in modulosConAsignaturasMatriculadas" :key="modulo.codigoModulo"
+                        class="modulo-card">
 
-                    <div v-for="modulo in modulosConAsignaturasMatriculadas" :key="modulo.codigoModulo" class="modulo-card">
-                        
                         <h4>Módulo: {{ modulo.nombreModulo }} ({{ modulo.codigoModulo }})</h4>
                         <p>Curso: {{ modulo.curso }} | Grupo: {{ modulo.grupo }}</p>
 
                         <div v-if="modulo.asignaturas && modulo.asignaturas.length > 0">
-                            <h5>Asignaturas:</h5>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>CÓDIGO</th>
-                                            <th>NOMBRE ASIGNATURA</th>
-                                            <th>DESCRIPCIÓN</th>
-                                            <th>ACCIÓN</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                            <tr v-for="asignatura in modulo.asignaturas" :key="asignatura.id">
-                                                <td>{{ asignatura.codigo }}</td>
-                                                <td>{{ asignatura.nombre }}</td>
-                                                <td>{{ asignatura.descripcion }}</td>
-                                                <td>
-                                                    <button class="action-button color-button-eliminar"
-                                                        @click="confirmarBajaMatricula(asignatura.codigo,asignatura.nombre)"><i
-                                                            class="fas fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                    </tbody>
-                                </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>CÓDIGO</th>
+                                        <th>NOMBRE ASIGNATURA</th>
+                                        <th>DESCRIPCIÓN</th>
+                                        <th>ACCIÓN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="asignatura in modulo.asignaturas" :key="asignatura.id">
+                                        <td>{{ asignatura.codigo }}</td>
+                                        <td>{{ asignatura.nombre }}</td>
+                                        <td>{{ asignatura.descripcion }}</td>
+                                        <td class="action-cell">
+                                            <button class="action-button" title="Eliminar"
+                                                @click="confirmarBajaMatricula(asignatura.codigo, asignatura.nombre)"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <p v-else>No hay asignaturas matriculadas en este módulo para este alumno.</p>
                     </div>
-                        <button type="submit" class="action-button color-button-baja" @click="confirmarBajaCompleta()">
-                            Baja Completa
+                    <div class="action-style">
+                        <button type="submit" class="action-button" @click="confirmarBajaCompleta()">
+                            <i class="fas fa-trash"></i><span>Baja Completa </span>
                         </button>
+                    </div>
                 </div>
-                <p v-else>El/la alumn@ no está matriculado/a aún de ninguna asignatura o se le dio de baja la matricula.</p>
+                <p v-else>El/la alumn@ no está matriculado/a aún de ninguna asignatura o se le dio de baja la matricula.
+                </p>
             </div>
             <p v-else>Cargando información o sin datos que mostrar.</p>
         </main>
@@ -97,7 +101,7 @@ export default {
             alumno: {}, // Objeto para el alumno del que depende la matricula.
             asignaturasMatriculadas: [], // Almacenará las asignaturas donde el alumno ya esté matriculado.
             modulosConAsignaturasMatriculadas: [], // Nueva propiedad para módulos con asignaturas matriculadas
-          
+
             mensaje: '',
             error: false,
             mostrarAlerta: false,
@@ -116,7 +120,7 @@ export default {
         };
 
         const back = () => {
-            router.push('/ListAlumnos');
+            router.go(-1);
         };
 
         return {
@@ -217,7 +221,7 @@ export default {
 
         },
 
-        confirmarBajaMatricula(codigoAsignatura,nombreAsinatura) {
+        confirmarBajaMatricula(codigoAsignatura, nombreAsinatura) {
             if (confirm(`¿Está seguro que desea dar de baja la asignatura ${nombreAsinatura} para el alumno ${this.alumno.nombre} ${this.alumno.apellido1} ?`)) {
                 this.desMatricularDeAsignatura(this.alumno.dni, codigoAsignatura);
             }
@@ -231,7 +235,7 @@ export default {
 
         // Funcion para desmatricular al alumno en una asignatura
         async desMatricularDeAsignatura(dniAlumno, codigoAsignatura) {
-            
+
             this.error = false;
             this.mensaje = '';
             this.mostrarAlerta = false;
@@ -254,7 +258,7 @@ export default {
 
                 // Y despues de desMatricular, regargamos de nuevo la matricula.
 
-               await this.cargarAsignaturasMatriculadasPorModulo(dniAlumno); // Recargar datos
+                await this.cargarAsignaturasMatriculadasPorModulo(dniAlumno); // Recargar datos
 
             } catch (error) {
                 this.error = true;
@@ -293,22 +297,31 @@ export default {
 </script>
 <style lang="css" scoped>
 .header {
-    margin-top: 0%;
+    margin-top: 2%;
 }
 
 .action-container {
-    margin-top: 0;
-    margin-left: 3%;
+    margin: auto;
+}
+
+.action-button span {
+    color: #a54a4a;
+}
+
+.action-style button {
+    margin-left: auto;
 }
 
 /* Estilo para el contenedor principal de VerMatricula */
 .container-color-ver-matricula {
-    border-left: 5px solid #a33939; /* Un color distinto para diferenciar de AltaMatricula */
+    border-left: 5px solid #a33939;
+    /* Un color distinto para diferenciar de AltaMatricula */
 }
 
 /* Estilos de las tarjetas de módulo, tabla y botones (copiados de AltaMatricula y ajustados) */
 .modulo-card {
-    border: 1px solid #a33939; /* Borde del módulo */
+    border: 1px solid #a33939;
+    /* Borde del módulo */
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
@@ -340,13 +353,8 @@ export default {
 
 .modulo-card th,
 .modulo-card td {
-    border: 1px solid #ddd;
     padding: 10px;
-    text-align: left;
-}
-
-.modulo-card th {
-    background-color: #f2f2f2;
+    text-align: center;
 }
 
 .container-color-matricular {
@@ -354,7 +362,7 @@ export default {
 }
 
 .alert {
-    width: 50%;
+    width: 60%;
 }
 
 .alert-danger {

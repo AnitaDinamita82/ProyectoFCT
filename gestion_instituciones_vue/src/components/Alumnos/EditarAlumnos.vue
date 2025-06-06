@@ -11,13 +11,10 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
-        </div>
-        <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
         </div>
         <!-- *** -->
 
@@ -49,8 +46,10 @@
                     <input type="text" id="apellido2" v-model="alumno.apellido2" required>
                 </div>
                 <div class="button-group">
-                    <button type="submit" class="action-button color-button-guardar">GUARDAR</button>
-                    <button type="button" class="action-button color-button-cancelar" @click="back">CANCELAR</button>
+                    <button type="submit" title="Guardar" class="action-button"><i
+                            class="fas fa-thin fa-floppy-disk"></i></button>
+                    <button type="button" title="Cancelar" class="action-button" @click="back"><i
+                            class="fas fa-regular fa-xmark"></i></button>
                 </div>
 
             </form>
@@ -178,7 +177,7 @@ export default {
 
 <style lang="css" scoped>
 .action-container {
-    margin-top: 0;
+    gap: 15%;
 }
 
 .form-group {
@@ -187,7 +186,7 @@ export default {
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {

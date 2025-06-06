@@ -12,22 +12,19 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
         <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
 
         <main class="action-container container-color-editar">
             <div>
                 <img :src="imglotus" style="width: 185px;" alt="logo">
             </div>
-             <!-- Control de alertas -->
-             <div v-if="mostrarAlerta" class="alert" :class="{ 'alert-success': !error, 'alert-danger': error }">
+            <!-- Control de alertas -->
+            <div v-if="mostrarAlerta" class="alert" :class="{ 'alert-success': !error, 'alert-danger': error }">
                 {{ mensaje }}
                 <button type="button" class="x-close" @click="cerrarAlerta">X</button>
             </div>
@@ -47,9 +44,10 @@
                         <input type="text" id="descripcion" v-model="asignatura.descripcion" required>
                     </div>
                     <div class="button-group">
-                        <button type="submit" class="action-button color-button-guardar">GUARDAR</button>
-                        <button type="button" class="action-button color-button-cancelar"
-                            @click="volver">CANCELAR</button>
+                        <button type="submit" title="Guardar" class="action-button"><i
+                                class="fas fa-thin fa-floppy-disk"></i></button>
+                        <button type="button" title="Cancelar" class="action-button" @click="back"><i
+                                class="fas fa-regular fa-xmark"></i></button>
                     </div>
 
                 </form>
@@ -92,7 +90,7 @@ export default {
             router.push('/'); // Redirige a la página de login (asumiendo que tu ruta de login es '/')
         };
 
-        
+
         const back = () => {
             router.push('/ListAsignaturas');
         };
@@ -108,8 +106,8 @@ export default {
 
     async mounted() {
 
-         /* Usuario logeado */
-         this.sessionUser = localStorage.getItem('sessionUser');
+        /* Usuario logeado */
+        this.sessionUser = localStorage.getItem('sessionUser');
         console.log('SESSIONUSER: ', this.sessionUser); // PUNTO DE CONTROL
 
         if (this.route.params && this.route.params.asignatura) {
@@ -133,7 +131,7 @@ export default {
 
                 console.log('Asignatura a actualizar ', this.asignatura); // PUNTO DE CONTROL
 
-                const response =  await axios.put(`${this.apiUrl}/${this.version}/asignaturas/actualizar`, this.asignatura, {
+                const response = await axios.put(`${this.apiUrl}/${this.version}/asignaturas/actualizar`, this.asignatura, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
 
@@ -147,7 +145,7 @@ export default {
             } catch (error) {
                 this.error = true;
 
-                 if (error.response) {
+                if (error.response) {
                     this.mensaje = error.response.data;
                     console.log('API ERROR:  ', this.mensaje); // PUNTO DE CONTROL
 
@@ -174,7 +172,7 @@ export default {
 
 <style lang="css" scoped>
 .action-container {
-   margin-top: 0;
+    gap: 15%;
 }
 
 .form-group {
@@ -183,10 +181,10 @@ export default {
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {
-    width: 40%;
+    width: 60%;
 }
 </style>

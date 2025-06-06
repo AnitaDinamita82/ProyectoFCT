@@ -10,15 +10,13 @@
             </div>
             <div class="top-bar-right">
                 <span class="user-display"> <i class="fas fa-thing fa-user"></i> {{ sessionUser }}</span>
-                <button class="logout-button" @click="logout"><i class="fas fa-power-off"></i></button>
+                <button class="back-button" title="Volver" @click="back"><i class="fas fa-arrow-left"></i></button>
+                <button class="logout-button" title="Desconectar" @click="logout"><i
+                        class="fas fa-power-off"></i></button>
             </div>
         </div>
         <!-- ** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-            <button class="back-button" @click="back"><i class="fas fa-arrow-left"></i></button>
-        </div>
-        <!-- *** -->
+
         <header class="header">
             <img :src="imglotus" style="width: 100px;" alt="logo-header" />
             <h1>{{ modulo.nombreModulo }} - ({{ modulo.curso }}/{{
@@ -43,10 +41,10 @@
                             <tbody>
                                 <tr v-for="asignatura in asignaturasEnModulo" :key="asignatura.id">
                                     <td> {{ asignatura.nombre }} ({{ asignatura.codigo }})</td>
-                                    <td>
-                                        <button class="action-button color-button-eliminar"
+                                    <td class="action-cell">
+                                        <button class="action-button" title="Eliminar"
                                             @click="confirmarBaja(asignatura.codigo)">
-                                            <i class="fas fa-trash"></i> Desvincular
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -62,8 +60,8 @@
                             <tbody>
                                 <tr v-for="asignatura in asignaturasDisponibles" :key="asignatura.id">
                                     <td> {{ asignatura.nombre }} ({{ asignatura.codigo }})</td>
-                                    <td>
-                                        <div class="action-button .color-button-añadir"
+                                    <td class="action-cell">
+                                        <div class="action-button" title="Añadir"
                                             @click="asignarAsignatura(modulo.codigoModulo, asignatura.codigo)">
                                             <i class="fas fa-plus-circle"></i>
                                         </div>
@@ -77,15 +75,21 @@
             </div>
             <p v-else>Cargando información o sin datos que mostrar.</p>
         </main>
+        <BotonSubir />
     </div>
 </template>
 <script>
 import imglotus from '@/assets/lotus.webp';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
+import BotonSubir from '@/components/Acciones/BotonSubir.vue';
 
 export default {
     name: 'AsignacionesAsignaturasModulos',
+    components: {
+        BotonSubir
+    },
+
     data() {
         return {
             imglotus: imglotus,
@@ -301,15 +305,19 @@ export default {
 </script>
 <style scoped lang="css">
 .header {
-    margin-top: 0;
+    margin-top: 2%;
 }
 
 .gestion-sections {
     display: flex;
     gap: 30px;
     width: 90%;
-    max-width: 1200px;
-    margin-top: 20px;
+
+
+}
+
+table {
+    width: 500px;
 }
 
 .section-column {
