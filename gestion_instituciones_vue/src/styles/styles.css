@@ -374,6 +374,10 @@ label {
     color: #cec625
 }
 
+.fa-people-group {
+    color: #479989;
+}
+
 /* // Estilo para cuando hay mas de un botón */
 .button-group {
     display: flex;

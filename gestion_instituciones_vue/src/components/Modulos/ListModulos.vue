@@ -64,12 +64,14 @@
                             <td>{{ modulo.curso }}</td>
                             <td>{{ modulo.grupo }}</td>
                             <td class="action-cell">
-                                <button type="submit" title="Asignar Asignaturas" class="action-button"
+                                <button type="submit" title="Gestionar Asignaturas" class="action-button"
                                     @click="gestionarAsignaciones(modulo.codigoModulo)"><i
                                         class="fas fa-network-wired"></i></button>
                                 <button type="submit" title="Ver Detalles Módulo" class="action-button"
                                     @click="verModuloCompleto(modulo)"><i class="fas fa-light
                                         fa-eye"></i></button>
+                                <button type="submit" title="Gestionar Alumnos" class="action-button"
+                                    @click="gestionarAlumnos()"><i class=" fas fa-thin fa-people-group"></i></button>
                                 <button type="submit" title="Eliminar" class="action-button"
                                     @click="confirmarBaja(modulo.codigoModulo)"><i class="fas fa-trash"></i></button>
                             </td>
@@ -289,6 +291,9 @@ export default {
                 name: 'VerModuloCompleto', // Este será el nombre de la ruta que definiremos
                 params: { modulo: JSON.stringify(modulo) }
             });
+        },
+        async gestionarAlumnos() {
+            this.router.push('/ListAlumnos');
         },
         cerrarAlerta() {
             this.mostrarAlerta = false;

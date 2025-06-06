@@ -25,7 +25,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    /* GET */
+    /* -- ENDPOINT GET -- */
+
+    // LISTAR USUARIOS //
     @GetMapping("/listar")
     public ResponseEntity<List<Usuario>> listarUsuarios() {
 
@@ -34,7 +36,7 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
-    /* GET */
+    // BUSCAR POR DNI DE USUARIO //
     @GetMapping("/buscar/{dniUsuario}")
     public ResponseEntity<Usuario> buscarUsuario(@PathVariable String dniUsuario) {
 
@@ -50,7 +52,9 @@ public class UsuarioController {
         }
     }
 
-    /* POST */
+    /* -- ENDPOINT POST -- */
+
+    // ALTA DE UN USUARIO //
     @PostMapping("/alta")
     public ResponseEntity<?> altaUsuario(@RequestBody UsuarioDTO usuarioDTO) {
 
@@ -67,12 +71,15 @@ public class UsuarioController {
                     "El login " + usuario.getLogin() + " ya está siendo utilizado por otra persona.",
                     HttpStatus.CONFLICT);
         }
+        // Actualizamos usuario
         usuarioService.darDeAltaUnUsuario(usuario);
-        return new ResponseEntity<>("Se ha dado al usuario " + usuario.getLogin() + " de alta con exito",
+        return new ResponseEntity<>("Se ha dado al usuario " + usuario.getLogin() + " de alta con éxito",
                 HttpStatus.OK);
     }
 
-    /* DELETE */
+    /* -- ENDPOINT DELETE -- */
+
+    // ELIMINAR USUARIO DADO SU DNI //
     @DeleteMapping("/baja/{dniUsuario}")
     public ResponseEntity<String> bajaUsuario(@PathVariable String dniUsuario) {
 
@@ -97,7 +104,8 @@ public class UsuarioController {
         }
     }
 
-    /* PUT */
+    /* -- ENDPOINT PUT -- */
+    // ACTUALIZAR DATOS DE UN USUARIO //
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
 

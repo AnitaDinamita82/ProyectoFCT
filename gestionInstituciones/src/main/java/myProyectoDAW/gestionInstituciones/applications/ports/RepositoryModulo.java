@@ -31,4 +31,6 @@ public interface RepositoryModulo {
 
     public ResponseEntity<?> obtenerTodasLasAsignaturasDeUnModulo(String codigoModulo);
 
+    public ResponseEntity<?> obtenerTodosLosModulosDeUnaAsignatura(String codigoAsignatura);
+
 }

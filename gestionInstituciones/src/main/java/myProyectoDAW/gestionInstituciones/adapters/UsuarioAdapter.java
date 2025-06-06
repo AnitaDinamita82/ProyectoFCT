@@ -22,7 +22,7 @@ public class UsuarioAdapter implements RepositoryUsuario {
 
     private Optional<UsuarioEntity> usuarioEntityOptional;
 
-    @Override // Operacion de Listar todos los usuarios de la BD
+    @Override // Operación de Listar todos los usuarios de la BD
     public List<Usuario> listarUsuarios() {
 
         List<UsuarioEntity> usuarioEntities = usuarioJpaRepository.findAll();
@@ -32,7 +32,7 @@ public class UsuarioAdapter implements RepositoryUsuario {
                 .collect(Collectors.toList());
     }
 
-    @Override // Operacion para dar de alta un usuario.
+    @Override // Operación para dar de alta un usuario.
     public Usuario darDeAltaUnUsuario(Usuario usuario) {
 
         UsuarioEntity usuarioEntity = convertirUsuarioAEntity(usuario);
@@ -40,7 +40,7 @@ public class UsuarioAdapter implements RepositoryUsuario {
 
     }
 
-    @Override
+    @Override // Operación de busqueda y obtención de un usuario dado su login.
     public Usuario encontrarSiExisteUsuario(String login) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByLogin(login);
@@ -57,7 +57,7 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return null;
     }
 
-    @Override
+    @Override // Operación para dar de baja un usuario dado su login
     public Boolean eliminarUsuarioDadoLogin(String login) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByLogin(login);
@@ -79,7 +79,7 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return true;
     }
 
-    @Override
+    @Override // Operación para la modificación de datos de un usuario.
     public ResponseEntity<String> actualizarUsuario(Usuario usuario) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByDni(usuario.getDni());
@@ -97,22 +97,22 @@ public class UsuarioAdapter implements RepositoryUsuario {
 
             usuarioJpaRepository.save(usuarioEntity);
             convertirEntityAUsuario(usuarioEntity);
-            return new ResponseEntity<>("Modificación realizada con exito.", HttpStatus.OK);
+            return new ResponseEntity<>("Modificación realizada con éxito.", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Parece que ha habido un error con la actualizacion del usuario.", HttpStatus.OK);
+        return new ResponseEntity<>("Parece que ha habido un error con la actualización del usuario.", HttpStatus.OK);
     }
 
-    @Override
+    @Override // Operación para obtener el numero total de usuarios conectados
     public long obtenerNumeroTotalDeUsuarios() {
         return usuarioJpaRepository.count();
     }
 
-    @Override
+    @Override // Operación para saber si un determinado usuario existe dado su dni
     public boolean existe(String dniUsuario) {
         return usuarioJpaRepository.findByDni(dniUsuario).isPresent();
     }
 
-    @Override
+    @Override // Operación para obtener al usuario dado su DNI
     public Usuario obtenerUsuarioDadoDni(String dniUsuario) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByDni(dniUsuario);
@@ -120,12 +120,12 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return convertirEntityAUsuario(usuarioEntity);
     }
 
-    @Override
+    @Override // Operación para saber si existe un usuario dado su Login.
     public Boolean existeLoginDeUsuario(String login) {
         return usuarioJpaRepository.findByLogin(login).isPresent();
     }
 
-    /* Metodos de conversion */
+    /* -- METODOS DE CONVERSION -- */
     private UsuarioEntity convertirUsuarioAEntity(Usuario usuario) {
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();

@@ -16,7 +16,7 @@ public class ModuloService {
     @Autowired
     private RepositoryModulo repositoryModulo;
 
-    /* LIST */
+    /* Listar todos los módulos de la BD */
     public List<Modulo> obtenerTodosLosModulos() {
         return repositoryModulo.obtenerTodosLosModulos();
     }
@@ -63,6 +63,10 @@ public class ModuloService {
 
     public ResponseEntity<?> obtenerTodasLasAsignaturasDeUnModulo(String codigoModulo) {
         return repositoryModulo.obtenerTodasLasAsignaturasDeUnModulo(codigoModulo);
+    }
+
+    public ResponseEntity<?> obtenerTodosLosModulosDeUnaAsignatura(String codigoAsignatura) {
+        return repositoryModulo.obtenerTodosLosModulosDeUnaAsignatura(codigoAsignatura);
     }
 
 }

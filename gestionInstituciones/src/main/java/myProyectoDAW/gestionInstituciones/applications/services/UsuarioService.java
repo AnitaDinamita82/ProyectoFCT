@@ -28,10 +28,7 @@ public class UsuarioService {
         return repositoryUsuario.darDeAltaUnUsuario(usuario);
     }
 
-    /*
-     * Dado un login de usuario saber si existe en base de datos y nos devuelve el
-     * usuario
-     */
+    /* Obtener al usuario en si dado su login */
     public Usuario encontrarSiExisteUsuario(String login) {
 
         return repositoryUsuario.encontrarSiExisteUsuario(login);

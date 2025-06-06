@@ -209,6 +209,18 @@ export default {
     margin-top: 2%;
 }
 
+button span {
+    color: #ee7724
+}
+
+.style-router-link {
+    margin-left: auto;
+}
+
+.style-router-link button {
+    margin-left: auto;
+}
+
 .alert {
     width: 40%;
 }
