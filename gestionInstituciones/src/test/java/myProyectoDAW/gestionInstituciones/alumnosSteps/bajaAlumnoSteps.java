@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.restassured.response.Response;
-import myProyectoDAW.gestionInstituciones.applications.services.AlumnoAsignaturaService;
+import myProyectoDAW.gestionInstituciones.applications.services.MatriculaService;
 import myProyectoDAW.gestionInstituciones.applications.services.AlumnoService;
 import myProyectoDAW.gestionInstituciones.commonSteps.autenticacionStepsComunes;
 import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
@@ -24,13 +24,12 @@ public class bajaAlumnoSteps {
     private AlumnoService alumnoService;
 
     @Autowired
-    private AlumnoAsignaturaService alumnoAsignaturaService;
+    private MatriculaService matriculaService;
 
     private Response response;
 
     @Autowired
     private autenticacionStepsComunes autenticacionStepsComunes;
-    
 
     @Given("un alumno con DNI {string} no existente en el sistema")
     public void alumno_no_existente(String dni) {
@@ -42,29 +41,29 @@ public class bajaAlumnoSteps {
     @Transactional
     @Given("el alumno con DNI {string} tiene asignaturas asociadas")
     public void alumno_tiene_asignaturas_asociadas(String dniAlumno) {
-        assertTrue(alumnoAsignaturaService.alumnoTieneAsignaturas(dniAlumno));
+        assertTrue(matriculaService.alumnoTieneAsignaturas(dniAlumno));
     }
 
     @Transactional
     @Given("el alumno con DNI {string} no tiene asignaturas asociadas")
     public void alumno_no_tiene_asignaturas_asociadas(String dniAlumno) {
         // Asegúrate de que el alumno no tenga asignaturas asociadas en la base de datos
-        assertFalse(alumnoAsignaturaService.alumnoTieneAsignaturas(dniAlumno));
+        assertFalse(matriculaService.alumnoTieneAsignaturas(dniAlumno));
     }
-    
+
     @And("se comprobara que el alumno no existe mostrando la lista de alumnos")
     public void se_comprobara_que_el_alumno_no_existe_mostrando_la_lista_de_alumnos() {
 
         response = autenticacionStepsComunes.getResponse(); // Obtiene la respuesta de autenticacionStepsComunes
 
         // Verifica que la respuesta sea una lista y que contenga alumnos.
-        List<Alumno> alumnos = response.jsonPath().getList(".", Alumno.class); 
+        List<Alumno> alumnos = response.jsonPath().getList(".", Alumno.class);
         Assert.assertNotNull(alumnos);
-        Assert.assertTrue(!alumnos.isEmpty()); 
+        Assert.assertTrue(!alumnos.isEmpty());
 
-         // Imprime la lista de alumnos en la consola
-        System.out.println("Lista de alumnos:"); 
-        
+        // Imprime la lista de alumnos en la consola
+        System.out.println("Lista de alumnos:");
+
         for (Alumno alumno : alumnos) {
             System.out.println("  - DNI: " + alumno.getDni());
             System.out.println("  - Nombre: " + alumno.getNombre());
@@ -73,6 +72,6 @@ public class bajaAlumnoSteps {
             System.out.println(" ");
         }
 
-    } 
+    }
 
 }

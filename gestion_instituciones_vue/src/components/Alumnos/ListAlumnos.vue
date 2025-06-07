@@ -198,36 +198,42 @@ export default {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     },
-                    validateStatus: (status) => status >= 200 && status < 300 || status === 400 || status === 404 || status === 409, // Para que no los tome como erroes reales
                 });
 
-                this.apiResponse(response);
-                this.listarAlumnos();
+                this.error = false;
+
+                this.mensaje = await response.data;
+                this.mostrarAlerta = true;
+                //  this.listarAlumnos();
 
             } catch (error) {
 
-                if (error.request) {
-                    this.error = true;
-                    this.mensaje = 'Intento fallido de comunicación con el servidor.'; // La aplicacion no está en ejecucion.
-                    this.mostrarAlerta = true;
-                }
-
-            }
-        },
-
-        async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
-            if (response.status === 200) {
-
-                this.mensaje = await response.data;
-                this.error = false;
-
-            } else if (response.status === 400 || response.status === 404 || response.status === 409) {
                 this.error = true;
-                this.mensaje = await response.data;
+                this.mostrarAlerta = true;
+                if (error.response) {
+                    this.mensaje = await error.response.data;
+                } else {
+                    if (error.request) {
 
+                        this.mensaje = 'Intento fallido de comunicación con el servidor.'; // La aplicacion no está en ejecucion.
+                    }
+                }
             }
-            this.mostrarAlerta = true;
         },
+
+        /*  async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
+              if (response.status === 200) {
+  
+                  this.mensaje = await response.data;
+                  this.error = false;
+  
+              } else if (response.status === 400 || response.status === 404 || response.status === 409) {
+                  this.error = true;
+                  this.mensaje = await response.data;
+  
+              }
+              this.mostrarAlerta = true;
+          },*/
 
         async buscarAlumno() {
 
@@ -309,6 +315,7 @@ export default {
         },
         cerrarAlerta() {
             this.mostrarAlerta = false;
+            this.listarAlumnos();
         },
         limpiarFormulario() {
             this.dniABuscar = '';

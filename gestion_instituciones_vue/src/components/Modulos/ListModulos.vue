@@ -193,35 +193,42 @@ export default {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     },
-                    validateStatus: (status) => status >= 200 && status < 300 || status === 400 || status === 404 || status === 409,
                 });
 
-                this.apiResponse(response);
-                this.listarModulos(); // Refrescar la lista de módulos
+
+                this.error = false;
+                this.mostrarAlerta = true;
+                this.mensaje = await response.data;
+                //  this.listarModulos(); // Refrescar la lista de módulos
 
             } catch (error) {
+                this.error = true;
+                this.mostrarAlerta = true;
 
-                if (error.request) {
-                    this.error = true;
-                    this.mensaje = 'Intento fallido de comunicación con el servidor.'; // La aplicacion no está en ejecucion.
-                    this.mostrarAlerta = true;
+                if (error.response) {
+                    this.mensaje = await error.response.data;
+                } else {
+                    if (error.request) {
+
+                        this.mensaje = 'Intento fallido de comunicación con el servidor.'; // La aplicacion no está en ejecucion.
+                    }
                 }
             }
         },
 
-        async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
-            if (response.status === 200) {
-
-                this.mensaje = await response.data;
-                this.error = false;
-
-            } else if (response.status === 400 || response.status === 404 || response.status === 409) {
-                this.error = true;
-                this.mensaje = await response.data;
-
-            }
-            this.mostrarAlerta = true;
-        },
+        /*     async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
+                 if (response.status === 200) {
+     
+                     this.mensaje = await response.data;
+                     this.error = false;
+     
+                 } else if (response.status === 400 || response.status === 404 || response.status === 409) {
+                     this.error = true;
+                     this.mensaje = await response.data;
+     
+                 }
+                 this.mostrarAlerta = true;
+             },*/
         async buscarModulo() {
             try {
                 const token = localStorage.getItem('authToken');
@@ -297,6 +304,7 @@ export default {
         },
         cerrarAlerta() {
             this.mostrarAlerta = false;
+            this.listarModulos(); // Refrescar la lista de módulos
         },
         limpiarFormularioBusqueda() {
             this.codigoABuscar = '';

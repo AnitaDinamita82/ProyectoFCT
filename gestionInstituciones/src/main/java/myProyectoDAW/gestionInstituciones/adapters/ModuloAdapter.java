@@ -103,7 +103,7 @@ public class ModuloAdapter implements RepositoryModulo {
             }
             // Verificamos si el modulo tiene asignaturas asociadasalumnoAdapter
             if (moduloEntityAEliminar.getAsignaturas() != null && !moduloEntityAEliminar.getAsignaturas().isEmpty()) {
-                return new ResponseEntity<>("No se puede eliminar el modulo con codigo " + codigoModulo
+                return new ResponseEntity<>("No se puede eliminar el modulo " + moduloEntityAEliminar.getNombreModulo()
                         + ". Tiene asignaturas ya registradas.", HttpStatus.CONFLICT);
             }
 

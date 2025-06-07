@@ -261,7 +261,7 @@ export default {
                 const response = await axios.delete(url, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json' // Aunque DELETE no suele enviar cuerpo, es buena práctica si el backend lo espera.
+                        'Content-Type': 'application/json'
                     },
                 });
 

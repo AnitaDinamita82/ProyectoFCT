@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import myProyectoDAW.gestionInstituciones.adapters.dtos.MatriculaDTO;
-import myProyectoDAW.gestionInstituciones.applications.services.AlumnoAsignaturaService;
+import myProyectoDAW.gestionInstituciones.applications.services.MatriculaService;
 import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
 import myProyectoDAW.gestionInstituciones.domain.models.Asignatura;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("{version}/alumnoAsignaturaMTM")
-public class AlumnoAsignaturaManyToManyController {
+@RequestMapping("{version}/matricula")
+public class MatriculaController {
 
     @Autowired
-    private AlumnoAsignaturaService alumnoAsignaturaService;
+    private MatriculaService alumnoAsignaturaService;
 
     /* GET */
     @GetMapping("/listarAsignaturasDeAlumno/{dniAlumno}")
@@ -53,4 +53,8 @@ public class AlumnoAsignaturaManyToManyController {
                 matriculaDTO.getCodigoAsignatura());
     }
 
+    @DeleteMapping("desmatricularTodasLasAsignaturasDeAlumno/{dniAlumno}")
+    public ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(@PathVariable String dniAlumno) {
+        return alumnoAsignaturaService.desmatricularTodasLasAsignaturasDeUnAlumno(dniAlumno);
+    }
 }
