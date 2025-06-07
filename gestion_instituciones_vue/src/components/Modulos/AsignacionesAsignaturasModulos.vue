@@ -175,7 +175,7 @@ export default {
 
                 // 2. Obtener asignaturas ya asignadas a este módulo
                 console.log('COD MODULO:', codigoModulo); // PUNTO DE CONTROL.
-                const todasLasDelModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturas/${codigoModulo}`, { // Llamada a la API de listar asignaturas
+                const todasLasDelModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturasModulo/${codigoModulo}`, { // Llamada a la API de listar asignaturas
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -210,7 +210,7 @@ export default {
             try {
 
                 const token = localStorage.getItem('authToken');
-                const response = await axios.post(`${this.apiUrl}/${this.version}/modulos/asignarAsignaturas/${codigoModulo}`, {
+                const response = await axios.post(`${this.apiUrl}/${this.version}/modulos/asignarAsignaturasAModulo/${codigoModulo}`, {
                     codigoAsignatura: codigoAsignatura
                 }, {
                     headers: {
@@ -256,7 +256,7 @@ export default {
             try {
                 const token = localStorage.getItem('authToken');
 
-                const url = `${this.apiUrl}/${this.version}/modulos/desasignarAsignaturas/${this.modulo.codigoModulo}/${codigoAsignatura}`;
+                const url = `${this.apiUrl}/${this.version}/modulos/desasignarAsignaturasDeModulo/${this.modulo.codigoModulo}/${codigoAsignatura}`;
 
                 const response = await axios.delete(url, {
                     headers: {

@@ -135,7 +135,7 @@ export default {
                 const token = localStorage.getItem('authToken');
                 console.log('Modulo a actualizar ', this.modulo); // PUNTO DE CONTROL
 
-                const response = await axios.put(`${this.apiUrl}/${this.version}/modulos/actualizar`, this.modulo, {
+                const response = await axios.put(`${this.apiUrl}/${this.version}/modulos/actualizarModulo`, this.modulo, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
 

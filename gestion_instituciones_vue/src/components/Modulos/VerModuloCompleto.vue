@@ -132,7 +132,7 @@ export default {
 
                 //1. Obtener el modulo en cuestión
 
-                const responseModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/buscar/${codigoModulo}`, {
+                const responseModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/buscarModulo/${codigoModulo}`, {
                     headers: { 'Authorization': `Bearer ${token}` },
 
                 });
@@ -148,7 +148,7 @@ export default {
                 console.log('MODULO COMPLETO', this.modulo); // PUNTO DE CONTROL
 
                 //2. Obtener las asignaturas del modulo
-                const responseAsignaturas = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturas/${codigoModulo}`, {
+                const responseAsignaturas = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturasModulo/${codigoModulo}`, {
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
 

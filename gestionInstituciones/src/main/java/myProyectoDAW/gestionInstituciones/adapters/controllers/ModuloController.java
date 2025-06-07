@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import myProyectoDAW.gestionInstituciones.adapters.dtos.CodigoAsignaturaDTO;
-//import myProyectoDAW.gestionInstituciones.adapters.dtos.DniAlumnoDTO;
+import myProyectoDAW.gestionInstituciones.adapters.dtos.DniAlumnoDTO;
 import myProyectoDAW.gestionInstituciones.adapters.dtos.ModuloDTO;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.ModuloEntity;
 import myProyectoDAW.gestionInstituciones.applications.services.ModuloService;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("{version}/modulos")
@@ -32,8 +31,8 @@ public class ModuloController {
 
     /* -- ENDPOINT GET -- */
 
-    // LISTAR TODOS LOS MODULOS//
-    @GetMapping("/listar")
+    // LISTAR TODOS LOS MODULOS //
+    @GetMapping("/listarModulos")
     public ResponseEntity<List<Modulo>> obtenerTodosLosModulos() {
 
         List<Modulo> modulos = moduloService.obtenerTodosLosModulos();
@@ -41,27 +40,33 @@ public class ModuloController {
     }
 
     // LISTAR TODAS LAS ASIGNATURAS DE UN MODULO DADO SU CODIGO //
-    @GetMapping("/listarAsignaturas/{codigoModulo}")
+    @GetMapping("/listarAsignaturasModulo/{codigoModulo}")
     public ResponseEntity<?> obtenerTodasLasAsignaturasDeUnModulo(@PathVariable String codigoModulo) {
         return moduloService.obtenerTodasLasAsignaturasDeUnModulo(codigoModulo);
     }
 
     // BUSCAR UN MODULO EN CONCRETO DADO SU CODIGO //
-    @GetMapping("/buscar/{codigoModulo}")
+    @GetMapping("/buscarModulo/{codigoModulo}")
     public ResponseEntity<?> buscarModuloDadoElCodigo(@PathVariable String codigoModulo) {
         return moduloService.buscarModuloDadoElCodigo(codigoModulo);
     }
 
-    // LISTTAR TODOS LOS MODULOS DADO EL CODIGO DE UNA ASIGNATURA //
-    @GetMapping("/listarModulos/{codAsignatura}")
+    // LISTAR TODOS LOS MODULOS EN LOS QUE ESTÁ UNA DETERMINADA ASIGNATURA //
+    @GetMapping("/listarModulosDeAsignatura/{codigoAsignatura}")
     public ResponseEntity<?> obtenerTodosLosModulosDeUnaAsignatura(@PathVariable String codigoAsignatura) {
         return moduloService.obtenerTodosLosModulosDeUnaAsignatura(codigoAsignatura);
+    }
+
+    // LISTAR TODOS LOS MODULOS DE UN ALUMNO //
+    @GetMapping("/listarModulosDeAlumno/{dniAlumno}")
+    public ResponseEntity<?> obtenerTodosLosModulosDeUnAlumno(@PathVariable String dniAlumno) {
+        return moduloService.obtenerTodosLosModulosDeUnAlumno(dniAlumno);
     }
 
     /* -- ENDPOINT POST -- */
 
     // ALTA DE UN NUEVO MODULO //
-    @PostMapping("/alta")
+    @PostMapping("/altaModulo")
     public ResponseEntity<String> crearNuevoModulo(@RequestBody ModuloDTO moduloDTO) {
 
         ModuloEntity moduloEntity = moduloDTO.convertirDTOaEntity(); // Se convierte a modulo de datos entyties que es
@@ -70,28 +75,24 @@ public class ModuloController {
         return moduloService.crearNuevoModulo(moduloEntity);
     }
 
-    // -- asignarAlumnosAModulo --
-    /*
-     * @PostMapping("/asignarAlumnos/{codigoModulo}")
-     * public ResponseEntity<String> asignarAlumnosAModulo(@PathVariable String
-     * codigoModulo,
-     * 
-     * @RequestBody DniAlumnoDTO dniAlumnoDTO) {
-     * return moduloService.asignarAlumnosAModulo(codigoModulo,
-     * dniAlumnoDTO.getDni());
-     * }
-     */
+    // ASIGNAR ALUMNOS A UN MODULO DADO SU CODIGO //
+    @PostMapping("/asignarAlumnosAModulo/{codigoModulo}")
+    public ResponseEntity<String> asignarAlumnosAModulo(@PathVariable String codigoModulo,
+            @RequestBody DniAlumnoDTO dniAlumnoDTO) {
+        return moduloService.asignarAlumnosAModulo(codigoModulo, dniAlumnoDTO.getDni());
+    }
 
     // ASIGNACION DE ASIGNATURAS A UN MODULO EN CONCRETO //
-    @PostMapping("/asignarAsignaturas/{codigoModulo}")
+    @PostMapping("/asignarAsignaturasAModulo/{codigoModulo}")
     public ResponseEntity<String> asignarAsignaturasAModulo(@PathVariable String codigoModulo,
             @RequestBody CodigoAsignaturaDTO codigoAsignaturaDTO) {
         return moduloService.asignarAsignaturasAModulo(codigoModulo, codigoAsignaturaDTO.getCodigoAsignatura());
     }
 
     /* -- ENDPOINT PUT -- */
+
     // ACTUALIZAR LOS DATOS DE UN MODULO //
-    @PutMapping("/actualizar")
+    @PutMapping("/actualizarModulo")
     public ResponseEntity<String> actualizarDatosEnModulo(@RequestBody ModuloDTO moduloDTO) {
 
         ModuloEntity moduloEntity = moduloDTO.convertirDTOaEntity();
@@ -102,25 +103,22 @@ public class ModuloController {
     /* -- ENDPOINT DELETE -- */
 
     // ELIMINACION DE UN MODULO DADO SU CODIGO //
-    @DeleteMapping("/baja/{codigoModulo}")
+    @DeleteMapping("/bajaModulo/{codigoModulo}")
     public ResponseEntity<String> bajaDeUnModuloDadoElCodigo(@PathVariable String codigoModulo) {
 
         return moduloService.bajaDeUnModuloDadoElCodigo(codigoModulo);
     }
 
-    // -- DesasignarAlumnosDeModulo --
-    /*
-     * @DeleteMapping("/desasignarAlumnos/{codigoModulo}/{dniAlumno}")
-     * public ResponseEntity<String> desasignarAlumnoDeModulo(@PathVariable String
-     * codigoModulo,
-     * 
-     * @PathVariable String dniAlumno) {
-     * return moduloServ
-     */
+    // DESASIGNAR ALUMNOS DE UN MODULO //
+    @DeleteMapping("/desasignarAlumnosDeModulo/{codigoModulo}/{dniAlumno}")
+    public ResponseEntity<String> desasignarAlumnoDeModulo(@PathVariable String codigoModulo,
+            @PathVariable String dniAlumno) {
+        return moduloService.desasignarAlumnoDeModulo(codigoModulo, dniAlumno);
+    }
 
-    // DESASIGNAR ASIGNATURAS DE UN MODULO DADO EL CODIGO DE MODULO Y EL CODIGO DE
+    // DESASIGNAR ASIGNATURAS DE UN MODULO DADO EL CODIGO DEL MODULO Y EL CODIGO DE
     // ASIGNATURA //
-    @DeleteMapping("/desasignarAsignaturas/{codigoModulo}/{codigoAsignatura}")
+    @DeleteMapping("/desasignarAsignaturasDeModulo/{codigoModulo}/{codigoAsignatura}")
     public ResponseEntity<String> desasignarAsignaturaDeModulo(@PathVariable String codigoModulo,
             @PathVariable String codigoAsignatura) {
         return moduloService.desasignarAsignaturaDeModulo(codigoModulo, codigoAsignatura);

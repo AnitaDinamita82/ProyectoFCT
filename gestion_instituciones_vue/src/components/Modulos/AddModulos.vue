@@ -110,7 +110,7 @@ export default {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await axios.post(`${this.apiUrl}/${this.version}/modulos/alta`, this.modulo, {
+                const response = await axios.post(`${this.apiUrl}/${this.version}/modulos/altaModulo`, this.modulo, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'

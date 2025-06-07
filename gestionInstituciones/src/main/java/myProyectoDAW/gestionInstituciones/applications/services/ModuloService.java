@@ -69,4 +69,8 @@ public class ModuloService {
         return repositoryModulo.obtenerTodosLosModulosDeUnaAsignatura(codigoAsignatura);
     }
 
+    public ResponseEntity<?> obtenerTodosLosModulosDeUnAlumno(String dniAlumno) {
+        return repositoryModulo.obtenerTodosLosModulosDeUnAlumno(dniAlumno);
+    }
+
 }
