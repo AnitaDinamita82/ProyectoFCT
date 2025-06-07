@@ -9,10 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-//import myProyectoDAW.gestionInstituciones.adapters.entitys.AlumnoEntity;
+import myProyectoDAW.gestionInstituciones.adapters.entitys.AlumnoEntity;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.AsignaturaEntity;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.ModuloEntity;
-//import myProyectoDAW.gestionInstituciones.adapters.jpas.AlumnoJpaRepository;
+import myProyectoDAW.gestionInstituciones.adapters.jpas.AlumnoJpaRepository;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.AsignaturaJpaRepository;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.ModuloJpaRepository;
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryModulo;
@@ -22,16 +22,14 @@ import myProyectoDAW.gestionInstituciones.domain.models.Modulo;
 public class ModuloAdapter implements RepositoryModulo {
 
     private Optional<ModuloEntity> moduloEntityOptional;
-    // private Optional<AlumnoEntity> alumnoEntityOptional;
+    private Optional<AlumnoEntity> alumnoEntityOptional;
     private Optional<AsignaturaEntity> asignaturaEntityOptional;
 
     @Autowired
     private ModuloJpaRepository moduloJpaRepository;
 
-    /*
-     * @Autowired
-     * private AlumnoJpaRepository alumnoJpaRepository;
-     */
+    @Autowired
+    private AlumnoJpaRepository alumnoJpaRepository;
 
     @Autowired
     private AsignaturaJpaRepository asignaturaJpaRepository;
@@ -157,60 +155,33 @@ public class ModuloAdapter implements RepositoryModulo {
     @Override
     public ResponseEntity<String> asignarAlumnosAModulo(String codigoModulo, String dniAlumno) {
 
-        /*
-         * System.out.print("DNI: " + dniAlumno); // PUNTO DE CONTROL
-         * 
-         * // 1. Buscar el Módulo por su código
-         * moduloEntityOptional = moduloJpaRepository.findByCodigoModulo(codigoModulo);
-         * 
-         * if (moduloEntityOptional.isEmpty()) {
-         * return new ResponseEntity<>
-         * ("Intento de asignación fallida, puede que dicho mòdulo no exista",
-         * HttpStatus.NOT_FOUND);
-         * }
-         * 
-         * ModuloEntity moduloAAsignarAlumno = moduloEntityOptional.get();
-         * 
-         * // 2. Buscar el Alumno por su DNI
-         * alumnoEntityOptional = alumnoJpaRepository.findByDni(dniAlumno);
-         * 
-         * if (alumnoEntityOptional.isEmpty()) {
-         * return new ResponseEntity<>(
-         * "El alumno con DNI: " + dniAlumno +
-         * " no esta dado de alta aún. No se le puede asignar al módulo",
-         * HttpStatus.NOT_FOUND);
-         * } // existe en BD
-         * System.out.println("ALUMNO: " + alumnoEntityOptional.get().getNombre()); //
-         * PUNTO DE CONTROL
-         * System.out.println("DNI: " + alumnoEntityOptional.get().getDni()); // PUNTO
-         * DE CONTROL
-         * 
-         * // 3. Verificar si el alumno ya está asignado al módulo
-         * if (moduloAAsignarAlumno.getAlumnos().contains(alumnoEntityOptional.get())) {
-         * return new ResponseEntity<>(
-         * "El alumno con DNI " + dniAlumno + " ya está asignado al módulo " +
-         * codigoModulo + ".",
-         * HttpStatus.CONFLICT);
-         * }
-         * 
-         * // 4. Asignar el alumno al módulo (modificar el lado dueño de la relación)
-         * moduloAAsignarAlumno.getAlumnos().add(alumnoEntityOptional.get());
-         * 
-         * // 5. Mantener la consistencia bidireccional
-         * if (alumnoEntityOptional.get().getModulos() != null
-         * && !alumnoEntityOptional.get().getModulos().contains(moduloAAsignarAlumno)) {
-         * alumnoEntityOptional.get().getModulos().add(moduloAAsignarAlumno);
-         * alumnoJpaRepository.save(alumnoEntityOptional.get());
-         * }
-         * 
-         * // 6. Guardar el módulo para persistir los cambios en la tabla intermedia
-         * (dueño
-         * // de la relación)
-         * moduloJpaRepository.save(moduloAAsignarAlumno);
-         * return new ResponseEntity<>("Se ha asignado al alumno con DNI: " + dniAlumno
-         * + " con exito", HttpStatus.OK);
-         */
-        return null;
+        alumnoEntityOptional = alumnoJpaRepository.findByDni(dniAlumno); // Obtengo al alumno.
+        moduloEntityOptional = moduloJpaRepository.findByCodigoModulo(codigoModulo); // Obtengo el modulo
+        ModuloEntity moduloAAsignarAlumno = moduloEntityOptional.get();
+
+        if (moduloAAsignarAlumno.getAlumnos().contains(alumnoEntityOptional.get())) {
+            return new ResponseEntity<>(
+                    "El alumno con DNI " + dniAlumno + " ya está asignado al módulo " +
+                            codigoModulo + ".",
+                    HttpStatus.OK);
+        }
+
+        // Asignar el alumno al módulo (modificar el lado dueño de la relación)
+        moduloAAsignarAlumno.getAlumnos().add(alumnoEntityOptional.get());
+
+        // Mantener la consistencia bidireccional
+        if (alumnoEntityOptional.get().getModulos() != null
+                && !alumnoEntityOptional.get().getModulos().contains(moduloAAsignarAlumno)) {
+            alumnoEntityOptional.get().getModulos().add(moduloAAsignarAlumno);
+            alumnoJpaRepository.save(alumnoEntityOptional.get());
+        }
+
+        // Guardar el módulo para persistir los cambios en la tabla intermedia de la
+        // relación)
+        moduloJpaRepository.save(moduloAAsignarAlumno);
+        return new ResponseEntity<>("Se ha asignado al alumno con DNI: " + dniAlumno
+                + " con exito", HttpStatus.OK);
+
     }
 
     /* METODO asignarAsignaturasAModulo */
@@ -264,56 +235,31 @@ public class ModuloAdapter implements RepositoryModulo {
     @Override
     public ResponseEntity<String> desasignarAlumnoDeModulo(String codigoModulo, String dniAlumno) {
 
-        // 1. Buscar el Módulo por su código
-        /*
-         * moduloEntityOptional = moduloJpaRepository.findByCodigoModulo(codigoModulo);
-         * 
-         * if (moduloEntityOptional.isEmpty()) {
-         * return new ResponseEntity<>
-         * ("Intento de desasignación fallida, puede que dicho mòdulo no exista",
-         * HttpStatus.NOT_FOUND);
-         * }
-         * 
-         * ModuloEntity moduloADesAsignarAlumno = moduloEntityOptional.get();
-         * 
-         * // 2. Buscar el Alumno por su DNI
-         * alumnoEntityOptional = alumnoJpaRepository.findByDni(dniAlumno);
-         * 
-         * if (alumnoEntityOptional.isEmpty()) {
-         * return new ResponseEntity<>(
-         * "El alumno con DNI: " + dniAlumno
-         * + " no esta dado de alta aún. No se le puede desasignar de módulo",
-         * HttpStatus.NOT_FOUND);
-         * }
-         * 
-         * AlumnoEntity alumnoADesasignar = alumnoEntityOptional.get();
-         * 
-         * // 3. Verificar si el alumno está realmente asignado al módulo
-         * boolean asignado = moduloADesAsignarAlumno.getAlumnos().removeIf(a ->
-         * a.getDni().equals(dniAlumno));
-         * 
-         * if (!asignado) {
-         * return new ResponseEntity<>(
-         * "El alumno con DNI " + dniAlumno + " ya no está asignado al módulo " +
-         * codigoModulo + ".",
-         * HttpStatus.CONFLICT);
-         * }
-         * 
-         * // 4. Mantener la consistencia bidireccional
-         * if (alumnoADesasignar.getModulos() != null) {
-         * alumnoADesasignar.getModulos().removeIf(m ->
-         * m.getCodigoModulo().equals(codigoModulo));
-         * alumnoJpaRepository.save(alumnoADesasignar);
-         * }
-         * 
-         * // 5. Guardar el módulo para persistir los cambios en la tabla intermedia
-         * (dueño
-         * // de la relación)
-         * moduloJpaRepository.save(moduloADesAsignarAlumno);
-         * return new ResponseEntity<>("Se ha desasignado al alumno con DNI: " +
-         * dniAlumno + " con exito", HttpStatus.OK);
-         */
-        return null;
+        moduloEntityOptional = moduloJpaRepository.findByCodigoModulo(codigoModulo);
+        alumnoEntityOptional = alumnoJpaRepository.findByDni(dniAlumno);
+
+        ModuloEntity moduloADesAsignarAlumno = moduloEntityOptional.get();
+
+        boolean asignado = moduloADesAsignarAlumno.getAlumnos().removeIf(a -> a.getDni().equals(dniAlumno));
+
+        if (!asignado) {
+            return new ResponseEntity<>(
+                    "El alumno con DNI " + dniAlumno + " no está asignado al módulo " +
+                            codigoModulo + ".",
+                    HttpStatus.OK);
+        }
+
+        // Mantener la consistencia bidireccional
+        if (alumnoEntityOptional.get().getModulos() != null) {
+            alumnoEntityOptional.get().getModulos().removeIf(m -> m.getCodigoModulo().equals(codigoModulo));
+            alumnoJpaRepository.save(alumnoEntityOptional.get());
+        }
+
+        // Guardar el módulo para persistir los cambios en la tabla intermedia (dueño de
+        // la relación)
+        moduloJpaRepository.save(moduloADesAsignarAlumno);
+        return new ResponseEntity<>("Se ha desasignado al alumno con DNI: " +
+                dniAlumno + " con exito", HttpStatus.OK);
     }
 
     /* METODO DESasignarAsignaturasDEModulo */
@@ -386,6 +332,20 @@ public class ModuloAdapter implements RepositoryModulo {
                 + " no esta dada de alta aún.",
                 HttpStatus.NOT_FOUND);
 
+    }
+
+    @Override /* Opeeración para obtener todos los modulos de un alummo */
+    public ResponseEntity<?> obtenerTodosLosModulosDeUnAlumno(String dniAlumno) {
+
+        /* Nos traemos o no al alumno dependiendo de si existe */
+
+        alumnoEntityOptional = alumnoJpaRepository.findByDni(dniAlumno);
+
+        if (alumnoEntityOptional.isPresent()) {
+            return new ResponseEntity<>(alumnoEntityOptional.get().getModulos(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("El alumno con DNI: " + dniAlumno + "no existe en BD", HttpStatus.NOT_FOUND);
     }
 
     /* METODO DE CONVERSION */

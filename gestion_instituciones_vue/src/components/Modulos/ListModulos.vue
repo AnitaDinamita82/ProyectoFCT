@@ -155,7 +155,7 @@ export default {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await axios.get(`${this.apiUrl}/${this.version}/modulos/listar`, {
+                const response = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarModulos`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -189,7 +189,7 @@ export default {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await axios.delete(`${this.apiUrl}/${this.version}/modulos/baja/${codigoModulo}`, {
+                const response = await axios.delete(`${this.apiUrl}/${this.version}/modulos/bajaModulo/${codigoModulo}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     },
@@ -225,7 +225,7 @@ export default {
         async buscarModulo() {
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await axios.get(`${this.apiUrl}/${this.version}/modulos/buscar/${this.codigoABuscar}`, {
+                const response = await axios.get(`${this.apiUrl}/${this.version}/modulos/buscarModulo/${this.codigoABuscar}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -259,7 +259,7 @@ export default {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await axios.get(`${this.apiUrl}/${this.version}/modulos/buscar/${codigoModulo}`, {
+                const response = await axios.get(`${this.apiUrl}/${this.version}/modulos/buscarModulo/${codigoModulo}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

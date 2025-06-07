@@ -33,4 +33,6 @@ public interface RepositoryModulo {
 
     public ResponseEntity<?> obtenerTodosLosModulosDeUnaAsignatura(String codigoAsignatura);
 
+    public ResponseEntity<?> obtenerTodosLosModulosDeUnAlumno(String dniAlumno);
+
 }

@@ -60,7 +60,7 @@
                                         <td>{{ asignatura.descripcion }}</td>
                                         <td class="action-cell">
                                             <button class="action-button" title="Eliminar"
-                                                @click="confirmarBajaMatricula(asignatura.codigo, asignatura.nombre)"><i
+                                                @click="confirmarBajaMatricula(asignatura.codigo, asignatura.nombre, modulo.codigoModulo)"><i
                                                     class="fas fa-trash"></i></button>
                                         </td>
                                     </tr>
@@ -141,7 +141,7 @@ export default {
             console.log('ALUMNO CARGADO: ', this.alumno);  // PUNTO DE CONTROL 
 
             if (this.alumno && this.alumno.dni) {
-                await this.cargarAsignaturasMatriculadasPorModulo(this.alumno.dni);
+                await this.cargarMatriculaDetallada(this.alumno.dni);
             }
         } else {
             console.warn('No se encontró al alumno como parametro en la ruta.');  // PUNTO DE CONTROL 
@@ -151,10 +151,11 @@ export default {
     },
     methods: {
 
-        async cargarAsignaturasMatriculadasPorModulo(dniAlumno) {
+        async cargarMatriculaDetallada(dniAlumno) {
             this.error = false;
             this.mensaje = '';
             this.mostrarAlerta = false;
+            this.matriculaDetallada = [];
             this.asignaturasMatriculadas = [];
             this.modulosConAsignaturasMatriculadas = []; // Reinicia la lista de módulos
 
@@ -172,21 +173,26 @@ export default {
                 console.log('ASIGNATURAS YA MATRICULADAS:', this.asignaturasMatriculadas); // PUNTO DE CONTROL.
                 const codigosAsignaturasMatriculadas = new Set(this.asignaturasMatriculadas.map(a => a.codigo));
 
-                // 2. Obtener todos los modulos 
-                const responseModulos = await axios.get(`${this.apiUrl}/${this.version}/modulos/listar`, {
+                // 2. Obtener solo los modulos en los que el alumno está
+                const responseModulosAlumno = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarModulosDeAlumno/${dniAlumno}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
 
                     },
                 });
 
-                const todosLosModulos = responseModulos.data;
-                console.log('TODOS LOS MODULOS:', this.asignaturasMatriculadas); // PUNTO DE CONTROL.
+                console.log('ASIGNATURAS MATRICULADAS DE ALUMNO:', this.asignaturasMatriculadas); // PUNTO DE CONTROL.
 
-                // 3. Para cada módulo, obtener sus asignaturas y filtrar las matriculadas por el alumno
-                for (const modulo of todosLosModulos) {
+                const modulosDelAlumno = responseModulosAlumno.data;
+                console.log('MODULOS DEL ALUMNO:', modulosDelAlumno); // PUNTO DE CONTROL.
+
+                // 3. Para cada módulo, al cual el alumno está directamente asociado por modulos - alumnos
+                // obtendremos sus asignaturas modulo - asignaturas
+                // y filtraremos por las que el alumno tiene matriculadas alumnos - asignaturas
+
+                for (const modulo of  modulosDelAlumno) {
                     try {
-                        const responseAsignaturasDeModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturas/${modulo.codigoModulo}`, {
+                        const responseAsignaturasDeModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturasModulo/${modulo.codigoModulo}`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`
 
@@ -221,9 +227,9 @@ export default {
 
         },
 
-        confirmarBajaMatricula(codigoAsignatura, nombreAsinatura) {
-            if (confirm(`¿Está seguro que desea dar de baja la asignatura ${nombreAsinatura} para el alumno ${this.alumno.nombre} ${this.alumno.apellido1} ?`)) {
-                this.desMatricularDeAsignatura(this.alumno.dni, codigoAsignatura);
+        confirmarBajaMatricula(codigoAsignatura, nombreAsignatura,codigoModulo) {
+            if (confirm(`¿Está seguro que desea dar de baja la asignatura ${nombreAsignatura} para el alumno ${this.alumno.nombre} ${this.alumno.apellido1} ?`)) {
+                this.desMatricularDeAsignatura(this.alumno.dni, codigoAsignatura,codigoModulo);
             }
         },
 
@@ -234,7 +240,7 @@ export default {
         },
 
         // Funcion para desmatricular al alumno en una asignatura
-        async desMatricularDeAsignatura(dniAlumno, codigoAsignatura) {
+        async desMatricularDeAsignatura(dniAlumno, codigoAsignatura, codigoModulo) {
 
             this.error = false;
             this.mensaje = '';
@@ -242,6 +248,8 @@ export default {
 
             try {
                 const token = localStorage.getItem('authToken');
+
+                // 1. Damos de baja la asignatura alumnos - asignaturas
                 const response = await axios.delete(`${this.apiUrl}/${this.version}/alumnoAsignaturaMTM/desmatricularAlumno`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -253,12 +261,20 @@ export default {
                     }
                 });
 
-                console.log('Respuesta de la API (desmatricula):', response); // PUNTO DE CONTROL
+                // 2. Quitamos la referencia del alumno en el modulo modulos - alumnos 
+                const responseMensaje = await axios.delete(`${this.apiUrl}/${this.version}/modulos/desasignarAlumnosDeModulo/${codigoModulo}/${dniAlumno}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                console.log('Desasigna bien al alumno del modulo:', responseMensaje.data); // PUNTO DE CONTROL
                 this.apiResponse(response);
 
                 // Y despues de desMatricular, regargamos de nuevo la matricula.
 
-                await this.cargarAsignaturasMatriculadasPorModulo(dniAlumno); // Recargar datos
+                await this.cargarMatriculaDetallada(dniAlumno); // Recargar datos
 
             } catch (error) {
                 this.error = true;
