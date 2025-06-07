@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.AlumnoEntity;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.AlumnoJpaRepository;
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryAlumno;
-import myProyectoDAW.gestionInstituciones.applications.services.AlumnoAsignaturaService;
+import myProyectoDAW.gestionInstituciones.applications.services.MatriculaService;
 import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
 
 @Component
@@ -22,7 +22,7 @@ public class AlumnoAdapter implements RepositoryAlumno {
     private AlumnoJpaRepository alumnoJpaRepository;
 
     @Autowired
-    private AlumnoAsignaturaService alumnoAsignaturaService;
+    private MatriculaService matriculaService;
 
     private Optional<AlumnoEntity> alumnoEntityOptional;
 
@@ -56,7 +56,7 @@ public class AlumnoAdapter implements RepositoryAlumno {
 
             AlumnoEntity alumnoEntity = alumnoEntityOptional.get();
 
-            if (alumnoAsignaturaService.alumnoTieneAsignaturas(dniAlumno)) {
+            if (matriculaService.alumnoTieneAsignaturas(dniAlumno)) {
                 System.out.println("No se puede dar de baja al alumno porque tiene asignaturas asociadas.");
                 return false;
             } else {

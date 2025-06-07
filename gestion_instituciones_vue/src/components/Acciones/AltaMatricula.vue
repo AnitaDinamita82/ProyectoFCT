@@ -61,7 +61,7 @@
                                         <td>{{ asignatura.descripcion }}</td>
                                         <td class="action-cell">
                                             <button class="action-button"
-                                                @click="confirmarEnMatricula(asignatura.nombre,asignatura.codigo,modulo.codigoModulo)"><i
+                                                @click="confirmarEnMatricula(asignatura.nombre, asignatura.codigo, modulo.codigoModulo)"><i
                                                     class="fas fa-plus-circle"></i></button>
                                         </td>
                                     </tr>
@@ -70,14 +70,14 @@
                         </div>
                         <p v-else>No hay asignaturas disponibles en este módulo para este alumno.</p>
                     </div>
-                    <div class="action-style">
-                        <button type="submit" class="action-button" @click="verMatriculaCompleta()"><i class="fas fa-light
-                        fa-eye"></i><span>Matricula Completa</span>
-                        </button>
-                    </div>
                 </div>
                 <p v-else>Aún no tenemos abierta la oferta para el nuevo curso o el alumno está matriculado de todas las
                     asignaturas disponibles</p>
+                <div class="action-style">
+                    <button type="submit" class="action-button" @click="verMatriculaCompleta()"><i class="fas fa-light
+                        fa-eye"></i><span>Matricula Completa</span>
+                    </button>
+                </div>
             </div>
             <p v-else>Cargando información o sin datos que mostrar.</p>
         </main>
@@ -191,7 +191,7 @@ export default {
 
                 // 2. Obtener todas las asignaturas de las que el alumno ya esta matriculado.
 
-                const responseMatriculadas = await axios.get(`${this.apiUrl}/${this.version}/alumnoAsignaturaMTM/listarAsignaturasDeAlumno/${dniAlumno}`, { // Llamada a la API que muestra las asignaturas dado un DNI
+                const responseMatriculadas = await axios.get(`${this.apiUrl}/${this.version}/matricula/listarAsignaturasDeAlumno/${dniAlumno}`, { // Llamada a la API que muestra las asignaturas dado un DNI
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -256,9 +256,9 @@ export default {
 
         },
 
-        confirmarEnMatricula(nombreAsignatura,codigoAsignatura,codigoModulo) {
+        confirmarEnMatricula(nombreAsignatura, codigoAsignatura, codigoModulo) {
             if (confirm(`¿Estás seguro que quieres matricular a ${this.alumno.nombre} ${this.alumno.apellido1} en la asignatura ${nombreAsignatura} ? `)) {
-                this.matricular(this.alumno.dni,codigoAsignatura,codigoModulo);
+                this.matricular(this.alumno.dni, codigoAsignatura, codigoModulo);
             }
         },
 
@@ -273,7 +273,7 @@ export default {
                 const token = localStorage.getItem('authToken');
 
                 // 1. Asignar referencia en tabla alumnos - asignaturas (Matricular)
-                const response = await axios.post(`${this.apiUrl}/${this.version}/alumnoAsignaturaMTM/matricularAlumno`, {
+                const response = await axios.post(`${this.apiUrl}/${this.version}/matricula/matricularAlumno`, {
                     dniAlumno: dniAlumno,
                     codigoAsignatura: codigoAsignatura
                 }, {
@@ -282,7 +282,7 @@ export default {
                         'Content-Type': 'application/json'
                     },
                 });
- 
+
                 // 2. Asignar referencia en tabla alumnos - modulos. (Ver Matricula)
                 const responseMensaje = await axios.post(`${this.apiUrl}/${this.version}/modulos/asignarAlumnosAModulo/${codigoModulo}`, {
                     dni: dniAlumno

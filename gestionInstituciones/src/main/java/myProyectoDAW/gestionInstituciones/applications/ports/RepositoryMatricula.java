@@ -8,7 +8,7 @@ import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
 import myProyectoDAW.gestionInstituciones.domain.models.Asignatura;
 
 @Repository
-public interface RespositoryAlumnosAsignaturas {
+public interface RepositoryMatricula {
 
     List<Asignatura> listarAsignaturasDeAlumno(String dniAlumno);
 
@@ -21,4 +21,6 @@ public interface RespositoryAlumnosAsignaturas {
     ResponseEntity<String> matricularAlumno(String dniAlumno, String codigoAsignatura);
 
     ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumno(String dniAlumno, String codigoAsignatura);
+
+    ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(String dniAlumno);
 }

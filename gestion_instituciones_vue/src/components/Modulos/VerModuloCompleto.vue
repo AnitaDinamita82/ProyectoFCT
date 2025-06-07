@@ -34,7 +34,6 @@
                 <p><strong>Grupo:</strong> {{ modulo.grupo }}</p>
 
                 <div v-if="modulo.asignaturas && modulo.asignaturas.length > 0">
-                    <h2>Asignaturas del Módulo</h2>
                     <div v-for="asignatura in modulo.asignaturas" :key="asignatura.id" class="asignatura-card">
                         <h4>{{ asignatura.nombre }} ({{ asignatura.codigo }})</h4>
                         <div v-if="asignatura.alumnosMatriculados && asignatura.alumnosMatriculados.length > 0">
@@ -162,7 +161,7 @@ export default {
                     // 3. Obtener alumnos para cada asignatura
                     for (const asignatura of this.modulo.asignaturas) {
                         try {
-                            const responseAlumnos = await axios.get(`${this.apiUrl}/${this.version}/alumnoAsignaturaMTM/obtenerAlumnosMatriculados/${asignatura.codigo}`, {
+                            const responseAlumnos = await axios.get(`${this.apiUrl}/${this.version}/matricula/obtenerAlumnosMatriculados/${asignatura.codigo}`, {
                                 headers: { 'Authorization': `Bearer ${token}` },
                             });
 

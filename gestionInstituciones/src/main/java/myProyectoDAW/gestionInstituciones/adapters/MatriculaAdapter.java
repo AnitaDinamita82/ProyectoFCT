@@ -15,12 +15,12 @@ import myProyectoDAW.gestionInstituciones.adapters.entitys.AlumnoEntity;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.AsignaturaEntity;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.AlumnoJpaRepository;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.AsignaturaJpaRepository;
-import myProyectoDAW.gestionInstituciones.applications.ports.RespositoryAlumnosAsignaturas;
+import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryMatricula;
 import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
 import myProyectoDAW.gestionInstituciones.domain.models.Asignatura;
 
 @Component
-public class AlumnosAsignaturasAdapter implements RespositoryAlumnosAsignaturas {
+public class MatriculaAdapter implements RepositoryMatricula {
 
     @Autowired
     private AlumnoJpaRepository alumnoJpaRepository;
@@ -112,6 +112,20 @@ public class AlumnosAsignaturasAdapter implements RespositoryAlumnosAsignaturas 
                         + ")  de la matricula correctamente.",
                 HttpStatus.OK);
 
+    }
+
+    @Override
+    public ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(String dniAlumno) {
+
+        /* Obtenemos al alumno en cuestion */
+        AlumnoEntity alumnoEntity = alumnoJpaRepository.findByDni(dniAlumno).get();
+
+        if (!alumnoEntity.getAsignatura().isEmpty()) {
+            alumnoEntity.getAsignatura().clear();
+            alumnoJpaRepository.save(alumnoEntity);
+        }
+        return new ResponseEntity<>("Se le ha dado al alumno" + alumnoEntity.getNombre() + alumnoEntity.getApellido1()
+                + " de baja en todas sus asignaturas, o no estaba matricuado.", HttpStatus.OK);
     }
     /* Metodos de conversion */
 
