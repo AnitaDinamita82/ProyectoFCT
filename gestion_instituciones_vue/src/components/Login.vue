@@ -124,7 +124,7 @@ export default {
           this.mensaje = response.data;
           console.log('He registrado algo: ', response.status); // PUNTO DE CONTRO
           this.mostrarAlerta = true;
-          this.esUnRegistro = false; // Para que vuelva al formulario de login.
+          this.esUnRegistro = false; this.esUnRegistro = false;// Para que vuelva al formulario de login.
         }
 
       } catch (error) {
@@ -132,6 +132,7 @@ export default {
         if (error.response && error.response.status === 409) {
           this.error = true;
           this.mensaje = error.response.data;
+          this.esUnRegistro = false;
 
         } else {
           if (error.request) {

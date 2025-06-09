@@ -42,8 +42,7 @@
                     <input type="text" id="nombre" v-model="nuevaAsignatura.nombre" placeholder="Nombre" required>
                 </div>
                 <div class="form-group">
-                    <input type="text" id="descripcion" v-model="nuevaAsignatura.descripcion" placeholder="Descripción"
-                        required>
+                    <input type="text" id="descripcion" v-model="nuevaAsignatura.descripcion" placeholder="Descripción">
                 </div>
                 <button type="submit" class="action-button"><i class="fas fa-plus-circle"></i><span>Añadir nueva
                         asignatura</span>

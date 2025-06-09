@@ -14,7 +14,7 @@ INSERT INTO instituto.alumnos (id,dni,nombre, apellido1, apellido2) VALUES
 INSERT INTO instituto.asignaturas (id,codigo,nombre, descripcion) VALUES 
 (114,'DAM01','Acceso a datos','Conecta aplicaciones con bases de datos para manipular información.'),
 (116,'DAM02','Desarrollo de Interfaces','Crea interfaces de usuario intuitivas y atractivas.'),
-(117,'DAM03','Programación multimedia y dispositivos móviles',''),
+(117,'DAM03','Programación multimedia y dispositivos móviles','Desarrollo de aplicaciones interactivas y ricas en contenido para smartphones, tablets y otros dispositivos portátiles.'),
 (118,'DAM04','Programacion de Servicios y Procesos','Crea servicios y procesos que se ejecutan en segundo plano.'),
 (119,'DAM05','Sistemas de gestión empresarial',' Conoce y utiliza software para la gestión integral de empresas.'),
 (123,'DAW01','Desarrollo web en entorno cliente','Crea interfaces web interactivas usando lenguajes de cliente.'),
@@ -31,7 +31,7 @@ INSERT INTO instituto.asignaturas (id,codigo,nombre, descripcion) VALUES
 (129,'DAC201','Sostenibilidad aplicada al sistema productivo',' Integra prácticas sostenibles en la producción y gestión empresarial.'),
 (131,'DAC202','Itinerario personal para la Empleabilidad II','Profundiza en el desarrollo personal y profesional para mejorar la empleabilidad.'),
 (120,'DAC203','Proyecto intermodular de Desarrollo en Aplicaciones Web/Multiplataforma','Desarrolla un proyecto completo de aplicación web integrando conocimientos.'),
-(122,'DAC204','Formacion en empresa','Aplica los conocimientos adquiridos en un entorno laboral real.'),
+/*(122,'DAC204','Formacion en empresa','Aplica los conocimientos adquiridos en un entorno laboral real.'),*/
 (130,'DAC105','Itinerario personal para la Empleabilidad I','Desarrolla habilidades y estrategias para la búsqueda activa de empleo.');
 
 
