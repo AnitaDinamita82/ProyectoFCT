@@ -244,10 +244,55 @@ export default {
             }
         },
         confirmarBaja(codigoAsignatura) {
-            if (confirm('¿Estás seguro de que quieres desvincular esta asignatura del módulo?')) {
-                this.bajaAsignatura(codigoAsignatura);
+            this.verficarAlumnosEnAsignatura(codigoAsignatura);
+            /*  if (confirm('¿Estás seguro de que quieres desvincular esta asignatura del módulo?')) {
+                  this.bajaAsignatura(codigoAsignatura);
+              }*/
+        },
+
+        async verficarAlumnosEnAsignatura(codigoAsignatura) {
+            this.error = false;
+            this.mensaje = '';
+            this.mostrarAlerta = false;
+
+            try {
+                const token = localStorage.getItem('authToken');
+
+                const response = await axios.get(`${this.apiUrl}/${this.version}/matricula/obtenerAlumnosMatriculados/${codigoAsignatura}`, { // Llamada a la API de listar asignaturas
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+
+                const alumnosMatriculados = response.data;
+                console.log('ALUMNOS MATRICULADOS: ', alumnosMatriculados); // PUNTO DE CONTROL.
+
+                const numeroAlumnos = alumnosMatriculados.length;
+                console.log(`Número de alumnos matriculados en ${codigoAsignatura}: ${numeroAlumnos}`); // Punto de control
+
+                if (numeroAlumnos > 0) {
+                    this.error = true;
+                    this.mensaje = `No se puede desvincular la asignatura porque tiene ${numeroAlumnos} alumno(s) matriculado(s).`;
+                    this.mostrarAlerta = true;
+                } else {
+                    // Si no hay alumnos, procede con la confirmación y la baja
+                    if (confirm('¿Estás seguro de que quieres desvincular esta asignatura del módulo? No tiene alumnos matriculados.')) {
+                        this.bajaAsignatura(codigoAsignatura);
+                    }
+                }
+
+            } catch (error) {
+                this.error = true;
+                this.mostrarAlerta = true;
+
+                if (error.request) {
+                    this.mensaje = 'Imposible verificar los alumnos. Posible fallo de conexión con el servidor.';
+                    console.error('Error de red al verificar alumnos:', error);
+                }
             }
         },
+
         async bajaAsignatura(codigoAsignatura) {
             this.error = false;
             this.mensaje = '';
@@ -313,7 +358,6 @@ export default {
     gap: 30px;
     width: 90%;
 
-
 }
 
 table {
@@ -334,5 +378,13 @@ h3 {
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
     margin-bottom: 15px;
+}
+
+.alert {
+    width: 60%;
+}
+
+.alert-danger {
+    width: 60%;
 }
 </style>

@@ -33,13 +33,14 @@
                 <p><strong>Curso:</strong> {{ modulo.curso }}</p>
                 <p><strong>Grupo:</strong> {{ modulo.grupo }}</p>
 
-                <div v-if="modulo.asignaturas && modulo.asignaturas.length > 0">
-                    <div v-for="asignatura in modulo.asignaturas" :key="asignatura.id" class="asignatura-card">
+                <div v-if="asignaturasConAlumnos.length > 0">
+                    <div v-for="asignatura in asignaturasConAlumnos" :key="asignatura.id" class="asignatura-card">
                         <h4>{{ asignatura.nombre }} ({{ asignatura.codigo }})</h4>
-                        <div v-if="asignatura.alumnosMatriculados && asignatura.alumnosMatriculados.length > 0">
+
+                        <div v-if="asignatura.alumnos && asignatura.alumnos.length > 0">
                             <h5>Alumnos Matriculados:</h5>
                             <ul>
-                                <li v-for="alumno in asignatura.alumnosMatriculados" :key="alumno.dni">
+                                <li v-for="alumno in asignatura.alumnos" :key="alumno.dni">
                                     {{ alumno.nombre }} {{ alumno.apellido1 }} {{ alumno.apellido2 }} (DNI: {{
                                         alumno.dni }})
                                 </li>
@@ -48,7 +49,7 @@
                         <p v-else>No hay alumnos matriculados en esta asignatura.</p>
                     </div>
                 </div>
-                <p v-else>No hay asignaturas asociadas a este módulo.</p>
+                <p v-else>No hay asignaturas asociadas a este módulo o no tiene alumnos matriculados.</p>
             </div>
             <p v-else-if="!mostrarAlerta">Cargando detalles del módulo o el módulo no existe...</p>
         </main>
@@ -78,8 +79,9 @@ export default {
             error: false,
             mostrarAlerta: false,
 
-            moduloCargado: false,
-            modulo: {}, // Para cargar todos los datos del modulo.
+            moduloCargado: false, // Control para saber si el modulo ya se cargó
+            modulo: {}, // Objeto para modulo que se está gestionando
+            asignaturasConAlumnos: [] // Estructura para la vista
         }
     },
     setup() {
@@ -121,64 +123,89 @@ export default {
     methods: {
         async cargarModuloCompleto(codigoModulo) {
 
+            console.log("INICIANDO carga del módulo completo para:", codigoModulo); // PUNTO DE CONTROL
             this.error = false;
             this.mensaje = '';
             this.mostrarAlerta = false;
             this.moduloCargado = false;
+            this.asignaturasConAlumnos = []; // Se reinicia la estructura para la vista
 
             try {
                 const token = localStorage.getItem('authToken');
 
-                //1. Obtener el modulo en cuestión
-
-                const responseModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/buscarModulo/${codigoModulo}`, {
-                    headers: { 'Authorization': `Bearer ${token}` },
-
-                });
-
-                if (responseModulo.status === 404) {
-                    this.error = true;
-                    this.mensaje = 'No se ha encontrado el modulo indicado';
-                    this.mostrarAlerta = true;
-                    return;
-                }
-
-                this.modulo = responseModulo.data;
-                console.log('MODULO COMPLETO', this.modulo); // PUNTO DE CONTROL
-
-                //2. Obtener las asignaturas del modulo
-                const responseAsignaturas = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturasModulo/${codigoModulo}`, {
-                    headers: { 'Authorization': `Bearer ${token}` },
-                });
-
-                console.log('ASIGNATURAS DEL MODULO??: ', responseAsignaturas.data); // PUNTO DE CONTROL
-                if (responseAsignaturas.status === 200) {
-
-                    console.log('entreeee'); // PUNTO DE CONTROL
-                    this.modulo.asignaturas = responseAsignaturas.data;
-                    console.log('ASIGNATURAS DEL MODULO: ', this.modulo.asignaturas); // PUNTO DE CONTROL
-
-                    // 3. Obtener alumnos para cada asignatura
-                    for (const asignatura of this.modulo.asignaturas) {
-                        try {
-                            const responseAlumnos = await axios.get(`${this.apiUrl}/${this.version}/matricula/obtenerAlumnosMatriculados/${asignatura.codigo}`, {
-                                headers: { 'Authorization': `Bearer ${token}` },
-                            });
-
-                            if (responseAlumnos.status === 200) {
-                                asignatura.alumnosMatriculados = responseAlumnos.data;
-                                console.log('ALUMNOS EN LA ASIGNATURA: ', this.modulo.asignaturas); // PUNTO DE CONTROL
-                            } else {
-                                asignatura.alumnosMatriculados = []; // No hay alumnos o error 404
-                            }
-                        } catch (err) {
-                            console.error(`Error al cargar alumnos para asignatura ${asignatura.codigoAsignatura}:`, err);
-                            asignatura.alumnosMatriculados = []; // En caso de error de red
-                        }
+                // 1. Obtenemos todas las asignaturas que pertenecen a este módulo
+                const responseAsignaturasDelModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAsignaturasModulo/${codigoModulo}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
                     }
-                } else {
-                    this.modulo.asignaturas = []; // No hay asignaturas o error 404
+                });
+
+                const asignaturasDelModulo = responseAsignaturasDelModulo.data;
+                console.log(`Asignaturas del módulo ${codigoModulo}:`, asignaturasDelModulo); //PUNTO DE CONTROL
+
+
+                // 2. Obtenemos la lista de  alumnos asociados directamente a este módulo
+                const responseAlumnosAsociadosAModulo = await axios.get(`${this.apiUrl}/${this.version}/modulos/listarAlumnosModulo/${codigoModulo}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                // Convertimos la lista de objetos de alumno a un Set de sus DNI para búsquedas eficientes
+                const dnisAlumnosAsociadosAModulo = new Set(responseAlumnosAsociadosAModulo.data.map(alumno => alumno.dni));
+                console.log(`DNI de alumnos asociados directamente al módulo ${codigoModulo}:`, dnisAlumnosAsociadosAModulo); // PUNTO DE CONTROL
+
+                // 3. Para cada asignatura del módulo, obtenemos sus alumnos matriculados y filtramos
+                for (const asignatura of asignaturasDelModulo) {
+
+                    const alumnosValidosParaMostrarEnEstaAsignatura = []; // Se inicializa vacio
+
+                    try {
+                        const responseAlumnosEnAsignatura = await axios.get(`${this.apiUrl}/${this.version}/matricula/obtenerAlumnosMatriculados/${asignatura.codigo}`, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        const alumnosMatriculadosEnEstaAsignatura = responseAlumnosEnAsignatura.data;
+                        console.log(`Alumnos matriculados en asignatura ${asignatura.nombre} (todos):`, alumnosMatriculadosEnEstaAsignatura); // PUNTO DE CONTROL
+
+
+                        const dnisYaAgregadosParaEstaAsignatura = new Set(); // Para controlar duplicados internos
+
+                        for (const alumno of alumnosMatriculadosEnEstaAsignatura) {
+                            // Criterio de filtrado para evitar duplicidades y asegurar relevancia:
+                            // El alumno DEBE estar asociado a este MÓDULO (según la relación modulos-alumnos)
+                            // Y no debe haber sido agregado ya a la lista de alumnos para ESTA asignatura.
+                            if (dnisAlumnosAsociadosAModulo.has(alumno.dni) && !dnisYaAgregadosParaEstaAsignatura.has(alumno.dni)) {
+                                alumnosValidosParaMostrarEnEstaAsignatura.push(alumno);
+                                dnisYaAgregadosParaEstaAsignatura.add(alumno.dni);
+                            }
+                        }
+
+                        // *** CAMBIO CLAVE AQUI ***
+                        // Siempre añade la asignatura a la estructura final,
+                        // incluso si alumnosValidosParaMostrarEnEstaAsignatura está vacío.
+                        this.asignaturasConAlumnos.push({
+                            ...asignatura,
+                            alumnos: alumnosValidosParaMostrarEnEstaAsignatura // Puede ser un array vacío
+                        });
+
+                    } catch (errorAlumnosEnAsignatura) {
+                        console.warn(`No se pudieron cargar los alumnos para la asignatura ${asignatura.nombre} del módulo ${codigoModulo}:`, errorAlumnosEnAsignatura.response?.data || errorAlumnosEnAsignatura.message);
+                    }
                 }
+                console.log('Estructura final de asignaturas con alumnos para mostrar:', this.asignaturasConAlumnos); // PUNTO DE CONTROL
+
+                /*  if (this.asignaturasConAlumnos.length === 0 && asignaturasDelModulo.length > 0) {
+                      this.mensaje = 'Este módulo tiene asignaturas, pero ningún alumno matriculado en ellas o asociado al módulo.';
+                      this.error = false;
+                      this.mostrarAlerta = true;
+                  } else if (this.asignaturasConAlumnos.length === 0 && asignaturasDelModulo.length === 0) {
+                      this.mensaje = 'Este módulo no tiene asignaturas asociadas.';
+                      this.error = false;
+                      this.mostrarAlerta = true;
+                  }*/
                 this.moduloCargado = true;
             } catch (error) {
                 if (error.response) {

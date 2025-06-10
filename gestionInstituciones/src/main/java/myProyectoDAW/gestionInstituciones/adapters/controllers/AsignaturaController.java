@@ -25,7 +25,9 @@ public class AsignaturaController {
     @Autowired
     private AsignaturaService asignaturaService;
 
-    /* GET */
+    /* -- ENDPOINTS GET -- */
+
+    // LISTAR ASIGNATURAS //
     @GetMapping("/listar")
     public ResponseEntity<List<Asignatura>> listarAsignatura() {
 
@@ -34,7 +36,7 @@ public class AsignaturaController {
         return new ResponseEntity<>(asignaturas, HttpStatus.OK);
     }
 
-    /* GET */
+    // BUSCAR UNA ASIGNATURA DADO SU CODIGO //
     @GetMapping("/buscar/{codigoAsignatura}")
 
     public ResponseEntity<Asignatura> encontrarSiExisteAsignatura(@PathVariable String codigoAsignatura) {
@@ -48,7 +50,9 @@ public class AsignaturaController {
         }
     }
 
-    /* POST */
+    /* -- ENDPOINTS POST -- */
+
+    // ALTA DE UNA ASIGNATURA //
     @PostMapping("/alta")
     public ResponseEntity<?> altaAsignatura(@RequestBody AsignaturaDTO asignaturasDTO) {
         System.out.println("pero estoy dentro o no?");
@@ -66,7 +70,9 @@ public class AsignaturaController {
 
     }
 
-    /* DELETE */
+    /* -- ENDPOINTS DELETE -- */
+
+    // ELIMINAR UNA ASIGNATURA DADO SU CODIGO //
     @DeleteMapping("/baja/{codigoAsignatura}")
     public ResponseEntity<String> bajaAsignatura(@PathVariable String codigoAsignatura) {
 
@@ -88,7 +94,9 @@ public class AsignaturaController {
 
     }
 
-    /* PUT */
+    /* -- ENDPOINTS PUT -- */
+
+    // ACTUALIZAR DATOS DE UNA ASIGNATURA //
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarAsignatura(@RequestBody AsignaturaDTO asignaturaDTO) {
 

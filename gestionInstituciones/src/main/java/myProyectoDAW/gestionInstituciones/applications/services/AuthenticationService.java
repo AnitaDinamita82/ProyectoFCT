@@ -13,10 +13,12 @@ public class AuthenticationService {
     @Autowired
     private RepositoryAuthentication repositoryAuthentication;
 
+    /* Logica para el inicio de sesion de usuarios */
     public ResponseEntity<String> signup(Usuario usuario) {
         return repositoryAuthentication.signup(usuario);
     }
 
+    /* Logica para la autenticacion de usuarios */
     public Usuario authenticate(Usuario usuario) {
         return repositoryAuthentication.authenticate(usuario);
     }

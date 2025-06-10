@@ -24,21 +24,24 @@ public class MatriculaController {
     @Autowired
     private MatriculaService alumnoAsignaturaService;
 
-    /* GET */
+    /* -- ENDPOINTS GET -- */
+
+    // LISTAR TODAS LAS ASIGNATURAS DE UN ALUMNO //
     @GetMapping("/listarAsignaturasDeAlumno/{dniAlumno}")
     public List<Asignatura> listarAsignaturasDeAlumno(@PathVariable String dniAlumno) {
 
         return alumnoAsignaturaService.listarAsignaturasDeAlumno(dniAlumno);
     }
 
-    /* GET */
+    // OBTENER TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA //
     @GetMapping("/obtenerAlumnosMatriculados/{codigoAsignatura}")
     public List<Alumno> obtenerAlumnosMatriculados(@PathVariable String codigoAsignatura) {
         return alumnoAsignaturaService.obtenerAlumnosMatriculados(codigoAsignatura);
     }
 
-    /* POST */
+    /* -- ENDPOINTS POST -- */
 
+    // MATRICULAR A UN ALUMNO //
     @PostMapping("/matricularAlumno")
     public ResponseEntity<String> matricularAlumno(@RequestBody MatriculaDTO matriculaDTO) {
 
@@ -46,13 +49,16 @@ public class MatriculaController {
                 matriculaDTO.getCodigoAsignatura());
     }
 
-    /* DELETE */
+    /* -- ENDPOINTS DELETE -- */
+
+    // ELIMINAR LA MATRICULA DE UN ALUMNO A NIVEL ASIGNATURA //
     @DeleteMapping("/desmatricularAlumno")
     public ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumno(@RequestBody MatriculaDTO matriculaDTO) {
         return alumnoAsignaturaService.bajaAsignaturaDeMatriculaDeAlumno(matriculaDTO.getDniAlumno(),
                 matriculaDTO.getCodigoAsignatura());
     }
 
+    // ELIMINAR TODAS LA MATRICULAS //
     @DeleteMapping("desmatricularTodasLasAsignaturasDeAlumno/{dniAlumno}")
     public ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(@PathVariable String dniAlumno) {
         return alumnoAsignaturaService.desmatricularTodasLasAsignaturasDeUnAlumno(dniAlumno);

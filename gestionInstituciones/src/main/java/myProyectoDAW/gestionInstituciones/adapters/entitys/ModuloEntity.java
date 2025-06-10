@@ -39,11 +39,12 @@ public class ModuloEntity implements java.io.Serializable {
     @ManyToMany
     @JoinTable(name = "modulos_alumnos", schema = "instituto", joinColumns = @JoinColumn(name = "cod_modulo", referencedColumnName = "codigoModulo"), inverseJoinColumns = @JoinColumn(name = "dni_alumno", referencedColumnName = "dni"))
 
-    private List<AlumnoEntity> alumnos = new ArrayList<>(); // Inicializar para evitar NullPointerException
+    private List<AlumnoEntity> alumnos = new ArrayList<>();
 
+    /* Relacion many to many Modulos - Asignaturas */
     @ManyToMany
     @JoinTable(name = "modulos_asignaturas", schema = "instituto", joinColumns = @JoinColumn(name = "cod_modulo", referencedColumnName = "codigoModulo"), inverseJoinColumns = @JoinColumn(name = "cod_asignatura", referencedColumnName = "codigo"))
-    private List<AsignaturaEntity> asignaturas = new ArrayList<>(); // Inicializar para evitar NullPointerException
+    private List<AsignaturaEntity> asignaturas = new ArrayList<>();
 
     public ModuloEntity() {
     }

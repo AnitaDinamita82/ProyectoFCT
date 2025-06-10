@@ -25,9 +25,9 @@ public class AuthenticationController {
     @Autowired
     private JwtService jwtService; // Para generar el token JWT.
 
-    /* -- ENPOINT POST -- */
+    /* -- ENPOINTS POST -- */
 
-    // Registro de un usuario //
+    // PROCESO DE REGISTRO DE UN USUARIO //
     @PostMapping("/signup")
     public ResponseEntity<String> registrar(@RequestBody UsuarioDTO usuarioDTO) {
 
@@ -35,7 +35,7 @@ public class AuthenticationController {
         return authenticationService.signup(usuario);
     }
 
-    // Proceso de autenticación de un usuario //
+    // PROCESO DE AUTENTICACION DE UN USUARIO //
     @PostMapping("/login")
     public ResponseEntity<?> autenticar(@RequestBody UsuarioDTO usuarioDTO) {
 
