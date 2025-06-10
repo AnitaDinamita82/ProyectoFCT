@@ -23,4 +23,11 @@ public interface RepositoryMatricula {
     ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumno(String dniAlumno, String codigoAsignatura);
 
     ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(String dniAlumno);
+
+    ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumnoConGestionDeModulo(String dniAlumno,
+            String codigoAsignatura, String codigoModulo);
+
+    ResponseEntity<?> alumnosMatriculadosEnAsignaturaPorModulos(String codigoAsignatura,
+            String codigoModulo);
+
 }

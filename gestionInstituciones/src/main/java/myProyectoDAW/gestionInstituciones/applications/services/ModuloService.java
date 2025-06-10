@@ -42,7 +42,7 @@ public class ModuloService {
     }
 
     /*
-     * Asigna a un determinado modulo una asignatura (Relacion nodulo - asignatura)
+     * Asigna a un determinado modulo una asignatura (Relacion Modulo - asignatura)
      */
     public ResponseEntity<String> asignarAsignaturasAModulo(String codigoModulo,
             String codigoAsignatura) {

@@ -43,7 +43,7 @@
                                     <td> {{ asignatura.nombre }} ({{ asignatura.codigo }})</td>
                                     <td class="action-cell">
                                         <button class="action-button" title="Eliminar"
-                                            @click="confirmarBaja(asignatura.codigo)">
+                                            @click="confirmarBaja(asignatura.codigo, modulo.codigoModulo)">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -243,38 +243,39 @@ export default {
                 }
             }
         },
-        confirmarBaja(codigoAsignatura) {
-            this.verficarAlumnosEnAsignatura(codigoAsignatura);
+        confirmarBaja(codigoAsignatura, codigoModulo) {
+            this.verficarAlumnosEnAsignatura(codigoAsignatura, codigoModulo);
             /*  if (confirm('¿Estás seguro de que quieres desvincular esta asignatura del módulo?')) {
                   this.bajaAsignatura(codigoAsignatura);
               }*/
         },
 
-        async verficarAlumnosEnAsignatura(codigoAsignatura) {
+        async verficarAlumnosEnAsignatura(codigoAsignatura, codigoModulo) {
             this.error = false;
             this.mensaje = '';
             this.mostrarAlerta = false;
-
+            confirm(codigoAsignatura);
+            confirm(codigoModulo);
             try {
                 const token = localStorage.getItem('authToken');
 
-                const response = await axios.get(`${this.apiUrl}/${this.version}/matricula/obtenerAlumnosMatriculados/${codigoAsignatura}`, { // Llamada a la API de listar asignaturas
+                const response = await axios.get(`${this.apiUrl}/${this.version}/matricula/alumnosMatriculadosPorModulo/${codigoAsignatura}/${codigoModulo}`, { // Llamada a la API de listar asignaturas
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
 
 
-                const alumnosMatriculados = response.data;
-                console.log('ALUMNOS MATRICULADOS: ', alumnosMatriculados); // PUNTO DE CONTROL.
+                console.log("Que tengo cuando salgo del metodo", response.data);
+                const numeroAlumnos = response.data; // Devuelve una lista
+                // console.log(`Número de alumnos matriculados en ${codigoAsignatura} para el módulo ${codigoModulo}: ${numeroAlumnos}`); // PUNTO DE CONTROL
 
-                const numeroAlumnos = alumnosMatriculados.length;
-                console.log(`Número de alumnos matriculados en ${codigoAsignatura}: ${numeroAlumnos}`); // Punto de control
 
-                if (numeroAlumnos > 0) {
+                if (numeroAlumnos.length > 0) {
                     this.error = true;
-                    this.mensaje = `No se puede desvincular la asignatura porque tiene ${numeroAlumnos} alumno(s) matriculado(s).`;
+                    this.mensaje = `No se puede desvincular la asignatura porque tiene ${numeroAlumnos.length} alumno(s) matriculado(s).`;
                     this.mostrarAlerta = true;
+
                 } else {
                     // Si no hay alumnos, procede con la confirmación y la baja
                     if (confirm('¿Estás seguro de que quieres desvincular esta asignatura del módulo? No tiene alumnos matriculados.')) {
@@ -348,6 +349,7 @@ export default {
     },
 }
 </script>
+
 <style scoped lang="css">
 .header {
     margin-top: 2%;

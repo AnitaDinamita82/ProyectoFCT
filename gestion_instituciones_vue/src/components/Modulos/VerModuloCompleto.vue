@@ -49,7 +49,7 @@
                         <p v-else>No hay alumnos matriculados en esta asignatura.</p>
                     </div>
                 </div>
-                <p v-else>No hay asignaturas asociadas a este módulo o no tiene alumnos matriculados.</p>
+                <p v-else>No hay asignaturas asociadas a este módulo.</p>
             </div>
             <p v-else-if="!mostrarAlerta">Cargando detalles del módulo o el módulo no existe...</p>
         </main>

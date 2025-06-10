@@ -33,12 +33,19 @@ public class MatriculaController {
         return alumnoAsignaturaService.listarAsignaturasDeAlumno(dniAlumno);
     }
 
-    // OBTENER TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA //
+    // OBTENER TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA DE MANERA GENERAL //
     @GetMapping("/obtenerAlumnosMatriculados/{codigoAsignatura}")
     public List<Alumno> obtenerAlumnosMatriculados(@PathVariable String codigoAsignatura) {
         return alumnoAsignaturaService.obtenerAlumnosMatriculados(codigoAsignatura);
     }
 
+    // CONTAR TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA POR MODULO //
+    @GetMapping("/alumnosMatriculadosPorModulo/{codigoAsignatura}/{codigoModulo}")
+    public ResponseEntity<?> alumnosMatriculadosEnAsignaturaPorModulos(
+            @PathVariable String codigoAsignatura,
+            @PathVariable String codigoModulo) {
+        return alumnoAsignaturaService.alumnosMatriculadosEnAsignaturaPorModulos(codigoAsignatura, codigoModulo);
+    }
     /* -- ENDPOINTS POST -- */
 
     // MATRICULAR A UN ALUMNO //
@@ -63,4 +70,15 @@ public class MatriculaController {
     public ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(@PathVariable String dniAlumno) {
         return alumnoAsignaturaService.desmatricularTodasLasAsignaturasDeUnAlumno(dniAlumno);
     }
+
+    // ELIMINA LA ASIGNATURA QUE SE PASA COMO PARAMETRO PERO CONTROLAMOS SI TENEMOS
+    // MAS DEL MISMO MODULO //
+
+    @DeleteMapping("/desmatricularAlumnoModulo")
+    public ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumnoConGestionDeModulo(
+            @RequestBody MatriculaDTO matriculaDTO) {
+        return alumnoAsignaturaService.bajaAsignaturaDeMatriculaDeAlumnoConGestionDeModulo(matriculaDTO.getDniAlumno(),
+                matriculaDTO.getCodigoAsignatura(), matriculaDTO.getCodigoModulo());
+    }
+
 }
