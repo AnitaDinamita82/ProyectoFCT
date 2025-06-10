@@ -17,7 +17,6 @@ public class MatriculaService {
     private RepositoryMatricula repositoryMatricula;
 
     /* Dado un dni de alumno listar todas las asignatruas matriculadas */
-
     public List<Asignatura> listarAsignaturasDeAlumno(String dniAlumno) {
 
         return repositoryMatricula.listarAsignaturasDeAlumno(dniAlumno);
@@ -49,8 +48,25 @@ public class MatriculaService {
         return repositoryMatricula.bajaAsignaturaDeMatriculaDeAlumno(dniAlumno, codigoAsignatura);
     }
 
-    /* Daremos de baja todas las asignaturas de la matricula del alumno */
+    /*
+     * Daremos de baja todas las asignaturas de la matricula del alumno de forma
+     * general
+     */
     public ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(String dniAlumno) {
         return repositoryMatricula.desmatricularTodasLasAsignaturasDeUnAlumno(dniAlumno);
+    }
+
+    /* Baja de la asignatura de un alumno asociada a un modulo en concreto */
+    public ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumnoConGestionDeModulo(String dniAlumno,
+            String codigoAsignatura, String codigoModulo) {
+
+        return repositoryMatricula.bajaAsignaturaDeMatriculaDeAlumnoConGestionDeModulo(dniAlumno, codigoAsignatura,
+                codigoModulo);
+    }
+
+    /* Obtencion de los alumnos de una asignatura para un modulo en concreto */
+    public ResponseEntity<?> alumnosMatriculadosEnAsignaturaPorModulos(String codigoAsignatura,
+            String codigoModulo) {
+        return repositoryMatricula.alumnosMatriculadosEnAsignaturaPorModulos(codigoAsignatura, codigoModulo);
     }
 }

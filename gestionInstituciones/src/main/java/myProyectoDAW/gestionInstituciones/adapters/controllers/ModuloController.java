@@ -46,7 +46,6 @@ public class ModuloController {
     }
 
     // LISTAR TODOS LOS ALUMNOS DE UN MODULO DADO SU CODIGO //
-
     @GetMapping("/listarAlumnosModulo/{codigoModulo}")
     public ResponseEntity<?> obtenerTodosLosAlumnosDeUnModulo(@PathVariable String codigoModulo) {
         return moduloService.obtenerTodosLosAlumnosDeUnModulo(codigoModulo);

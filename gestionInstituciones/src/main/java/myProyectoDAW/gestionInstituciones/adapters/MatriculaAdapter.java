@@ -13,9 +13,11 @@ import org.springframework.stereotype.Component;
 import jakarta.transaction.Transactional;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.AlumnoEntity;
 import myProyectoDAW.gestionInstituciones.adapters.entitys.AsignaturaEntity;
+import myProyectoDAW.gestionInstituciones.adapters.entitys.ModuloEntity;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.AlumnoJpaRepository;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.AsignaturaJpaRepository;
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryMatricula;
+import myProyectoDAW.gestionInstituciones.applications.services.ModuloService;
 import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
 import myProyectoDAW.gestionInstituciones.domain.models.Asignatura;
 
@@ -27,6 +29,9 @@ public class MatriculaAdapter implements RepositoryMatricula {
 
     @Autowired
     private AsignaturaJpaRepository asignaturaJpaRepository;
+
+    @Autowired
+    private ModuloService moduloService;
 
     /* Dado el Dni de un alumno listaremos todas sus asignaturas */
     @Override
@@ -147,4 +152,154 @@ public class MatriculaAdapter implements RepositoryMatricula {
         alumno.setApellido2(alumnoEntity.getApellido2());
         return alumno;
     }
+
+    @Override
+    @Transactional
+    public ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumnoConGestionDeModulo(String dniAlumno,
+            String codigoAsignatura, String codigoModulo) {
+
+        // Asumiendo que ahora recibes codigoModulo directamente
+
+        System.out.println("Estoy dentro bajaAsignaturaMatriculaDeAlumnoGestionDeModulo en el adapter"); // PUNTO DE
+                                                                                                         // CONTROL
+        System.out.println("DEBUG: DNI Alumno: " + dniAlumno + ", Asignatura: " + codigoAsignatura
+                + ", Módulo contextual: " + codigoModulo); // PUNTO DE CONTROL
+
+        // 1. Obtener el alumno
+        Optional<AlumnoEntity> optionalAlumnoEntity = alumnoJpaRepository.findByDni(dniAlumno);
+
+        if (!optionalAlumnoEntity.isPresent()) {
+            return new ResponseEntity<>("Alumno con DNI " + dniAlumno + " no encontrado.", HttpStatus.NOT_FOUND);
+        }
+
+        AlumnoEntity alumnoEntity = optionalAlumnoEntity.get(); // Pasamos a entidad.
+
+        // 2. Obtener la asignatura a desmatricular
+        Optional<AsignaturaEntity> optionalAsignaturaEntity = asignaturaJpaRepository.findByCodigo(codigoAsignatura);
+
+        if (!optionalAsignaturaEntity.isPresent()) {
+            return new ResponseEntity<>(
+                    "Asignatura con código " + optionalAsignaturaEntity.get().getNombre() + " no encontrada.",
+                    HttpStatus.NOT_FOUND);
+        }
+        AsignaturaEntity asignaturaEntity = optionalAsignaturaEntity.get(); // Pasamos aentidad
+
+        // 3. Eliminar la asignatura de la matrícula del alumno (relación
+        // alumno-asignatura)
+
+        if (!alumnoEntity.getAsignatura().remove(asignaturaEntity)) {
+            return new ResponseEntity<>("El alumno con DNI " + dniAlumno + " no estaba matriculado en la asignatura "
+                    + codigoAsignatura + ".", HttpStatus.NOT_FOUND);
+        }
+
+        alumnoJpaRepository.save(alumnoEntity); // Guardar los cambios de la matrícula
+
+        System.out.println("DEBUG: Asignatura " + codigoAsignatura + " desmatriculada del alumno " + dniAlumno); // PUNTO
+                                                                                                                 // DE
+                                                                                                                 // CONTROL
+
+        // 4. Verificar si el alumno tiene más asignaturas el el mismo modulo
+        // (codigoModulo)
+        // Antes se recarga el alumno para asegurar que la lista de asignaturas está
+        // actualizada.
+        alumnoEntity = alumnoJpaRepository.findByDni(dniAlumno).get();
+        List<AsignaturaEntity> asignaturasRestantesDelAlumno = alumnoEntity.getAsignatura();
+
+        boolean alumnoTieneMasAsignaturasEnEsteModulo = asignaturasRestantesDelAlumno.stream()
+                .anyMatch(a -> {
+                    return a.getModulos() != null && a.getModulos().stream()
+                            .anyMatch(m -> m.getCodigoModulo().equals(codigoModulo));
+                });
+
+        System.out.println("DEBUG: ¿Alumno " + dniAlumno + " tiene más asignaturas en el módulo " + codigoModulo + "? "
+                + alumnoTieneMasAsignaturasEnEsteModulo); // PUNTO DE CONTROL
+
+        // 5. Si el alumno no tiene más asignaturas en el módulo contextual,
+        // desvincularlo del módulo.
+        if (!alumnoTieneMasAsignaturasEnEsteModulo) {
+            // Eliminar la relación alumno-módulo
+            moduloService.desasignarAlumnoDeModulo(codigoModulo, dniAlumno);
+            // moduloAlumnoJpaRepository.deleteByDniAlumnoAndCodigoModulo(dniAlumno,
+            // codigoModulo);
+            System.out.println("DEBUG: Alumno " + dniAlumno + " desvinculado del módulo " + codigoModulo
+                    + " (no quedan más asignaturas en él).");
+            return new ResponseEntity<>(
+                    "Se ha dado de baja la asignatura " + asignaturaEntity.getNombre()
+                            + " y el alumno ha sido desvinculado del módulo " + codigoModulo + ".",
+                    HttpStatus.OK);
+        } else {
+            // Si el alumno aún tiene asignaturas en este módulo, no tocamos la relación
+            // módulo-alumno
+            return new ResponseEntity<>(
+                    "Se ha dado de baja la asignatura " + asignaturaEntity.getNombre()
+                            + ". El alumno sigue matriculado en otras asignaturas del módulo " + codigoModulo + ".",
+                    HttpStatus.OK);
+        }
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    @Transactional
+    public ResponseEntity<?> alumnosMatriculadosEnAsignaturaPorModulos(String codigoAsignatura,
+            String codigoModulo) {
+
+        System.out.println("OYEEEEEEE que estoy dentro......");
+        System.out.println("Modulo: " + codigoModulo);
+        System.out.println("Aasignatura " + codigoAsignatura);
+
+        // 1. Obtener la asignatura
+        Optional<AsignaturaEntity> optionalAsignaturaEntity = asignaturaJpaRepository.findByCodigo(codigoAsignatura);
+
+        System.out.println("Nombre Aasignatura " + optionalAsignaturaEntity.get().getNombre());
+
+        if (!optionalAsignaturaEntity.isPresent()) {
+            System.out.println("me meti en el primero");
+            return new ResponseEntity<>(
+                    "La asignatura " + optionalAsignaturaEntity.get().getNombre() + " no está asignada a este modulo",
+                    HttpStatus.NOT_FOUND);
+
+        }
+
+        System.out.println("OYEEEEE que sigo dentro");
+
+        List<AlumnoEntity> alumnosMatriculadosEnAsignatura = optionalAsignaturaEntity.get().getAlumnos();
+
+        // Lista para guardar los alumnos que cumplen ambas condiciones
+        List<AlumnoEntity> alumnosQueCumplenCondicion = new ArrayList<>();
+
+        if (alumnosMatriculadosEnAsignatura.isEmpty()) { // La asignatura no tiene alumnos
+            return new ResponseEntity<>(
+                    alumnosMatriculadosEnAsignatura,
+                    HttpStatus.OK);
+        }
+        // Tengo alumnos pero hay que comporbar si estan asignados al modulo que se ha
+        // pasado por parametro
+
+        System.out.println("OYEEEEE que voy a pasar al bucle for....");
+
+        for (AlumnoEntity alumno : alumnosMatriculadosEnAsignatura) {
+            System.out.println("DEBUG: Procesando alumno: " + alumno.getDni()); // PUNTO DE CONTROL
+
+            ResponseEntity<?> modulosResponse = moduloService.obtenerTodosLosModulosDeUnAlumno(alumno.getDni());
+
+            if (modulosResponse.getStatusCode().is2xxSuccessful() && modulosResponse.getBody() != null) {
+
+                if (modulosResponse.getBody() instanceof List) {
+                    @SuppressWarnings("unchecked")
+                    List<ModuloEntity> modulosDelAlumno = (List<ModuloEntity>) modulosResponse.getBody();
+
+                    // Comprobar si el módulo está en la lista de módulos del alumno
+                    boolean estaEnElModulo = modulosDelAlumno.stream()
+                            .anyMatch(modulo -> modulo.getCodigoModulo().equals(codigoModulo));
+
+                    if (estaEnElModulo) {
+                        alumnosQueCumplenCondicion.add(alumno);
+
+                    }
+                }
+            }
+        }
+        return new ResponseEntity<>(alumnosQueCumplenCondicion, HttpStatus.OK);
+    }
+
 }

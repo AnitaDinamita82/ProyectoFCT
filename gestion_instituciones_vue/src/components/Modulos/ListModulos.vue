@@ -80,9 +80,10 @@
                 </table>
                 <div>
                     <!-- Logica para poder ir al componente que gestiona el añadir modulo -->
-                    <router-link to="/AddModulos" class="style-router-link"><button class="action-button"><i
-                                class="fas fa-plus-circle"></i><span>Añadir nuevo
-                                Módulo</span></button></router-link>
+                    <router-link to="/AddModulos" class="style-router-link">
+                        <button class="action-button"><i class="fas fa-plus-circle"></i><span>Añadir nuevo
+                                Módulo</span></button>
+                    </router-link>
                 </div>
             </div>
             <p v-else>No se puede cargar la lista o no disponemos de módulos registrados.</p>
@@ -216,19 +217,6 @@ export default {
             }
         },
 
-        /*     async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
-                 if (response.status === 200) {
-     
-                     this.mensaje = await response.data;
-                     this.error = false;
-     
-                 } else if (response.status === 400 || response.status === 404 || response.status === 409) {
-                     this.error = true;
-                     this.mensaje = await response.data;
-     
-                 }
-                 this.mostrarAlerta = true;
-             },*/
         async buscarModulo() {
             try {
                 const token = localStorage.getItem('authToken');
@@ -336,10 +324,10 @@ table {
 }
 
 .alert {
-    width: 40%;
+    width: 80%;
 }
 
 .alert-danger {
-    width: 60%;
+    width: 80%;
 }
 </style>

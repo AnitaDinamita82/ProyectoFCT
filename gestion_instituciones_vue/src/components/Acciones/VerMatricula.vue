@@ -254,7 +254,7 @@ export default {
         },
 
         // Funcion para desmatricular al alumno en una asignatura
-        async desMatricularDeAsignatura(dniAlumno, codigoAsignatura) {
+        async desMatricularDeAsignatura(dniAlumno, codigoAsignatura, codigoModulo) {
 
             this.error = false;
             this.mensaje = '';
@@ -263,15 +263,16 @@ export default {
             try {
                 const token = localStorage.getItem('authToken');
 
-                // 1. Damos de baja la asignatura alumnos - asignaturas
-                const response = await axios.delete(`${this.apiUrl}/${this.version}/matricula/desmatricularAlumno`, {
+                // 1. Damos de baja la asignatura pero controlando ademas si el alumno tiene mas asignaturas del mismo modulo
+                const response = await axios.delete(`${this.apiUrl}/${this.version}/matricula/desmatricularAlumnoModulo`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
                     data: {
                         dniAlumno: dniAlumno,
-                        codigoAsignatura: codigoAsignatura
+                        codigoAsignatura: codigoAsignatura,
+                        codigoModulo: codigoModulo
                     }
                 });
 
