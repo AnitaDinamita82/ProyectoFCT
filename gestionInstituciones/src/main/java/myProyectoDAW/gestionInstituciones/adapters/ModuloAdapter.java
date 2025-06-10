@@ -98,7 +98,8 @@ public class ModuloAdapter implements RepositoryModulo {
             // Verificamos si el modulo tiene alumnos asignados
             if (moduloEntityAEliminar.getAlumnos() != null && !moduloEntityAEliminar.getAlumnos().isEmpty()) {
                 return new ResponseEntity<>(
-                        "No se puede eliminar el modulo con codigo " + codigoModulo + ". Tiene alumnos ya asignados.",
+                        "No se puede eliminar el modulo con codigo " + moduloEntityAEliminar.getNombreModulo()
+                                + ". Tiene alumnos ya asignados.",
                         HttpStatus.CONFLICT);
             }
             // Verificamos si el modulo tiene asignaturas asociadasalumnoAdapter
@@ -145,6 +146,24 @@ public class ModuloAdapter implements RepositoryModulo {
             List<AsignaturaEntity> asignaturas = moduloAListarAsignaturas.getAsignaturas();
 
             return new ResponseEntity<>(asignaturas, HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>("Intento de búsqueda fallido, puede que dicho mòdulo no exista",
+                HttpStatus.NOT_FOUND);
+    }
+
+    /* Buscar todos los dnis de los alumnos asociados a un modulo */
+    @Override
+    public ResponseEntity<?> obtenerTodosLosAlumnosDeUnModulo(String codigoModulo) {
+
+        /* Nos traemos o no el modulo dependiendo de si existe */
+        moduloEntityOptional = moduloJpaRepository.findByCodigoModulo(codigoModulo);
+
+        if (moduloEntityOptional.isPresent()) {
+
+            ModuloEntity moduloAListarAlumnos = moduloEntityOptional.get();
+            List<AlumnoEntity> alumnos = moduloAListarAlumnos.getAlumnos();
+            return new ResponseEntity<>(alumnos, HttpStatus.OK);
 
         }
         return new ResponseEntity<>("Intento de búsqueda fallido, puede que dicho mòdulo no exista",
@@ -203,7 +222,7 @@ public class ModuloAdapter implements RepositoryModulo {
 
         if (asignaturaEntityOptional.isEmpty()) {
             return new ResponseEntity<>(
-                    "La asignatura con CODIGO: " + codigoAsignatura
+                    "La asignatura " + asignaturaEntityOptional.get().getNombre()
                             + " no esta dada de alta aún. No se la puede asignar al módulo",
                     HttpStatus.NOT_FOUND);
         }
@@ -211,7 +230,8 @@ public class ModuloAdapter implements RepositoryModulo {
         // 3. Verificar si la asignatura ya está asignada al módulo
         if (moduloAAsignarAsignatura.getAsignaturas().contains(asignaturaEntityOptional.get())) {
             return new ResponseEntity<>(
-                    "La asignatura con CODIGO " + codigoAsignatura + " ya está asignada al módulo " + codigoModulo
+                    "La asignatura " + asignaturaEntityOptional.get().getNombre() + " ya está asignada al módulo "
+                            + moduloEntityOptional.get().getNombreModulo()
                             + ".",
                     HttpStatus.CONFLICT);
         }
@@ -227,7 +247,8 @@ public class ModuloAdapter implements RepositoryModulo {
         // 6. Guardar el módulo para persistir los cambios en la tabla intermedia (dueño
         // de la relación)
         moduloJpaRepository.save(moduloAAsignarAsignatura);
-        return new ResponseEntity<>("Se ha asignado la asignatura con CODIGO: " + codigoAsignatura + " con exito",
+        return new ResponseEntity<>(
+                "Se ha asignado la asignatura " + asignaturaEntityOptional.get().getNombre() + " con exito",
                 HttpStatus.OK);
     }
 
@@ -281,7 +302,7 @@ public class ModuloAdapter implements RepositoryModulo {
 
         if (asignaturaEntityOptional.isEmpty()) {
             return new ResponseEntity<>(
-                    "La asignatura con CODIGO: " + codigoAsignatura
+                    "La asignatura " + asignaturaEntityOptional.get().getNombre()
                             + " no esta dada de alta aún. No se la puede desasignar del módulo",
                     HttpStatus.NOT_FOUND);
         }
@@ -294,7 +315,8 @@ public class ModuloAdapter implements RepositoryModulo {
 
         if (!asignada) {
             return new ResponseEntity<>(
-                    "La asignatura con CODIGO: " + codigoAsignatura + " no está asignada al módulo " + codigoModulo
+                    "La asignatura " + asignaturaADesasignar.getNombre() + " no está asignada al módulo "
+                            + moduloADesAsignarAsignatura.getNombreModulo()
                             + ".",
                     HttpStatus.CONFLICT);
         }
@@ -308,7 +330,8 @@ public class ModuloAdapter implements RepositoryModulo {
         // 5. Guardar el módulo para persistir los cambios en la tabla intermedia (dueño
         // de la relación)
         moduloJpaRepository.save(moduloADesAsignarAsignatura);
-        return new ResponseEntity<>("Se ha desasignado la asignatura con CODIGO: " + codigoAsignatura + " con exito",
+        return new ResponseEntity<>(
+                "Se ha desasignado la asignatura " + asignaturaADesasignar.getNombre() + " con exito",
                 HttpStatus.OK);
     }
 
@@ -328,7 +351,7 @@ public class ModuloAdapter implements RepositoryModulo {
             return new ResponseEntity<>(modulos, HttpStatus.OK);
 
         }
-        return new ResponseEntity<>("La asignatura con CODIGO: " + codigoAsignatura
+        return new ResponseEntity<>("La asignatura " + asignaturaEntityOptional.get().getNombre()
                 + " no esta dada de alta aún.",
                 HttpStatus.NOT_FOUND);
 

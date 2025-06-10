@@ -16,12 +16,15 @@ public class EstadisticasController {
     @Autowired
     private EstadisticasService estadisticasService;
 
-    /* GET */
+    /* -- ENDPOINTS GET -- */
+
+    // OBTENER LA CUENTA DE LOS ALUMNOS MATRICULADOS POR ASIGNATURA //
     @GetMapping("/alumnosPorAsignatura")
     public ResponseEntity<?> numeroAlumnosPorAsignatura() {
         return estadisticasService.numeroAlumnosPorAsignatura();
     }
 
+    // OBTENER LOS ALUMNOS CON MAS ASIGNATURAS //
     @GetMapping("/alumnosConMasAsignaturas")
     public ResponseEntity<?> alumnosConMasAsignaturas() {
         return estadisticasService.alumnosConMasAsignaturas();

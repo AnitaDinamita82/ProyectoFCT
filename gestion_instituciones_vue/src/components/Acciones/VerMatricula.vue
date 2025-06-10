@@ -254,7 +254,7 @@ export default {
         },
 
         // Funcion para desmatricular al alumno en una asignatura
-        async desMatricularDeAsignatura(dniAlumno, codigoAsignatura, codigoModulo) {
+        async desMatricularDeAsignatura(dniAlumno, codigoAsignatura) {
 
             this.error = false;
             this.mensaje = '';
@@ -276,18 +276,19 @@ export default {
                 });
 
                 // 2. Quitamos la referencia del alumno en el modulo modulos - alumnos 
-                const responseMensaje = await axios.delete(`${this.apiUrl}/${this.version}/modulos/desasignarAlumnosDeModulo/${codigoModulo}/${dniAlumno}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                });
-
-                console.log('Desasigna bien al alumno del modulo:', responseMensaje.data); // PUNTO DE CONTROL
+                /*       const responseMensaje = await axios.delete(`${this.apiUrl}/${this.version}/modulos/desasignarAlumnosDeModulo/${codigoModulo}/${dniAlumno}`, {
+                           headers: {
+                               'Authorization': `Bearer ${token}`,
+                               'Content-Type': 'application/json'
+                           },
+                       });
+       
+                       console.log('Desasigna bien al alumno del modulo:', responseMensaje.data); // PUNTO DE CONTROL*/
+                this.error = false;
+                this.mostrarAlerta = true;
                 this.apiResponse(response);
 
                 // Y despues de desMatricular, regargamos de nuevo la matricula.
-
                 await this.cargarMatriculaCompleta(dniAlumno); // Recargar datos
 
             } catch (error) {
@@ -306,6 +307,7 @@ export default {
             }
 
         },
+
         /* Método para dar de baja la matricula completa */
         async bajaCompleta(dniAlumno) {
             this.error = false;
@@ -326,7 +328,7 @@ export default {
                 console.log('Respuesta desmatriculación total de asignaturas:', responseAsignaturas.data); //PUNTO DE CONTROL
 
                 // 2. Desasignar al alumno de TODOS los módulos asociados
-                // Es buena práctica obtener la lista de módulos actual antes de desasignar
+                // y obtenemos la lista de módulos actual antes de desasignar
                 const responseModulosAlumno = await axios.get(
                     `${this.apiUrl}/${this.version}/modulos/listarModulosDeAlumno/${dniAlumno}`,
                     { headers: { 'Authorization': `Bearer ${token}` } }
@@ -369,26 +371,28 @@ export default {
                 }
             }
         },
-        /*
-                async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
-                    if (response.status === 200) {
-        
-                        this.mensaje = await response.data;
-                        this.error = false;
-        
-                    } else if (response.status === 400 || response.status === 404 || response.status === 409) {
-                        this.error = true;
-                        this.mensaje = await response.data;
-        
-                    }
-                    this.mostrarAlerta = true;
-                },*/
+
+        async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
+            if (response.status === 200) {
+
+                this.mensaje = await response.data;
+                this.error = false;
+
+            } else if (response.status === 400 || response.status === 404 || response.status === 409) {
+                this.error = true;
+                this.mensaje = await response.data;
+
+            }
+            this.mostrarAlerta = true;
+        },
         cerrarAlerta() {
             this.mostrarAlerta = false;
         },
     }
 }
+
 </script>
+
 <style lang="css" scoped>
 .header {
     margin-top: 2%;

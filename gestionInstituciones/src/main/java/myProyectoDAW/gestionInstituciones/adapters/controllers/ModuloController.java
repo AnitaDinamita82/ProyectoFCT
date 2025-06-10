@@ -29,7 +29,7 @@ public class ModuloController {
     @Autowired
     private ModuloService moduloService;
 
-    /* -- ENDPOINT GET -- */
+    /* -- ENDPOINTS GET -- */
 
     // LISTAR TODOS LOS MODULOS //
     @GetMapping("/listarModulos")
@@ -43,6 +43,13 @@ public class ModuloController {
     @GetMapping("/listarAsignaturasModulo/{codigoModulo}")
     public ResponseEntity<?> obtenerTodasLasAsignaturasDeUnModulo(@PathVariable String codigoModulo) {
         return moduloService.obtenerTodasLasAsignaturasDeUnModulo(codigoModulo);
+    }
+
+    // LISTAR TODOS LOS ALUMNOS DE UN MODULO DADO SU CODIGO //
+
+    @GetMapping("/listarAlumnosModulo/{codigoModulo}")
+    public ResponseEntity<?> obtenerTodosLosAlumnosDeUnModulo(@PathVariable String codigoModulo) {
+        return moduloService.obtenerTodosLosAlumnosDeUnModulo(codigoModulo);
     }
 
     // BUSCAR UN MODULO EN CONCRETO DADO SU CODIGO //
@@ -63,7 +70,7 @@ public class ModuloController {
         return moduloService.obtenerTodosLosModulosDeUnAlumno(dniAlumno);
     }
 
-    /* -- ENDPOINT POST -- */
+    /* -- ENDPOINTS POST -- */
 
     // ALTA DE UN NUEVO MODULO //
     @PostMapping("/altaModulo")
@@ -89,7 +96,7 @@ public class ModuloController {
         return moduloService.asignarAsignaturasAModulo(codigoModulo, codigoAsignaturaDTO.getCodigoAsignatura());
     }
 
-    /* -- ENDPOINT PUT -- */
+    /* -- ENDPOINTS PUT -- */
 
     // ACTUALIZAR LOS DATOS DE UN MODULO //
     @PutMapping("/actualizarModulo")
@@ -100,7 +107,7 @@ public class ModuloController {
         return moduloService.actualizarDatosEnModulo(moduloEntity);
     }
 
-    /* -- ENDPOINT DELETE -- */
+    /* -- ENDPOINTS DELETE -- */
 
     // ELIMINACION DE UN MODULO DADO SU CODIGO //
     @DeleteMapping("/bajaModulo/{codigoModulo}")

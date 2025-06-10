@@ -295,8 +295,8 @@ export default {
 
                 console.log('Asigna bien al alumno en el modulo: ', responseMensaje.data); // PUNTO DE CONTROL
                 this.apiResponse(response);
-                /// DESPUÉS de matricular, recargamos las asignaturas del alumno
 
+                /// DESPUÉS de matricular, recargamos las asignaturas del alumno
                 await this.cargarAsignaturasParaMatricular(dniAlumno);
 
 
@@ -406,10 +406,10 @@ export default {
 }
 
 .alert {
-    width: 60%;
+    width: 70%;
 }
 
 .alert-danger {
-    width: 60%;
+    width: 70%;
 }
 </style>

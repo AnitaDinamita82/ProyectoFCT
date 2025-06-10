@@ -25,7 +25,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    /* -- ENDPOINT GET -- */
+    /* -- ENDPOINTS GET -- */
 
     // LISTAR USUARIOS //
     @GetMapping("/listar")
@@ -52,7 +52,7 @@ public class UsuarioController {
         }
     }
 
-    /* -- ENDPOINT POST -- */
+    /* -- ENDPOINTS POST -- */
 
     // ALTA DE UN USUARIO //
     @PostMapping("/alta")
@@ -77,7 +77,7 @@ public class UsuarioController {
                 HttpStatus.OK);
     }
 
-    /* -- ENDPOINT DELETE -- */
+    /* -- ENDPOINTS DELETE -- */
 
     // ELIMINAR USUARIO DADO SU DNI //
     @DeleteMapping("/baja/{dniUsuario}")
@@ -104,7 +104,7 @@ public class UsuarioController {
         }
     }
 
-    /* -- ENDPOINT PUT -- */
+    /* -- ENDPOINTS PUT -- */
     // ACTUALIZAR DATOS DE UN USUARIO //
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {

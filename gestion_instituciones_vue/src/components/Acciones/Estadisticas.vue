@@ -16,12 +16,7 @@
                         class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
-        <!-- Boton Volver -->
-        <div class="action-volver">
-
-        </div>
-
+        <!-- *** -->
         <main class="estadisticas-container">
             <div v-if="mostrarAlerta" class="alert" :class="{ 'alert-success': !error, 'alert-danger': error }">
                 {{ mensaje }}
@@ -94,6 +89,7 @@
                 </section>
             </div>
         </main>
+        <BotonSubir />
     </div>
 </template>
 
@@ -104,6 +100,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearSca
 import { Pie, Bar } from 'vue-chartjs';
 import axios from 'axios'; // Necesitas axios para las peticiones HTTP
 import { useRouter } from 'vue-router';
+import BotonSubir from '@/components/Acciones/BotonSubir.vue';
 
 // Registra los elementos necesarios de Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
@@ -111,7 +108,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name: 'Estadisticas',
-    components: { Pie, Bar },
+    components: { Pie, Bar, BotonSubir },
     data() {
         return {
             imglotus: imglotus,

@@ -25,7 +25,9 @@ public class AlumnoController {
     @Autowired
     private AlumnoService alumnoService;
 
-    /* GET */
+    /* -- ENDPOINTS GET -- */
+
+    // LISTAR ALUMNOS //
     @GetMapping("/listar")
     public ResponseEntity<List<Alumno>> listarAlumnos() {
 
@@ -34,7 +36,7 @@ public class AlumnoController {
         return new ResponseEntity<>(alumnos, HttpStatus.OK);
     }
 
-    /* GET */
+    // BUSCAR A UN ALUMNO POR DNI //
     @GetMapping("/buscar/{dniAlumno}")
     public ResponseEntity<Alumno> encontrarSiExisteAlumno(@PathVariable String dniAlumno) {
 
@@ -47,9 +49,10 @@ public class AlumnoController {
         }
     }
 
-    /* POST */
-    @PostMapping("/alta")
+    /* -- ENDPOINTS POST -- */
 
+    // ALTA DE UN ALUMNO //
+    @PostMapping("/alta")
     public ResponseEntity<?> altaAlumno(@RequestBody AlumnoDTO alumnoDTO) {
 
         Alumno alumno = alumnoDTO.convertirDTOAEntity();
@@ -63,7 +66,9 @@ public class AlumnoController {
         }
     }
 
-    /* DELETE */
+    /* -- ENDPOINTS DELETE -- */
+
+    // ELIMINAR A UN ALUMNO DADO SU DNI //
     @DeleteMapping("/baja/{dniAlumno}")
     public ResponseEntity<String> bajaAlumno(@PathVariable String dniAlumno) {
 
@@ -83,7 +88,9 @@ public class AlumnoController {
         }
     }
 
-    /* PUT */
+    /* -- ENDPOINTS PUT -- */
+
+    // ACTUALIZAR DATOS DE UN ALUMNO //
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarAlumno(@RequestBody AlumnoDTO alumnoDTO) {
 
