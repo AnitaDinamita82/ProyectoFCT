@@ -15,6 +15,16 @@ import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryAsignatur
 import myProyectoDAW.gestionInstituciones.applications.services.MatriculaService;
 import myProyectoDAW.gestionInstituciones.domain.models.Asignatura;
 
+/**
+ * Adaptador para la entidad Asignatura. Clase que actua de pasarela entre la
+ * capa
+ * de dominio y la de persistencia.
+ * A través de la interfaz 'RepositoryAsignatura', podemos hacer uso de las
+ * operaciones de acceso a datos de las asignaturas.
+ * Y con la inyeccion de AsignaturaJpaRepository podemos utilizar los metodos
+ * CRUD
+ * ofrecidos por el repositorio JPA.
+ */
 @Component
 public class AsignaturaAdapter implements RepositoryAsignatura {
 
@@ -26,6 +36,7 @@ public class AsignaturaAdapter implements RepositoryAsignatura {
     @Autowired
     private MatriculaService matriculaService;
 
+    /* Implementación del metodo para dar de alta una nueva asignatura */
     @Override
     public Asignatura altaAsignatura(Asignatura asignatura) {
 
@@ -33,6 +44,7 @@ public class AsignaturaAdapter implements RepositoryAsignatura {
         return convertirEntityAAsignatura(asignaturaJpaRepository.save(asignaturaEntity));
     }
 
+    /* Implementación del metodo para listar todas las asignaturas */
     @Override
     public List<Asignatura> listarAsignaturas() {
         return asignaturaJpaRepository.findAll().stream()
@@ -40,6 +52,7 @@ public class AsignaturaAdapter implements RepositoryAsignatura {
                 .collect(Collectors.toList());
     }
 
+    /* Implementacion del metodo para elminar una asignatura dado su codigo */
     @Override
     public Boolean eliminarAsignaturaDadoCodigo(String codigoAsignatura) {
 
@@ -65,6 +78,7 @@ public class AsignaturaAdapter implements RepositoryAsignatura {
 
     }
 
+    /* Implementacion del método para actualizar los datos de una asignatura */
     @Override
     public ResponseEntity<String> actualizarAsignatura(Asignatura asignatura) {
 
@@ -85,6 +99,10 @@ public class AsignaturaAdapter implements RepositoryAsignatura {
                 HttpStatus.OK);
     }
 
+    /*
+     * Implementación del metodo que encuentra y devuelve un asignatura en el caso
+     * de que exista
+     */
     @Override
     public Asignatura encontrarSiExisteAsignatura(String codigo) {
 
@@ -102,6 +120,10 @@ public class AsignaturaAdapter implements RepositoryAsignatura {
         return null;
     }
 
+    /*
+     * Implementación del metodo para verificar la existencia de una asignatura dado
+     * su codigo
+     */
     @Override
     public boolean existe(String codigoAsignatura) {
         System.out.println("Estoy dentro de existe ");
@@ -109,7 +131,12 @@ public class AsignaturaAdapter implements RepositoryAsignatura {
         System.out.println(asignaturaJpaRepository.findByCodigo(codigoAsignatura).isPresent());
         return asignaturaJpaRepository.findByCodigo(codigoAsignatura).isPresent();
     }
-    /* Metodos de conversion */
+
+    // METODOS DE CONVERSION //
+    /*
+     * Se definen estos metodos de coversion dado que JPA Repository trabaja con el
+     * modelo de datos entity para asegurar la persistencia de los datos
+     */
 
     private AsignaturaEntity convertirAsignaturaAEntity(Asignatura asignatura) {
 

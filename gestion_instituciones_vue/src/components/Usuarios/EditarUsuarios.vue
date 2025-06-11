@@ -16,7 +16,7 @@
                         class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
+        <!-- *** -->
         <main class="action-container container-color-editar">
             <div>
                 <img :src="imglotus" style="width: 185px;" alt="logo">
@@ -26,7 +26,7 @@
                 {{ mensaje }}
                 <button type="button" class="x-close" @click="cerrarAlerta">X</button>
             </div>
-            <!-- ** -->
+            <!-- *** -->
             <form @submit.prevent="actualizarUsuario">
                 <div class="form-group">
                     <label for="dni">DNI</label>
@@ -92,7 +92,7 @@ export default {
         const logout = () => {
             localStorage.removeItem('authToken'); // Limpia el token de sesión
             localStorage.removeItem('sessionUser');
-            router.push('/'); // Redirige a la página de login (asumiendo que tu ruta de login es '/')
+            router.push('/');
         };
 
         const back = () => {

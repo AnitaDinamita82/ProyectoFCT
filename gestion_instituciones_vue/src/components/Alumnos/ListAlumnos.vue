@@ -16,7 +16,7 @@
                         class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
+        <!-- *** -->
 
         <main class="action-container container-color-listar">
 
@@ -28,7 +28,7 @@
                 {{ mensaje }}
                 <button type="button" class="x-close" @click="cerrarAlerta">X</button>
             </div>
-            <!-- ** -->
+            <!-- *** -->
 
             <div v-else-if="alumnos?.length > 0">
 
@@ -204,7 +204,6 @@ export default {
 
                 this.mensaje = await response.data;
                 this.mostrarAlerta = true;
-                //  this.listarAlumnos();
 
             } catch (error) {
 
@@ -220,20 +219,6 @@ export default {
                 }
             }
         },
-
-        /*  async apiResponse(response) { // Los mensajes de exito o error vienen de la api.
-              if (response.status === 200) {
-  
-                  this.mensaje = await response.data;
-                  this.error = false;
-  
-              } else if (response.status === 400 || response.status === 404 || response.status === 409) {
-                  this.error = true;
-                  this.mensaje = await response.data;
-  
-              }
-              this.mostrarAlerta = true;
-          },*/
 
         async buscarAlumno() {
 
@@ -307,7 +292,7 @@ export default {
         },
         verMatriculaCompleta(alumno) {
             this.router.push({
-                name: 'VerMatricula', // Asegúrate de que esta ruta exista en tu router
+                name: 'VerMatricula',
                 params: {
                     alumno: JSON.stringify(alumno)
                 }

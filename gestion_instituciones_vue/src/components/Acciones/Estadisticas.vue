@@ -79,7 +79,7 @@
                                 <tr v-for="(alumno, index) in datosDetalleGraficaAMA" :key="index">
                                     <td>{{ alumno.dni }}</td>
                                     <td>{{ alumno.nombreAlumno }} {{ alumno.apellido1 }} {{ alumno.apellido2
-                                    }}</td>
+                                        }}</td>
                                     <td>{{ alumno.numeroAsignaturas }}</td>
                                 </tr>
                             </tbody>
@@ -98,7 +98,7 @@
 import imglotus from '@/assets/lotus.webp';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Pie, Bar } from 'vue-chartjs';
-import axios from 'axios'; // Necesitas axios para las peticiones HTTP
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import BotonSubir from '@/components/Acciones/BotonSubir.vue';
 
@@ -154,7 +154,6 @@ export default {
                 labels: [], // // Nombre de los alumnos para que se muestren en el grafico
                 datasets: [
                     {
-                        //label: 'Numero de asignaturas',
                         backgroundColor: [], // Colores para cada sección de las barras
                         data: [], // Cantidad de asignaturas
                     },
@@ -215,7 +214,7 @@ export default {
         const logout = () => {
             localStorage.removeItem('authToken'); // Limpia el token de sesión
             localStorage.removeItem('sessionUser');
-            router.push('/'); // Redirige a la página de login (asumiendo que tu ruta de login es '/')
+            router.push('/');
         };
 
         const back = () => {
@@ -240,7 +239,7 @@ export default {
         async fetchAlumnosPorAsignatura() {
 
             try {
-                console.log('He entrado en el try de fetchAlumnosPorAsignatura???'); //PUNTO DE CONTROL
+
                 const token = localStorage.getItem('authToken');
                 const response = await axios.get(`${this.apiUrl}/${this.version}/estadisticas/alumnosPorAsignatura`, {
                     headers: {
@@ -284,7 +283,7 @@ export default {
         async fetchAlumnosConMasAsignaturas() {
 
             try {
-                console.log('He entrado en el try de fetchAlumnosConMasAsignaturas???'); //PUNTO DE CONTROL
+
                 const token = localStorage.getItem('authToken');
                 const response = await axios.get(`${this.apiUrl}/${this.version}/estadisticas/alumnosConMasAsignaturas`, {
                     headers: {
@@ -346,7 +345,6 @@ export default {
 <style lang="css" scoped>
 .estadisticas-container {
     padding: 20px;
-    /*max-width: 900px;*/
     margin: 20px auto;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -358,7 +356,6 @@ export default {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 20px;
-    /* Espacio entre las celdas de la cuadrícula */
     width: 100%;
 }
 
@@ -369,7 +366,6 @@ export default {
     padding: 25px;
     margin-bottom: 30px;
     border-left: 5px solid #42b983;
-    /* Color de acento */
 }
 
 .estadistica-card h2 {
@@ -399,12 +395,11 @@ export default {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     overflow: hidden;
-    /* Asegura que los bordes redondeados se apliquen al contenido */
+
 }
 
 .styled-table thead tr {
     background-color: #009879;
-    /* Color de cabecera de tabla */
     color: #ffffff;
     text-align: left;
     font-weight: bold;
@@ -430,7 +425,6 @@ export default {
 
 .styled-table tbody tr:hover {
     background-color: #e0f2f1;
-    /* Light hover effect */
     cursor: pointer;
 }
 

@@ -16,11 +16,6 @@
             </div>
         </div>
         <!-- *** -->
-        <!-- Bloque boton volver  -->
-        <div class="action-volver">
-
-        </div>
-        <!-- *** -->
 
         <main class="action-container container-color-guardar">
 
@@ -86,7 +81,7 @@ export default {
         const logout = () => {
             localStorage.removeItem('authToken'); // Limpia el token de sesión
             localStorage.removeItem('sessionUser');
-            router.push('/'); // Redirige a la página de login (asumiendo que tu ruta de login es '/')
+            router.push('/');
         };
 
         const back = () => {

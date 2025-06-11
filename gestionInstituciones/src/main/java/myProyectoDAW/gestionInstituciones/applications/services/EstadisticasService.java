@@ -6,18 +6,27 @@ import org.springframework.stereotype.Service;
 
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryEstadisticas;
 
+/**
+ * Capa de Servicio para la gestión de las estadisticas.
+ */
 @Service
 public class EstadisticasService {
 
     @Autowired
     private RepositoryEstadisticas repositoryEstadisticas;
 
-    /* Obtener la cuenta del numero de alumnos matriculados en una asignatura */
+    /*
+     * Defiicion del metodo para obtener la cuenta del numero de alumnos
+     * matriculados en una asignatura
+     */
     public ResponseEntity<?> numeroAlumnosPorAsignatura() {
         return repositoryEstadisticas.numeroAlumnosPorAsignatura();
     }
 
-    /* Obtener la cuenta de los alumnos con mas asignaturas matriculadas */
+    /*
+     * Definicion del metodo para obtener una lista de alumnos con la cantidad de
+     * asignaturas en las que están matriculados.
+     */
     public ResponseEntity<?> alumnosConMasAsignaturas() {
         return repositoryEstadisticas.alumnosConMasAsignaturas();
     }

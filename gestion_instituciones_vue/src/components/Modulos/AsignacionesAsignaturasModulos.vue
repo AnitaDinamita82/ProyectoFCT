@@ -15,7 +15,7 @@
                         class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
+        <!-- *** -->
 
         <header class="header">
             <img :src="imglotus" style="width: 100px;" alt="logo-header" />
@@ -245,31 +245,24 @@ export default {
         },
         confirmarBaja(codigoAsignatura, codigoModulo) {
             this.verficarAlumnosEnAsignatura(codigoAsignatura, codigoModulo);
-            /*  if (confirm('¿Estás seguro de que quieres desvincular esta asignatura del módulo?')) {
-                  this.bajaAsignatura(codigoAsignatura);
-              }*/
         },
 
         async verficarAlumnosEnAsignatura(codigoAsignatura, codigoModulo) {
             this.error = false;
             this.mensaje = '';
             this.mostrarAlerta = false;
-            confirm(codigoAsignatura);
-            confirm(codigoModulo);
+
             try {
                 const token = localStorage.getItem('authToken');
 
-                const response = await axios.get(`${this.apiUrl}/${this.version}/matricula/alumnosMatriculadosPorModulo/${codigoAsignatura}/${codigoModulo}`, { // Llamada a la API de listar asignaturas
+                const response = await axios.get(`${this.apiUrl}/${this.version}/matricula/alumnosMatriculadosPorModulo/${codigoAsignatura}/${codigoModulo}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
 
 
-                console.log("Que tengo cuando salgo del metodo", response.data);
                 const numeroAlumnos = response.data; // Devuelve una lista
-                // console.log(`Número de alumnos matriculados en ${codigoAsignatura} para el módulo ${codigoModulo}: ${numeroAlumnos}`); // PUNTO DE CONTROL
-
 
                 if (numeroAlumnos.length > 0) {
                     this.error = true;

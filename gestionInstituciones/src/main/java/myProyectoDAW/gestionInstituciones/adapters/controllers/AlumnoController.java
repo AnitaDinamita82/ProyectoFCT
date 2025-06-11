@@ -18,6 +18,11 @@ import myProyectoDAW.gestionInstituciones.adapters.dtos.AlumnoDTO;
 import myProyectoDAW.gestionInstituciones.applications.services.AlumnoService;
 import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
 
+/**
+ * Clase controladora REST para la gestión de alumnos.
+ * Expone los endpoints HTTP para realizar operaciones CRUD (Crear, Leer,
+ * Actualizar, Borrar) sobre los alumnos.
+ */
 @RestController
 @RequestMapping("{version}/alumnos")
 public class AlumnoController {
@@ -27,7 +32,7 @@ public class AlumnoController {
 
     /* -- ENDPOINTS GET -- */
 
-    // LISTAR ALUMNOS //
+    // ENDPOINT PARA LISTAR TODOS LOS ALUMNOS DE MANERA GENERAL //
     @GetMapping("/listar")
     public ResponseEntity<List<Alumno>> listarAlumnos() {
 
@@ -36,7 +41,7 @@ public class AlumnoController {
         return new ResponseEntity<>(alumnos, HttpStatus.OK);
     }
 
-    // BUSCAR A UN ALUMNO POR DNI //
+    // ENDPOINT PARA BUSCAR A UN ALUMNO POR DNI //
     @GetMapping("/buscar/{dniAlumno}")
     public ResponseEntity<Alumno> encontrarSiExisteAlumno(@PathVariable String dniAlumno) {
 
@@ -51,7 +56,7 @@ public class AlumnoController {
 
     /* -- ENDPOINTS POST -- */
 
-    // ALTA DE UN ALUMNO //
+    // ENDPOINT PARA DAR ALTA DE UN ALUMNO //
     @PostMapping("/alta")
     public ResponseEntity<?> altaAlumno(@RequestBody AlumnoDTO alumnoDTO) {
 
@@ -68,7 +73,7 @@ public class AlumnoController {
 
     /* -- ENDPOINTS DELETE -- */
 
-    // ELIMINAR A UN ALUMNO DADO SU DNI //
+    // ENDPOINT PARA ELIMINAR A UN ALUMNO DADO SU DNI //
     @DeleteMapping("/baja/{dniAlumno}")
     public ResponseEntity<String> bajaAlumno(@PathVariable String dniAlumno) {
 
@@ -90,7 +95,7 @@ public class AlumnoController {
 
     /* -- ENDPOINTS PUT -- */
 
-    // ACTUALIZAR DATOS DE UN ALUMNO //
+    // ENPOINT PARA ACTUALIZAR DATOS DE UN ALUMNO //
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarAlumno(@RequestBody AlumnoDTO alumnoDTO) {
 

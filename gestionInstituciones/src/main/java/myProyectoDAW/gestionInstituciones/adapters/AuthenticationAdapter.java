@@ -13,6 +13,16 @@ import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryAuthentic
 import myProyectoDAW.gestionInstituciones.applications.services.UsuarioService;
 import myProyectoDAW.gestionInstituciones.domain.models.Usuario;
 
+/**
+ * **Adaptador para la autenticación de usuarios.**
+ *
+ * Esta clase implementa la interfaz 'RepositoryAuthentication', actuando como
+ * un adaptador de dominio los mecanismos de autenticación.
+ * Se encarga de manejar el registro y la autenticación de usuarios, utilizando
+ * el 'UsuarioJpaRepository', el 'UsuarioService' y el 'AuthenticationManager'
+ * de Spring Security para el
+ * proceso de login.
+ */
 @Component
 public class AuthenticationAdapter implements RepositoryAuthentication {
 
@@ -25,6 +35,7 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /* Procesa el registro de un nuevo usuario en el sistema */
     @Override
     public ResponseEntity<String> signup(Usuario usuario) {
 
@@ -52,10 +63,11 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
                 HttpStatus.OK);
     }
 
+    /* Proceso de autenticacion de un usuario */
     @Override
     public Usuario authenticate(Usuario usuario) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
+                new UsernamePasswordAuthenticationToken( // Crea un token de autenticación con el login y la contraseña.
                         usuario.getLogin(),
                         usuario.getPassword()));
 
@@ -64,7 +76,11 @@ public class AuthenticationAdapter implements RepositoryAuthentication {
 
     }
 
-    /* Metodos de conversion */
+    // METODOS DE CONVERSION //
+    /*
+     * Se definen estos metodos de coversion dado que JPA Repository trabaja con el
+     * modelo de datos entity para asegurar la persistencia de los datos
+     */
 
     private UsuarioEntity convertirUsuarioAEntity(Usuario usuario) {
 

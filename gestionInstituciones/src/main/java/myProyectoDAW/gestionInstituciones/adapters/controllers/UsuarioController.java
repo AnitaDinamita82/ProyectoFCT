@@ -18,6 +18,11 @@ import myProyectoDAW.gestionInstituciones.adapters.dtos.UsuarioDTO;
 import myProyectoDAW.gestionInstituciones.applications.services.UsuarioService;
 import myProyectoDAW.gestionInstituciones.domain.models.Usuario;
 
+/**
+ * Clase controladora REST para la gestión de usuarios.
+ * Esta clase expone los endpoints HTTP para realizar operaciones CRUD (Crear,
+ * Leer, Actualizar, Borrar) sobre los usuarios.
+ */
 @RestController
 @RequestMapping("{version}/usuarios")
 public class UsuarioController {
@@ -27,7 +32,7 @@ public class UsuarioController {
 
     /* -- ENDPOINTS GET -- */
 
-    // LISTAR USUARIOS //
+    // ENDPOINT PARA LISTAR USUARIOS //
     @GetMapping("/listar")
     public ResponseEntity<List<Usuario>> listarUsuarios() {
 
@@ -36,7 +41,7 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
-    // BUSCAR POR DNI DE USUARIO //
+    // ENDPOINT PARA BUSCAR UN USUARIO POR SU DNI //
     @GetMapping("/buscar/{dniUsuario}")
     public ResponseEntity<Usuario> buscarUsuario(@PathVariable String dniUsuario) {
 
@@ -54,7 +59,7 @@ public class UsuarioController {
 
     /* -- ENDPOINTS POST -- */
 
-    // ALTA DE UN USUARIO //
+    // ENDPOINT PARA DAR DE ALTA A UN USUARIO //
     @PostMapping("/alta")
     public ResponseEntity<?> altaUsuario(@RequestBody UsuarioDTO usuarioDTO) {
 
@@ -79,7 +84,7 @@ public class UsuarioController {
 
     /* -- ENDPOINTS DELETE -- */
 
-    // ELIMINAR USUARIO DADO SU DNI //
+    // ENDPOINT PARA ELIMINAR UN USUARIO DADO SU DNI //
     @DeleteMapping("/baja/{dniUsuario}")
     public ResponseEntity<String> bajaUsuario(@PathVariable String dniUsuario) {
 
@@ -105,7 +110,8 @@ public class UsuarioController {
     }
 
     /* -- ENDPOINTS PUT -- */
-    // ACTUALIZAR DATOS DE UN USUARIO //
+
+    // ENDPOINT PARA ACTUALIZAR DATOS DE UN USUARIO //
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
 

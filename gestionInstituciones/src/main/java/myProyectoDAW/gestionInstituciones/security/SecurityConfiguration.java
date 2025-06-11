@@ -11,6 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Clase de Configuración de Seguridad para la aplicación Spring Boot.
+ * Esta clase es el punto central donde se define la configuración de seguridad
+ * web de la aplicación utilizando Spring Security.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -21,6 +26,11 @@ public class SecurityConfiguration {
         @Autowired
         private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+        /*
+         * Define la cadena de filtros de seguridad de Spring Security. Este es el
+         * método principal donde se configura el comportamiento
+         * de seguridad para las solicitudes HTTP.
+         */
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http

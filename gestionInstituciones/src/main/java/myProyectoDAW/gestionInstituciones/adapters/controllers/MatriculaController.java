@@ -17,6 +17,12 @@ import myProyectoDAW.gestionInstituciones.domain.models.Asignatura;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * Clase controladora REST para la gestión de matrículas (relación *
+ * Alumno-Asignatura).
+ * Expone los endpoints HTTP para realizar operaciones relacionadas con la
+ * matriculación y desmatriculación de alumnos en asignaturas.
+ */
 @RestController
 @RequestMapping("{version}/matricula")
 public class MatriculaController {
@@ -26,29 +32,33 @@ public class MatriculaController {
 
     /* -- ENDPOINTS GET -- */
 
-    // LISTAR TODAS LAS ASIGNATURAS DE UN ALUMNO //
+    // ENDPOINT PARA LISTAR TODAS LAS ASIGNATURAS DE MANERA GENERAL EN LAS QUE UN
+    // ALUMNO ESTA MATRICULADO //
     @GetMapping("/listarAsignaturasDeAlumno/{dniAlumno}")
     public List<Asignatura> listarAsignaturasDeAlumno(@PathVariable String dniAlumno) {
 
         return alumnoAsignaturaService.listarAsignaturasDeAlumno(dniAlumno);
     }
 
-    // OBTENER TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA DE MANERA GENERAL //
+    // ENDPOINT PARA OBTENER TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA DE
+    // MANERA GENERAL //
     @GetMapping("/obtenerAlumnosMatriculados/{codigoAsignatura}")
     public List<Alumno> obtenerAlumnosMatriculados(@PathVariable String codigoAsignatura) {
         return alumnoAsignaturaService.obtenerAlumnosMatriculados(codigoAsignatura);
     }
 
-    // CONTAR TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA POR MODULO //
+    // ENDPINT PARA CONTAR TODOS LOS ALUMNOS MATRICULADOS DE UNA ASIGNATURA POR
+    // MODULO //
     @GetMapping("/alumnosMatriculadosPorModulo/{codigoAsignatura}/{codigoModulo}")
     public ResponseEntity<?> alumnosMatriculadosEnAsignaturaPorModulos(
             @PathVariable String codigoAsignatura,
             @PathVariable String codigoModulo) {
         return alumnoAsignaturaService.alumnosMatriculadosEnAsignaturaPorModulos(codigoAsignatura, codigoModulo);
     }
+
     /* -- ENDPOINTS POST -- */
 
-    // MATRICULAR A UN ALUMNO //
+    // ENDPOINT PARA MATRICULAR A UN ALUMNO //
     @PostMapping("/matricularAlumno")
     public ResponseEntity<String> matricularAlumno(@RequestBody MatriculaDTO matriculaDTO) {
 
@@ -58,22 +68,21 @@ public class MatriculaController {
 
     /* -- ENDPOINTS DELETE -- */
 
-    // ELIMINAR LA MATRICULA DE UN ALUMNO A NIVEL ASIGNATURA //
+    // ENDPOINT PARA ELIMINAR UNA ASIGNATURA EN CONCRETO DE SU MATRICULA //
     @DeleteMapping("/desmatricularAlumno")
     public ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumno(@RequestBody MatriculaDTO matriculaDTO) {
         return alumnoAsignaturaService.bajaAsignaturaDeMatriculaDeAlumno(matriculaDTO.getDniAlumno(),
                 matriculaDTO.getCodigoAsignatura());
     }
 
-    // ELIMINAR TODAS LA MATRICULAS //
+    // ENDPOINT PARA ELIMINAR TODA LA MATRICULA COMPLETA//
     @DeleteMapping("desmatricularTodasLasAsignaturasDeAlumno/{dniAlumno}")
     public ResponseEntity<String> desmatricularTodasLasAsignaturasDeUnAlumno(@PathVariable String dniAlumno) {
         return alumnoAsignaturaService.desmatricularTodasLasAsignaturasDeUnAlumno(dniAlumno);
     }
 
-    // ELIMINA LA ASIGNATURA QUE SE PASA COMO PARAMETRO PERO CONTROLAMOS SI TENEMOS
-    // MAS DEL MISMO MODULO //
-
+    // ENDPOINT PARA DESMATRICULAR A UN ALUMNO DE UNA ASIGNATURA, CON LOGICA
+    // ADICIONAL PARA GESTIONAR SI TODAVIA TIENE MAS ASIGNATURAS DEL MISMO MODULO //
     @DeleteMapping("/desmatricularAlumnoModulo")
     public ResponseEntity<String> bajaAsignaturaDeMatriculaDeAlumnoConGestionDeModulo(
             @RequestBody MatriculaDTO matriculaDTO) {

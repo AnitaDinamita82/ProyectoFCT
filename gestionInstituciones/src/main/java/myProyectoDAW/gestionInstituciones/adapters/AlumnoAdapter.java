@@ -15,6 +15,14 @@ import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryAlumno;
 import myProyectoDAW.gestionInstituciones.applications.services.MatriculaService;
 import myProyectoDAW.gestionInstituciones.domain.models.Alumno;
 
+/**
+ * Adaptador para la entidad Alumno. Clase que actua de pasarela entre la capa
+ * de dominio y la de persistencia.
+ * A través de la interfaz 'RepositoryAlumno', podemos hacer uso de las
+ * operaciones de acceso a datos de los alumnos.
+ * Y con la inyeccion de AlumnoJpaRepository podemos utilizar los metodos CRUD
+ * ofrecidos por el repositorio JPA.
+ */
 @Component
 public class AlumnoAdapter implements RepositoryAlumno {
 
@@ -26,6 +34,7 @@ public class AlumnoAdapter implements RepositoryAlumno {
 
     private Optional<AlumnoEntity> alumnoEntityOptional;
 
+    /* Implementación del metodo para dar de alta un nuevo alumno */
     @Override
     public Alumno altaAlumno(Alumno alumno) {
 
@@ -34,6 +43,7 @@ public class AlumnoAdapter implements RepositoryAlumno {
 
     }
 
+    /* Implementación del metodo para listar todos los alumnos */
     @Override
     public List<Alumno> listarAlumnos() {
         return alumnoJpaRepository.findAll().stream()
@@ -41,12 +51,13 @@ public class AlumnoAdapter implements RepositoryAlumno {
                 .collect(Collectors.toList());
     }
 
+    /* Método que busca a un alumno por DNI */
     public Optional<Alumno> findByDni(String dni) {
-
         alumnoEntityOptional = alumnoJpaRepository.findByDni(dni);
         return (alumnoEntityOptional.map(this::convertirEntityAAlumno));
     }
 
+    /* Implementacion del metodo para eliminar a un alumno dado su DNI */
     @Override
     public Boolean eliminarAlumnoDadoDni(String dniAlumno) {
 
@@ -70,6 +81,10 @@ public class AlumnoAdapter implements RepositoryAlumno {
         }
     }
 
+    /*
+     * Implementacion del metodo para encontrar y devolver un alumno si exitiese por
+     * su DNI
+     */
     @Override
     public Alumno encontrarSiExisteAlumno(String dniAlumno) {
 
@@ -87,12 +102,16 @@ public class AlumnoAdapter implements RepositoryAlumno {
         return null;
     }
 
+    /*
+     * Implementacion del método para verificar la existencia de un alumno dado su
+     * DNI
+     */
     @Override
     public boolean existe(String dniAlumno) {
-
         return alumnoJpaRepository.findByDni(dniAlumno).isPresent();
     }
 
+    /* Implementación de un método para actualizar los datos de un alumno */
     @Override
     public ResponseEntity<String> actualizarAlumno(Alumno alumno) {
 
@@ -109,8 +128,14 @@ public class AlumnoAdapter implements RepositoryAlumno {
         }
         return new ResponseEntity<>("Parece que ha habido un error con la actualizacion del usuario.", HttpStatus.OK);
     }
-    // Metodos de Conversion
 
+    // METODOS DE CONVERSION //
+    /*
+     * Se definen estos metodos de coversion dado que JPA Repository trabaja con el
+     * modelo de datos entity para asegurar la persistencia de los datos
+     */
+
+    // -- De Alumno a AlumnoEntity -- //
     public AlumnoEntity convertirAlumnoAEntity(Alumno alumno) {
 
         AlumnoEntity alumnoEntity = new AlumnoEntity();
@@ -123,6 +148,7 @@ public class AlumnoAdapter implements RepositoryAlumno {
         return alumnoEntity;
     }
 
+    // -- De AlumnoEntity a Alumno --/
     public Alumno convertirEntityAAlumno(AlumnoEntity alumnoEntity) {
         Alumno alumno = new Alumno();
         alumno.setId(alumnoEntity.getId());
