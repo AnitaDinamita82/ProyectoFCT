@@ -149,7 +149,6 @@
     margin-top: auto;
     margin-bottom: auto;
     gap: 30px;
-    /* Espacio en entre el logo y el formulario */
 }
 
 
@@ -319,7 +318,6 @@ label {
 
 .search-section {
     display: flex;
-    /* align-items: center;*/
     gap: 10px;
     margin-bottom: 20px;
 }
@@ -389,74 +387,6 @@ label {
     font-size: 2em;
     margin-left: 20%;
 }
-
-/* // //*/
-/*    Eto luego lo poder elimnar **************************/
-.color-button-guardar {
-
-    background-color: #f1bc96;
-
-    &:hover {
-        background-color: #ee7724;
-    }
-}
-
-.color-button-eliminar,
-.color-button-cancelar {
-    background-color: #dc6d6f;
-
-    &:hover {
-        background-color: #d74cd7;
-    }
-}
-
-.color-button-buscar {
-    margin-left: 0%;
-    background-color: #6eb3b5;
-
-    &:hover {
-        background-color: #242bae;
-    }
-}
-
-.color-button-añadir {
-    margin-left: 0%;
-    background-color: #e0759e;
-
-    &:hover {
-        background-color: #da1963;
-    }
-}
-
-.color-button-matricular,
-.color-button-asignaciones {
-
-    background-color: #479989;
-
-    &:hover {
-        background-color: #476999;
-    }
-}
-
-.color-button-ver {
-
-    background-color: #c9c23d;
-
-    &:hover {
-        background-color: #c9703d;
-    }
-}
-
-.color-button-baja {
-
-    background-color: #5fbf68;
-
-    &:hover {
-        background-color: #babf5f;
-    }
-}
-
-/*    Eto luego lo poder elimnar **************************/
 
 .style-router-link {
     text-decoration: none;

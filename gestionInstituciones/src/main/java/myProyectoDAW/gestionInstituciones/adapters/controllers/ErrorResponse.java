@@ -1,5 +1,9 @@
 package myProyectoDAW.gestionInstituciones.adapters.controllers;
 
+/**
+ * Clase de utilidad para representar una respuesta de error estándar en las
+ * APIs REST.
+ */
 public class ErrorResponse {
 
     private String mensaje;

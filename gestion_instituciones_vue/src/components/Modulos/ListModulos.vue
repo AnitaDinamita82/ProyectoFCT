@@ -200,7 +200,6 @@ export default {
                 this.error = false;
                 this.mostrarAlerta = true;
                 this.mensaje = await response.data;
-                //  this.listarModulos(); // Refrescar la lista de módulos
 
             } catch (error) {
                 this.error = true;
@@ -283,7 +282,7 @@ export default {
         },
         async verModuloCompleto(modulo) {
             this.$router.push({
-                name: 'VerModuloCompleto', // Este será el nombre de la ruta que definiremos
+                name: 'VerModuloCompleto',
                 params: { modulo: JSON.stringify(modulo) }
             });
         },

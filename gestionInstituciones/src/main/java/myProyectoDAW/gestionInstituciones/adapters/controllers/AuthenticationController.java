@@ -15,6 +15,11 @@ import myProyectoDAW.gestionInstituciones.domain.models.LoginResponse;
 import myProyectoDAW.gestionInstituciones.domain.models.Usuario;
 import myProyectoDAW.gestionInstituciones.security.JwtService;
 
+/**
+ * Clase controladora REST para la autenticación de usuarios.
+ * Maneja las solicitudes relacionadas con el registro y el inicio de sesión de
+ * usuarios.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
@@ -27,7 +32,7 @@ public class AuthenticationController {
 
     /* -- ENPOINTS POST -- */
 
-    // PROCESO DE REGISTRO DE UN USUARIO //
+    // ENDPOINT PARA EL PROCESO DE REGISTRO DE UN USUARIO //
     @PostMapping("/signup")
     public ResponseEntity<String> registrar(@RequestBody UsuarioDTO usuarioDTO) {
 
@@ -35,7 +40,7 @@ public class AuthenticationController {
         return authenticationService.signup(usuario);
     }
 
-    // PROCESO DE AUTENTICACION DE UN USUARIO //
+    // ENDPINT PARA EL PROCESO DE AUTENTICACION DE UN USUARIO //
     @PostMapping("/login")
     public ResponseEntity<?> autenticar(@RequestBody UsuarioDTO usuarioDTO) {
 

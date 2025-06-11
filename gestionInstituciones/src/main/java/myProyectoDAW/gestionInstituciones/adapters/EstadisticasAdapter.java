@@ -13,6 +13,7 @@ import myProyectoDAW.gestionInstituciones.adapters.jpas.AlumnoJpaRepository;
 import myProyectoDAW.gestionInstituciones.adapters.jpas.AsignaturaJpaRepository;
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryEstadisticas;
 
+/* Adaptador para la obtención de estadísticas */
 @Component
 public class EstadisticasAdapter implements RepositoryEstadisticas {
 
@@ -20,9 +21,12 @@ public class EstadisticasAdapter implements RepositoryEstadisticas {
     private AlumnoJpaRepository alumnoJpaRepository;
 
     @Autowired
-
     private AsignaturaJpaRepository asignaturaJpaRepository;
 
+    /*
+     * Implementacion de metodos para obtener el número de alumnos matriculados por
+     * cada asignatura.
+     */
     @Override
     public ResponseEntity<?> numeroAlumnosPorAsignatura() {
 
@@ -34,6 +38,10 @@ public class EstadisticasAdapter implements RepositoryEstadisticas {
         return new ResponseEntity<>(listStats, HttpStatus.OK);
     }
 
+    /*
+     * Implementacion del metodo para obtener una lista de alumnos ordenados por la
+     * cantidad de asignaturas en las que están matriculados.
+     */
     @Override
     public ResponseEntity<?> alumnosConMasAsignaturas() {
         List<AlumnoAsignaturasDTO> listStats = alumnoJpaRepository.countAsignaturasByAlumnoOrdered();

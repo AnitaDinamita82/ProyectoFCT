@@ -15,7 +15,7 @@
                 <button class="logout-button" title="Cancelar" @click="logout"><i class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** *-->
+        <!-- *** -->
 
         <main class="action-container container-color-listar">
             <div>
@@ -299,7 +299,7 @@ table {
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {

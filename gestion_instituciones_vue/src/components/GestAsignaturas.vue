@@ -14,12 +14,8 @@
         <button class="logout-button" title="Cancelar" @click="logout"><i class="fas fa-power-off"></i></button>
       </div>
     </div>
-    <!-- ** -->
+    <!-- *** -->
 
-    <!-- Boton Volver -->
-    <div class="action-volver">
-
-    </div>
     <!-- Cabecera -->
     <header class="header">
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
@@ -71,7 +67,7 @@ export default {
     const logout = () => {
       localStorage.removeItem('authToken'); // Limpia el token de sesión
       localStorage.removeItem('sessionUser');
-      router.push('/'); // Redirige a la página de login (asumiendo que tu ruta de login es '/')
+      router.push('/');
     };
 
     const back = () => {

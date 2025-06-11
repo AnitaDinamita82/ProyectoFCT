@@ -7,18 +7,26 @@ import org.springframework.stereotype.Service;
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryAuthentication;
 import myProyectoDAW.gestionInstituciones.domain.models.Usuario;
 
+/**
+ * Capa de Servicio para la gestión de Autenticacion de Usuarios.
+ */
 @Service
 public class AuthenticationService {
 
     @Autowired
     private RepositoryAuthentication repositoryAuthentication;
 
-    /* Logica para el inicio de sesion de usuarios */
+    /*
+     * Defincion del metodo que define la logica para el inicio de sesion de
+     * usuarios
+     */
     public ResponseEntity<String> signup(Usuario usuario) {
         return repositoryAuthentication.signup(usuario);
     }
 
-    /* Logica para la autenticacion de usuarios */
+    /*
+     * Definicion del metodo que define la logica para la autenticacion de usuarios
+     */
     public Usuario authenticate(Usuario usuario) {
         return repositoryAuthentication.authenticate(usuario);
     }

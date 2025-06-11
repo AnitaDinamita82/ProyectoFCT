@@ -18,6 +18,11 @@ import myProyectoDAW.gestionInstituciones.adapters.dtos.AsignaturaDTO;
 import myProyectoDAW.gestionInstituciones.applications.services.AsignaturaService;
 import myProyectoDAW.gestionInstituciones.domain.models.Asignatura;
 
+/**
+ * Clase controladora REST para la gestión de asignaturas.
+ * Expone los endpoints HTTP para realizar operaciones CRUD (Crear, Leer,
+ * Actualizar, Borrar) sobre los alumnos.
+ */
 @RestController
 @RequestMapping("{version}/asignaturas")
 public class AsignaturaController {
@@ -27,7 +32,7 @@ public class AsignaturaController {
 
     /* -- ENDPOINTS GET -- */
 
-    // LISTAR ASIGNATURAS //
+    // ENDPOINT PARA LISTAR TODAS LAS ASIGNATURAS //
     @GetMapping("/listar")
     public ResponseEntity<List<Asignatura>> listarAsignatura() {
 
@@ -36,7 +41,7 @@ public class AsignaturaController {
         return new ResponseEntity<>(asignaturas, HttpStatus.OK);
     }
 
-    // BUSCAR UNA ASIGNATURA DADO SU CODIGO //
+    // ENDPOINT PARA BUSCAR UNA ASIGNATURA DADO SU CODIGO //
     @GetMapping("/buscar/{codigoAsignatura}")
 
     public ResponseEntity<Asignatura> encontrarSiExisteAsignatura(@PathVariable String codigoAsignatura) {
@@ -52,7 +57,7 @@ public class AsignaturaController {
 
     /* -- ENDPOINTS POST -- */
 
-    // ALTA DE UNA ASIGNATURA //
+    // ENDPOINT PARA DAR DE ALTA UNA NUEVA ASIGNATURA //
     @PostMapping("/alta")
     public ResponseEntity<?> altaAsignatura(@RequestBody AsignaturaDTO asignaturasDTO) {
         System.out.println("pero estoy dentro o no?");
@@ -72,7 +77,7 @@ public class AsignaturaController {
 
     /* -- ENDPOINTS DELETE -- */
 
-    // ELIMINAR UNA ASIGNATURA DADO SU CODIGO //
+    // ENDPOINT PARA ELIMINAR UNA ASIGNATURA DADO SU CODIGO //
     @DeleteMapping("/baja/{codigoAsignatura}")
     public ResponseEntity<String> bajaAsignatura(@PathVariable String codigoAsignatura) {
 
@@ -96,7 +101,7 @@ public class AsignaturaController {
 
     /* -- ENDPOINTS PUT -- */
 
-    // ACTUALIZAR DATOS DE UNA ASIGNATURA //
+    // ENDPOINT PARA ACTUALIZAR DATOS DE UNA ASIGNATURA //
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarAsignatura(@RequestBody AsignaturaDTO asignaturaDTO) {
 

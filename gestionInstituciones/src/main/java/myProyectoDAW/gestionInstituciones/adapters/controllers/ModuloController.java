@@ -22,6 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
+/**
+ * Clase controladora REST para la gestión de módulos.
+ * Esta clase expone los endpoints HTTP para realizar operaciones CRUD y
+ * consultas relacionadas con los módulos, incluyendo la asignación de alumnos y
+ * asignaturas.
+ */
 @RestController
 @RequestMapping("{version}/modulos")
 public class ModuloController {
@@ -31,7 +37,7 @@ public class ModuloController {
 
     /* -- ENDPOINTS GET -- */
 
-    // LISTAR TODOS LOS MODULOS //
+    // ENDPOINT PARA LISTAR TODOS LOS MODULOS EXISTENTES //
     @GetMapping("/listarModulos")
     public ResponseEntity<List<Modulo>> obtenerTodosLosModulos() {
 
@@ -39,31 +45,33 @@ public class ModuloController {
         return new ResponseEntity<>(modulos, HttpStatus.OK);
     }
 
-    // LISTAR TODAS LAS ASIGNATURAS DE UN MODULO DADO SU CODIGO //
+    // ENDPOINT PARA LISTAR TODAS LAS ASIGNATURAS DE UN MODULO DADO SU CODIGO //
     @GetMapping("/listarAsignaturasModulo/{codigoModulo}")
     public ResponseEntity<?> obtenerTodasLasAsignaturasDeUnModulo(@PathVariable String codigoModulo) {
         return moduloService.obtenerTodasLasAsignaturasDeUnModulo(codigoModulo);
     }
 
-    // LISTAR TODOS LOS ALUMNOS DE UN MODULO DADO SU CODIGO //
+    // ENDPOINT PARA LISTAR TODOS LOS ALUMNOS DE UN MODULO DADO SU CODIGO //
     @GetMapping("/listarAlumnosModulo/{codigoModulo}")
     public ResponseEntity<?> obtenerTodosLosAlumnosDeUnModulo(@PathVariable String codigoModulo) {
         return moduloService.obtenerTodosLosAlumnosDeUnModulo(codigoModulo);
     }
 
-    // BUSCAR UN MODULO EN CONCRETO DADO SU CODIGO //
+    // ENPOINT PARA BUSCAR UN MODULO EN CONCRETO DADO SU CODIGO //
     @GetMapping("/buscarModulo/{codigoModulo}")
     public ResponseEntity<?> buscarModuloDadoElCodigo(@PathVariable String codigoModulo) {
         return moduloService.buscarModuloDadoElCodigo(codigoModulo);
     }
 
-    // LISTAR TODOS LOS MODULOS EN LOS QUE ESTÁ UNA DETERMINADA ASIGNATURA //
+    // ENDPOINT PARA LISTAR TODOS LOS MODULOS EN LOS SE IMPARTIRÁ UNA DETERMINADA
+    // ASIGNATURA //
     @GetMapping("/listarModulosDeAsignatura/{codigoAsignatura}")
     public ResponseEntity<?> obtenerTodosLosModulosDeUnaAsignatura(@PathVariable String codigoAsignatura) {
         return moduloService.obtenerTodosLosModulosDeUnaAsignatura(codigoAsignatura);
     }
 
-    // LISTAR TODOS LOS MODULOS DE UN ALUMNO //
+    // ENDPOINT PARA LISTAR TODOS LOS MODULOS EN LOS QUE EL ALUMNO PUEDE ESTAR
+    // MATRICULADO//
     @GetMapping("/listarModulosDeAlumno/{dniAlumno}")
     public ResponseEntity<?> obtenerTodosLosModulosDeUnAlumno(@PathVariable String dniAlumno) {
         return moduloService.obtenerTodosLosModulosDeUnAlumno(dniAlumno);
@@ -71,7 +79,7 @@ public class ModuloController {
 
     /* -- ENDPOINTS POST -- */
 
-    // ALTA DE UN NUEVO MODULO //
+    // ENDPOINT PARA EL ALTA DE UN NUEVO MODULO //
     @PostMapping("/altaModulo")
     public ResponseEntity<String> crearNuevoModulo(@RequestBody ModuloDTO moduloDTO) {
 
@@ -81,14 +89,14 @@ public class ModuloController {
         return moduloService.crearNuevoModulo(moduloEntity);
     }
 
-    // ASIGNAR ALUMNOS A UN MODULO DADO SU CODIGO //
+    // ENDPOINT PARA ASIGNAR ALUMNOS A UN MODULO EN CONCRETO //
     @PostMapping("/asignarAlumnosAModulo/{codigoModulo}")
     public ResponseEntity<String> asignarAlumnosAModulo(@PathVariable String codigoModulo,
             @RequestBody DniAlumnoDTO dniAlumnoDTO) {
         return moduloService.asignarAlumnosAModulo(codigoModulo, dniAlumnoDTO.getDni());
     }
 
-    // ASIGNACION DE ASIGNATURAS A UN MODULO EN CONCRETO //
+    // ENDPOINT PARA LA ASIGNACION DE ASIGNATURAS A UN MODULO EN CONCRETO //
     @PostMapping("/asignarAsignaturasAModulo/{codigoModulo}")
     public ResponseEntity<String> asignarAsignaturasAModulo(@PathVariable String codigoModulo,
             @RequestBody CodigoAsignaturaDTO codigoAsignaturaDTO) {
@@ -97,7 +105,7 @@ public class ModuloController {
 
     /* -- ENDPOINTS PUT -- */
 
-    // ACTUALIZAR LOS DATOS DE UN MODULO //
+    // ENDPOINT PARA ACTUALIZAR LOS DATOS DE UN MODULO //
     @PutMapping("/actualizarModulo")
     public ResponseEntity<String> actualizarDatosEnModulo(@RequestBody ModuloDTO moduloDTO) {
 
@@ -108,22 +116,21 @@ public class ModuloController {
 
     /* -- ENDPOINTS DELETE -- */
 
-    // ELIMINACION DE UN MODULO DADO SU CODIGO //
+    // ENDPOINT PARA LA ELIMINACION DE UN MODULO DADO SU CODIGO //
     @DeleteMapping("/bajaModulo/{codigoModulo}")
     public ResponseEntity<String> bajaDeUnModuloDadoElCodigo(@PathVariable String codigoModulo) {
 
         return moduloService.bajaDeUnModuloDadoElCodigo(codigoModulo);
     }
 
-    // DESASIGNAR ALUMNOS DE UN MODULO //
+    // ENDPOINT PARA DESASIGNAR ALUMNOS DE UN MODULO //
     @DeleteMapping("/desasignarAlumnosDeModulo/{codigoModulo}/{dniAlumno}")
     public ResponseEntity<String> desasignarAlumnoDeModulo(@PathVariable String codigoModulo,
             @PathVariable String dniAlumno) {
         return moduloService.desasignarAlumnoDeModulo(codigoModulo, dniAlumno);
     }
 
-    // DESASIGNAR ASIGNATURAS DE UN MODULO DADO EL CODIGO DEL MODULO Y EL CODIGO DE
-    // ASIGNATURA //
+    // ENDPOINT PARA DESASIGNAR UNA ASIGNATURA DE UN MODULO //
     @DeleteMapping("/desasignarAsignaturasDeModulo/{codigoModulo}/{codigoAsignatura}")
     public ResponseEntity<String> desasignarAsignaturaDeModulo(@PathVariable String codigoModulo,
             @PathVariable String codigoAsignatura) {

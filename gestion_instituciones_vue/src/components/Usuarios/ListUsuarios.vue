@@ -17,7 +17,7 @@
                         class="fas fa-power-off"></i></button>
             </div>
         </div>
-        <!-- ** -->
+        <!-- *** -->
 
         <main class="action-container container-color-listar">
             <div>
@@ -28,7 +28,7 @@
                 {{ mensaje }}
                 <button type="button" class="x-close" @click="cerrarAlerta">X</button>
             </div>
-            <!-- ** -->
+            <!-- *** -->
 
             <div v-else-if="usuarios?.length > 0">
 

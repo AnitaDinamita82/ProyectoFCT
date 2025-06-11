@@ -16,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import myProyectoDAW.gestionInstituciones.applications.services.UsuarioService;
 
-
+/**
+ * Clase de Configuración Principal para Spring Security y Autenticación.
+ */
 @Configuration
 public class AplicationConfig {
 
@@ -24,7 +26,14 @@ public class AplicationConfig {
 
     @Autowired
     private UsuarioService usuarioService;
-    
+
+    /**
+     * Define el bean `UserDetailsService` que carga los detalles del usuario para
+     * la autenticación.
+     * Este servicio es utilizado por Spring Security para buscar un usuario por su
+     * login durante el proceso
+     * de autenticación.    
+     */
     @Bean
     public UserDetailsService userDetailsService() {
 
@@ -38,26 +47,41 @@ public class AplicationConfig {
         };
     }
 
-    //crea una instancia de BCryptPasswordEncoder() que se utiliza para codificar la contraseña del usuario
+    /*
+     * Define el bean 'PasswordEncoder' para la codificación y verificación de
+     * contraseñas.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /*
+     * Define el bean `AuthenticationManager` que coordina el proceso de
+     * autenticación.
+     * Este es un componente principal de Spring Security al que se le pasan las
+     * credenciales de autenticación.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    //establece la nueva estrategia para realizar la autenticación.
+    /*
+     * Define el bean 'AuthenticationProvider' que implementa la estrategia de
+     * autenticación.
+     * Se utiliza 'DaoAuthenticationProvider', que recupera los detalles del usuario
+     * a través del 'UserDetailsService' y verifica la contraseña utilizando
+     * el 'PasswordEncoder'.  
+     * Por simplicidad no se estan encriptando las contraseñas 
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
 
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance()); // Probar a cambiarlo por passwordEncoder()
         return authProvider;
     }
-
 }

@@ -157,7 +157,7 @@ export default {
     methods: {
 
         async cargarMatriculaCompleta(dniAlumno) {
-            console.log("INICIANDO carga de la matrícula completa del alumno:", dniAlumno); // PUNTO DE CONTROL
+
             this.error = false;
             this.mensaje = '';
             this.mostrarAlerta = false;
@@ -276,20 +276,11 @@ export default {
                     }
                 });
 
-                // 2. Quitamos la referencia del alumno en el modulo modulos - alumnos 
-                /*       const responseMensaje = await axios.delete(`${this.apiUrl}/${this.version}/modulos/desasignarAlumnosDeModulo/${codigoModulo}/${dniAlumno}`, {
-                           headers: {
-                               'Authorization': `Bearer ${token}`,
-                               'Content-Type': 'application/json'
-                           },
-                       });
-       
-                       console.log('Desasigna bien al alumno del modulo:', responseMensaje.data); // PUNTO DE CONTROL*/
                 this.error = false;
                 this.mostrarAlerta = true;
                 this.apiResponse(response);
 
-                // Y despues de desMatricular, regargamos de nuevo la matricula.
+                // Y despues de desMatricular, recargamos de nuevo la matricula.
                 await this.cargarMatriculaCompleta(dniAlumno); // Recargar datos
 
             } catch (error) {
@@ -320,7 +311,6 @@ export default {
                 const token = localStorage.getItem('authToken');
 
                 // 1. Desmatricular TODAS las asignaturas con una única llamada API
-                // Esto asume que el backend ya tiene el endpoint DELETE /alumnoAsignaturaMTM/desmatricularTodasAsignaturasDeAlumno/{dniAlumno}
                 const responseAsignaturas = await axios.delete(
                     `${this.apiUrl}/${this.version}/matricula/desmatricularTodasLasAsignaturasDeAlumno/${dniAlumno}`,
                     { headers: { 'Authorization': `Bearer ${token}` } }
@@ -343,20 +333,20 @@ export default {
                             `${this.apiUrl}/${this.version}/modulos/desasignarAlumnosDeModulo/${modulo.codigoModulo}/${dniAlumno}`,
                             { headers: { 'Authorization': `Bearer ${token}` } }
                         );
-                        console.log(`Alumno ${dniAlumno} desasignado del módulo ${modulo.codigoModulo}`);
+
+                        console.log(`Alumno ${dniAlumno} desasignado del módulo ${modulo.codigoModulo}`); // PUNTO DE CONTROL
                     } catch (moduleError) {
-                        console.warn(`No se pudo desasignar al alumno ${dniAlumno} del módulo ${modulo.nombreModulo} (${modulo.codigoModulo}):`, moduleError.response?.data || moduleError.message);
-                        // Continúa con los demás módulos aunque uno falle
+                        console.error(`No se pudo desasignar al alumno ${dniAlumno} del módulo ${modulo.nombreModulo}`); // PUNTO DE CONTROL
+
                     }
                 }
-                console.log('Intento de desasignar al alumno de todos los módulos finalizado.');
 
                 // Informar al usuario y recargar la vista
                 this.mensaje = 'El alumno ha sido desmatriculado completamente y desvinculado de sus módulos con éxito.';
                 this.error = false;
                 this.mostrarAlerta = true;
 
-                await this.cargarMatriculaCompleta(dniAlumno); // Vuelve a cargar para reflejar el estado vacío
+                await this.cargarMatriculaCompleta(dniAlumno); // Volvemos a cargar
 
             } catch (error) {
                 this.error = true;
@@ -414,13 +404,11 @@ export default {
 /* Estilo para el contenedor principal de VerMatricula */
 .container-color-ver-matricula {
     border-left: 5px solid #a33939;
-    /* Un color distinto para diferenciar de AltaMatricula */
 }
 
 /* Estilos de las tarjetas de módulo, tabla y botones (copiados de AltaMatricula y ajustados) */
 .modulo-card {
     border: 1px solid #a33939;
-    /* Borde del módulo */
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;

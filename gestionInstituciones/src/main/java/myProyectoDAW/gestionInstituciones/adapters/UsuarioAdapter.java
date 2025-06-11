@@ -14,6 +14,7 @@ import myProyectoDAW.gestionInstituciones.adapters.jpas.UsuarioJpaRepository;
 import myProyectoDAW.gestionInstituciones.applications.ports.RepositoryUsuario;
 import myProyectoDAW.gestionInstituciones.domain.models.Usuario;
 
+/* Adaptador para la entidad Usuario */
 @Component
 public class UsuarioAdapter implements RepositoryUsuario {
 
@@ -22,7 +23,11 @@ public class UsuarioAdapter implements RepositoryUsuario {
 
     private Optional<UsuarioEntity> usuarioEntityOptional;
 
-    @Override // Operación de Listar todos los usuarios de la BD
+    /*
+     * Operación que bbtiene una lista de todos los usuarios existentes en la base
+     * de datos.
+     */
+    @Override
     public List<Usuario> listarUsuarios() {
 
         List<UsuarioEntity> usuarioEntities = usuarioJpaRepository.findAll();
@@ -32,7 +37,8 @@ public class UsuarioAdapter implements RepositoryUsuario {
                 .collect(Collectors.toList());
     }
 
-    @Override // Operación para dar de alta un usuario.
+    /* Opeeracion que da de alta a un nuevo usuario */
+    @Override
     public Usuario darDeAltaUnUsuario(Usuario usuario) {
 
         UsuarioEntity usuarioEntity = convertirUsuarioAEntity(usuario);
@@ -40,7 +46,8 @@ public class UsuarioAdapter implements RepositoryUsuario {
 
     }
 
-    @Override // Operación de busqueda y obtención de un usuario dado su login.
+    /* Operacion que busca y obtiene un usuario dado su login */
+    @Override
     public Usuario encontrarSiExisteUsuario(String login) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByLogin(login);
@@ -57,7 +64,8 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return null;
     }
 
-    @Override // Operación para dar de baja un usuario dado su login
+    /* Operación que da de baja (elimina) a un usuario del sistema. */
+    @Override
     public Boolean eliminarUsuarioDadoLogin(String login) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByLogin(login);
@@ -79,7 +87,8 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return true;
     }
 
-    @Override // Operación para la modificación de datos de un usuario.
+    /* Operacion para la modificacion de datos de los usuarios */
+    @Override
     public ResponseEntity<String> actualizarUsuario(Usuario usuario) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByDni(usuario.getDni());
@@ -102,17 +111,20 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return new ResponseEntity<>("Parece que ha habido un error con la actualización del usuario.", HttpStatus.OK);
     }
 
-    @Override // Operación para obtener el numero total de usuarios conectados
+    /* Operación para obtener el numero total de usuarios conectados */
+    @Override
     public long obtenerNumeroTotalDeUsuarios() {
         return usuarioJpaRepository.count();
     }
 
-    @Override // Operación para saber si un determinado usuario existe dado su dni
+    /* Operación para saber si un determinado usuario existe dado su dni */
+    @Override
     public boolean existe(String dniUsuario) {
         return usuarioJpaRepository.findByDni(dniUsuario).isPresent();
     }
 
-    @Override // Operación para obtener al usuario dado su DNI
+    /* Operacion para obtener a un usuario por su DNI */
+    @Override
     public Usuario obtenerUsuarioDadoDni(String dniUsuario) {
 
         usuarioEntityOptional = usuarioJpaRepository.findByDni(dniUsuario);
@@ -120,12 +132,14 @@ public class UsuarioAdapter implements RepositoryUsuario {
         return convertirEntityAUsuario(usuarioEntity);
     }
 
-    @Override // Operación para saber si existe un usuario dado su Login.
+    /* Operacion para saber si ya existe un determinado login */
+    @Override
     public Boolean existeLoginDeUsuario(String login) {
         return usuarioJpaRepository.findByLogin(login).isPresent();
     }
 
     /* -- METODOS DE CONVERSION -- */
+
     private UsuarioEntity convertirUsuarioAEntity(Usuario usuario) {
 
         UsuarioEntity usuarioEntity = new UsuarioEntity();

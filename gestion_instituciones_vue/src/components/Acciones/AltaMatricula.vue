@@ -164,7 +164,6 @@ export default {
 
         async cargarAsignaturasParaMatricular(dniAlumno) {
 
-            console.log("INICIANDO carga de asignaturas y módulos disponibles..."); // Debug
             this.error = false;
             this.error = false; // Restablecer estado de error
             this.mensaje = '';
@@ -239,7 +238,6 @@ export default {
                 }
 
                 console.log('Módulos con asignaturas disponibles para matricular:', this.modulosConAsignaturasDisponibles); // PUNTO DE CONTROL
-                console.log("FINALIZADA carga. Módulos con asignaturas disponibles:", this.modulosConAsignaturasDisponibles); // Debug
 
             } catch (error) {
                 this.error = true;
@@ -331,7 +329,7 @@ export default {
         },
         verMatriculaCompleta() {
             this.router.push({
-                name: 'VerMatricula', // Asegúrate de que esta ruta exista en tu router
+                name: 'VerMatricula',
                 params: {
                     alumno: JSON.stringify(this.alumno)
                 }

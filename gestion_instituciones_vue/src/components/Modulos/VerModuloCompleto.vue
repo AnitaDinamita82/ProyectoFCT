@@ -27,7 +27,7 @@
                 {{ mensaje }}
                 <button type="button" class="x-close" @click="cerrarAlerta">X</button>
             </div>
-            <!-- ** -->
+            <!-- *** -->
             <div v-if="moduloCargado && !mostrarAlerta">
                 <h1>{{ modulo.nombreModulo }} ({{ modulo.codigoModulo }})</h1>
                 <p><strong>Curso:</strong> {{ modulo.curso }}</p>
@@ -151,9 +151,9 @@ export default {
                     }
                 });
 
-                // Convertimos la lista de objetos de alumno a un Set de sus DNI para búsquedas eficientes
+                // Obtenemos un Set de los DNI's para una busqueda mas eficiente
                 const dnisAlumnosAsociadosAModulo = new Set(responseAlumnosAsociadosAModulo.data.map(alumno => alumno.dni));
-                console.log(`DNI de alumnos asociados directamente al módulo ${codigoModulo}:`, dnisAlumnosAsociadosAModulo); // PUNTO DE CONTROL
+
 
                 // 3. Para cada asignatura del módulo, obtenemos sus alumnos matriculados y filtramos
                 for (const asignatura of asignaturasDelModulo) {
@@ -168,49 +168,37 @@ export default {
                         });
 
                         const alumnosMatriculadosEnEstaAsignatura = responseAlumnosEnAsignatura.data;
-                        console.log(`Alumnos matriculados en asignatura ${asignatura.nombre} (todos):`, alumnosMatriculadosEnEstaAsignatura); // PUNTO DE CONTROL
-
 
                         const dnisYaAgregadosParaEstaAsignatura = new Set(); // Para controlar duplicados internos
 
+                        /* Filtrado: El alumno debe de estar asociado al MODULO (relacion modulo - alumno) que se trata y no debe de haber sido agregado ya a la lista de Alumnos para la asignatura.*/
                         for (const alumno of alumnosMatriculadosEnEstaAsignatura) {
-                            // Criterio de filtrado para evitar duplicidades y asegurar relevancia:
-                            // El alumno DEBE estar asociado a este MÓDULO (según la relación modulos-alumnos)
-                            // Y no debe haber sido agregado ya a la lista de alumnos para ESTA asignatura.
+
                             if (dnisAlumnosAsociadosAModulo.has(alumno.dni) && !dnisYaAgregadosParaEstaAsignatura.has(alumno.dni)) {
                                 alumnosValidosParaMostrarEnEstaAsignatura.push(alumno);
                                 dnisYaAgregadosParaEstaAsignatura.add(alumno.dni);
                             }
                         }
 
-                        // *** CAMBIO CLAVE AQUI ***
                         // Siempre añade la asignatura a la estructura final,
                         // incluso si alumnosValidosParaMostrarEnEstaAsignatura está vacío.
+                        // Para la vista
                         this.asignaturasConAlumnos.push({
                             ...asignatura,
-                            alumnos: alumnosValidosParaMostrarEnEstaAsignatura // Puede ser un array vacío
+                            alumnos: alumnosValidosParaMostrarEnEstaAsignatura
                         });
 
                     } catch (errorAlumnosEnAsignatura) {
-                        console.warn(`No se pudieron cargar los alumnos para la asignatura ${asignatura.nombre} del módulo ${codigoModulo}:`, errorAlumnosEnAsignatura.response?.data || errorAlumnosEnAsignatura.message);
+                        console.error(`No se pudieron cargar los alumnos para la asignatura ${asignatura.nombre} del módulo ${codigoModulo}:`); // PUNTO DE CONTROL
                     }
                 }
-                console.log('Estructura final de asignaturas con alumnos para mostrar:', this.asignaturasConAlumnos); // PUNTO DE CONTROL
 
-                /*  if (this.asignaturasConAlumnos.length === 0 && asignaturasDelModulo.length > 0) {
-                      this.mensaje = 'Este módulo tiene asignaturas, pero ningún alumno matriculado en ellas o asociado al módulo.';
-                      this.error = false;
-                      this.mostrarAlerta = true;
-                  } else if (this.asignaturasConAlumnos.length === 0 && asignaturasDelModulo.length === 0) {
-                      this.mensaje = 'Este módulo no tiene asignaturas asociadas.';
-                      this.error = false;
-                      this.mostrarAlerta = true;
-                  }*/
                 this.moduloCargado = true;
+
             } catch (error) {
                 if (error.response) {
                     this.error = true;
-                    this.mensaje = `Error al cargar los detalles del módulo: ${error.response.data || error.response.statusText}`;
+                    this.mensaje = `Error al cargar los detalles del módulo. `;
                 } else if (error.request) {
                     this.error = true;
                     this.mensaje = 'No se pudo conectar con el servidor para cargar los detalles del módulo.';
@@ -218,7 +206,7 @@ export default {
                     this.error = true;
                     this.mensaje = 'Error desconocido al cargar los detalles del módulo.';
                 }
-                console.error('Error al cargar los detalles del módulo:', error);
+                console.error('Error al cargar los detalles del módulo:');
                 this.mostrarAlerta = true;
             }
         },
@@ -248,7 +236,7 @@ button span {
 }
 
 .alert {
-    width: 40%;
+    width: 60%;
 }
 
 .alert-danger {

@@ -14,7 +14,7 @@
         <button class="logout-button" @click="logout">SALIR</button>
       </div>
     </div>
-    <!-- ** -->
+    <!-- *** -->
     <header class="header">
       <img :src="imglotus" style="width: 100px;" alt="logo-header" />
       <h1>sistema de GESTión integral en INstituciones</h1>
